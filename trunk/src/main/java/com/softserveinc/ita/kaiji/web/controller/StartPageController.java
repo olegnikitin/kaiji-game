@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class StartPageController {
 
-    @RequestMapping("/")
+    @RequestMapping("/*")
     public String getStartPage() {
 
         return "start-page";
