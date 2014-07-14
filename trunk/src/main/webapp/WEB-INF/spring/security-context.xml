@@ -1,0 +1,77 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+<!--
+	<http access-decision-manager-ref="accessDecisionManager"
+               use-expressions="true">
+
+		<intercept-url pattern="/game/**" access="hasRole('USER_ROLE')" />
+		<intercept-url pattern="/config/**" access="hasRole('ADMIN_ROLE')" />
+		<form-login 
+		    login-page="/login" 
+		    default-target-url="/" 
+			authentication-failure-url="/login?error" 
+			username-parameter="username"
+			password-parameter="password" />
+   			<logout logout-success-url="/" />
+	</http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service id="userService">
+                <user name="usertest" password="123" authorities="USER_ROLE" />
+                <user name="admin" password="123" authorities="USER_ROLE, ADMIN_ROLE" />
+            </user-service>
+                </authentication-provider>
+    </authentication-manager>
+-->
+
+    <!-- THIS IS NEEDED IN ANY WAY -->
+    <beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <beans:property name="decisionVoters">
+            <beans:list>
+                <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+                <beans:bean class="org.springframework.security.access.vote.RoleVoter">
+                    <beans:property name="rolePrefix" value=""/>
+                </beans:bean>
+                <beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+
+    <!--   UNCOMMENT THIS AS SOON AS YOU CONFIGURE YOUR DB -->
+
+    <http
+          access-decision-manager-ref="accessDecisionManager"
+          use-expressions="true">
+        <intercept-url pattern="/game/**" access="hasRole('USER_ROLE')" />
+        <intercept-url pattern="/statistic/**" access="hasRole('USER_ROLE')" />
+        <intercept-url pattern="/config/**" access="hasRole('ADMIN_ROLE')" />
+        <form-login login-page="/login" default-target-url="/"
+                    authentication-failure-url="/login?error" username-parameter="username"
+                    password-parameter="password" />
+        <logout logout-success-url="/" />
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+           <jdbc-user-service  data-source-ref="dataSource"
+           authorities-by-username-query="SELECT nickname , role
+            FROM user, user_role
+            WHERE nickname = ?
+            AND user.id = user_role.user_id;"
+
+           users-by-username-query="SELECT nickname , password, 'true' AS enabled
+            FROM user WHERE nickname =?"/>
+
+          </authentication-provider>
+        </authentication-manager>
+
+
+
+</beans:beans>

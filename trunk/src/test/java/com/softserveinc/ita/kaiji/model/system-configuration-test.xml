@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<systemConfiguration>
+    <botType>HARD</botType>
+    <gameTimeOut>21222</gameTimeOut>
+</systemConfiguration>

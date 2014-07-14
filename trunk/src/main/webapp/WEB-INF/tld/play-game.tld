@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib> 
+<tlibversion>1.0</tlibversion>
+<jspversion>1.1</jspversion>
+<shortname>game</shortname>
+<info>Sample taglib for Substr operation</info>
+<tag>
+    <name>statistic</name>
+    <tagclass>com.softserveinc.ita.kaiji.web.tag.PlayGameStatisticTag</tagclass>
+    <info>iterates statistic game</info>
+    <body-content>scriptless</body-content>
+    <attribute>
+      <name>player</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+  </attribute>
+</tag>
+<tag>
+    <name>rounds</name>
+    <tagclass>com.softserveinc.ita.kaiji.web.tag.PlayGameRoundsTag</tagclass>
+    <info>iterates game rounds</info>
+    <body-content>scriptless</body-content>
+    <attribute>
+      <name>gameHistory</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+  </attribute>
+    <attribute>
+      <name>player</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+  </attribute>
+    <attribute>
+      <name>enemy</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+  </attribute>
+</tag>
+</taglib> 

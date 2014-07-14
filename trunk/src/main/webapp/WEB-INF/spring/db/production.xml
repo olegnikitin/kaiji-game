@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans profile="production"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://#{T(java.lang.System).getenv('OPENSHIFT_MYSQL_DB_HOST')}:#{T(java.lang.System).getenv('OPENSHIFT_MYSQL_DB_PORT')}/game"/>
+        <property name="username" value="adming2V794Z"/>
+        <property name="password" value="dXZ8uyt28mLg" />
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.softserveinc.ita.kaiji.model, com.softserveinc.ita.kaiji.dto" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <!--WARNIND update is templorary for quick problem fix it must be validate value-->
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+            </props>
+        </property>
+    </bean>
+
+
+</beans>
