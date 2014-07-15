@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
@@ -21,34 +22,49 @@ import java.nio.file.Paths;
  * @since 30.03.14.
  */
 @Component
+@Scope("singleton")
 public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     private static final Logger LOG = Logger.getLogger(SystemConfiguratorXmlImpl.class);
+
+    private static final String CONFIGURATION_FILE = "system-configuration.xml";
+    private static final String DEFAULT_GAME_NAME = "Duel";
+    private static final String DEFAULT_USER_NAME = "Zoro";
+    private static final Integer DEFAULT_CARDS_NUMBER = 4;
+    private static final Bot.Types DEFAULT_BOT_TYPE = Bot.Types.EASY;
+    //300000L -> 5 minutes
+    private static final Long DEFAULT_GAME_CONNECTION_TIMEOUT = 300000L;
+    //60000L -> 1 minute
+    private static final Long DEFAULT_ROUND_CONNECTION_TIMEOUT = 60000L;
 
     private SystemConfiguration currentSystemConfiguration;
     private Path filePath;
 
     public SystemConfiguratorXmlImpl() {
-        setFilePath();
-        loadSystemConfiguration();
+        this.filePath = Paths.get(CONFIGURATION_FILE);
     }
 
     @Override
     public void setSystemConfiguration(SystemConfiguration systemConfiguration) {
         this.currentSystemConfiguration = systemConfiguration;
-
     }
 
     @Override
     public SystemConfiguration getSystemConfiguration() {
+
+        if(this.currentSystemConfiguration == null){
+            loadSystemConfiguration();
+        }
         return this.currentSystemConfiguration;
     }
 
     @Override
     public void loadSystemConfiguration() {
 
-        if (!Files.exists(filePath)) {
+        if (Files.notExists(filePath)) {
+            LOG.trace("Create new configuration");
             createDefaultSystemConfiguration(filePath);
+            return;
         }
 
         if (LOG.isTraceEnabled()) {
@@ -60,16 +76,14 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("unmarshalling file");
+            this.currentSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
+            if (!checkSystemConfiguration()) {
+                throw new RuntimeException("Incorrect configuration parameters");
             }
-
-            SystemConfiguration systemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
-
-            this.currentSystemConfiguration = systemConfiguration;
 
         } catch (JAXBException e) {
             LOG.error("Unable to load configuration from file. " + e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }
@@ -77,8 +91,10 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     @Override
     public void saveSystemConfiguration(SystemConfiguration systemConfiguration) {
 
-        if (!Files.exists(filePath)) {
-            createDefaultSystemConfiguration(filePath);
+        if (Files.notExists(filePath)) {
+            LOG.trace("create new configuration file");
+            createFile(filePath);
+            return;
         }
 
         if (LOG.isTraceEnabled()) {
@@ -92,62 +108,38 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            this.currentSystemConfiguration = systemConfiguration;
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("marshalling file");
-            }
-
             jaxbMarshaller.marshal(currentSystemConfiguration, filePath.toFile());
 
         } catch (JAXBException e) {
             LOG.error("Unable to save configuration to file. " + e.getMessage());
-        }
-
-    }
-
-    private void setFilePath() {
-
-        Path path = Paths.get("system-configuration.xml");
-
-        if (Files.exists(path)) {
-            this.filePath = path;
-            if (!(checkSystemConfiguration())) {
-                createDefaultSystemConfiguration(path);
-            }
-        } else {
-            createDefaultSystemConfiguration(path);
+            throw new RuntimeException(e);
         }
 
     }
 
     private void createDefaultSystemConfiguration(Path path) {
+
         createFile(path);
-        this.filePath = path;
 
         this.currentSystemConfiguration = new SystemConfiguration();
-        currentSystemConfiguration.setGameName("Duel");
-        currentSystemConfiguration.setUserName("Zoro");
-        currentSystemConfiguration.setNumberOfCards(4);
-        currentSystemConfiguration.setBotType(Bot.Types.EASY);
-        currentSystemConfiguration.setGameConnectionTimeout(300000L);
-        currentSystemConfiguration.setRoundTimeout(60000L);
+        currentSystemConfiguration.setGameName(DEFAULT_GAME_NAME);
+        currentSystemConfiguration.setUserName(DEFAULT_USER_NAME);
+        currentSystemConfiguration.setNumberOfCards(DEFAULT_CARDS_NUMBER);
+        currentSystemConfiguration.setBotType(DEFAULT_BOT_TYPE);
+        currentSystemConfiguration.setGameConnectionTimeout(DEFAULT_GAME_CONNECTION_TIMEOUT);
+        currentSystemConfiguration.setRoundTimeout(DEFAULT_ROUND_CONNECTION_TIMEOUT);
 
         saveSystemConfiguration(currentSystemConfiguration);
     }
 
     private boolean checkSystemConfiguration() {
-        loadSystemConfiguration();
-        if (currentSystemConfiguration.getGameConnectionTimeout() != null
-                || currentSystemConfiguration.getGameName() != null
-                || currentSystemConfiguration.getBotType() != null
-                || currentSystemConfiguration.getNumberOfCards() != null
-                || currentSystemConfiguration.getRoundTimeout() != null
-                || currentSystemConfiguration.getUserName() != null ) {
-            return true;
-        } else {
-            return false;
-        }
+        return (currentSystemConfiguration.getGameConnectionTimeout() != null
+                && currentSystemConfiguration.getGameName() != null
+                && currentSystemConfiguration.getBotType() != null
+                && currentSystemConfiguration.getNumberOfCards() != null
+                && currentSystemConfiguration.getRoundTimeout() != null
+                && currentSystemConfiguration.getUserName() != null);
+
     }
 
     private void createFile(Path path) {
@@ -155,6 +147,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             Files.createFile(path);
         } catch (IOException e) {
             LOG.error("Unable to create new configuration file " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

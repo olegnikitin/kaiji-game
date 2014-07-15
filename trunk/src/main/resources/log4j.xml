@@ -10,6 +10,11 @@
         </layout>
     </appender>
 
+    <logger name="com.softserveinc.ita.kaiji" additivity="false">
+        <appender-ref ref="console"/>
+        <level value="trace"/>
+    </logger>
+
     <!-- Root Logger -->
     <root>
         <priority value="fatal"/>

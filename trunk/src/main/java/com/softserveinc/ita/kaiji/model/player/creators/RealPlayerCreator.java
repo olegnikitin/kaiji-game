@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Provides real player creation if {@link User} is valid
+ *
  * @author Ievgen Sukhov
  * @version 1.0
  * @since 30.03.14
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class RealPlayerCreator implements PlayerCreator {
     @Override
     public boolean isValid(User creatorInfo) {
-        return creatorInfo==null? false : true;
+        return creatorInfo != null;
 
     }
 
