@@ -17,10 +17,9 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url"
-                  value="jdbc:mysql://#{T(java.lang.System).getenv('OPENSHIFT_MYSQL_DB_HOST')}:#{T(java.lang.System).getenv('OPENSHIFT_MYSQL_DB_PORT')}/game"/>
-        <property name="username" value="adming2V794Z"/>
-        <property name="password" value="dXZ8uyt28mLg" />
+        <property name="url" value="jdbc:mysql://localhost:3306/game"/>
+        <property name="username" value="root"/>
+        <property name="password" value="toor" />
     </bean>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
