@@ -5,6 +5,8 @@ import com.softserveinc.ita.kaiji.dto.UserRegistrationDto;
 import com.softserveinc.ita.kaiji.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,9 @@ public class RegistrationController {
     private UserRegistrationDto userDto;
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/registration" , method = RequestMethod.GET)
     public String getRegistrationForm(Model model) {
@@ -54,7 +59,6 @@ public class RegistrationController {
             return "registration-form";
         }
 
-
         if (userDAO.getByEmail(userDto.getEmail()) == null &&
                 userDAO.getByNickname(userDto.getNickname()) == null) {
 
@@ -62,7 +66,7 @@ public class RegistrationController {
             user.setName(userDto.getName());
             user.setEmail(userDto.getEmail());
             user.setNickname(userDto.getNickname());
-            user.setPassword(userDto.getPassword());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
             if (LOG.isInfoEnabled()) {
                 LOG.info("saving user to the database");
