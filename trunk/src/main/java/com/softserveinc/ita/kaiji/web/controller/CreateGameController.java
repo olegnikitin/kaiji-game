@@ -96,11 +96,15 @@ public class CreateGameController {
         final AsyncContext asyncContext = request.startAsync(request, response);
         asyncContext.setTimeout(systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout());
         asyncContext.addListener(new TimeoutListener(), request, response);
-
         Integer gameId = gameService.setGameInfo(gameInfoDto);
-        Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameInfoDto.getGameName());
-        model.addAttribute("playerId", playerId);
+        Integer abandonedGameId = gameService.getAbandonedGameId(gameId);
+        if (abandonedGameId != null) {
+            LOG.trace("Remove abandoned game from pool.");
+            gameService.clearGameInfo(abandonedGameId);
+        }
 
+        Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameId);
+        model.addAttribute("playerId", playerId);
         asyncContext.start(new SecondPlayerChecker(asyncContext, gameId, gameService));
 
         if (LOG.isTraceEnabled()) {
