@@ -204,10 +204,11 @@ public class GameServiceImpl implements GameService {
 
 
     @Override
-    public Integer getPlayerIdFromGame(String playerName, String gameName)
+    public Integer getPlayerIdFromGame(String playerName, Integer gameId)
             throws IllegalArgumentException {
+
         for (GameInfo gi : GAME_INFOS) {
-            if (gi.getGameName().equals(gameName)) {
+            if (gi.getId().equals(gameId)) {
                 for (Player p : gi.getPlayers()) {
                     if (p.getName().equals(playerName)) {
                         return p.getId();
@@ -217,6 +218,19 @@ public class GameServiceImpl implements GameService {
 
         }
         return null;
+    }
+
+    @Override
+    public Integer getAbandonedGameId(Integer currentGameId) {
+
+        Integer abandonedGameId = null;
+        for (GameInfo gi : GAME_INFOS) {
+            if (gi.getGameType().equals(Game.Type.BOT_GAME) && !gi.getId().equals(currentGameId)) {
+                abandonedGameId = gi.getId();
+                break;
+            }
+        }
+        return abandonedGameId;
     }
 
     @Override

@@ -27,6 +27,8 @@ public class SecondPlayerChecker implements Runnable {
         this.gameService = gameService;
     }
 
+
+
     @Override
     public void run() {
 

@@ -117,17 +117,18 @@ public class PlayGameController {
         Player player = userService.getPlayerById(personId);
         Player enemy = (Player) model.asMap().get("enemyObject");
 
-
         //starting async
         if (!enemy.isBot() & (enemy.getCardCount() != player.getCardCount())) {
             final AsyncContext asyncContext = request.startAsync(request, response);
             asyncContext.setTimeout(systemConfigurationService.getSystemConfiguration().getRoundTimeout());
             asyncContext.addListener(new TimeoutListener(), request, response);
+
             asyncContext.start(new TurnChecker(asyncContext, gameId, userService, enemy.getId(), personId));
         } else {
             response.sendRedirect(request.getContextPath() + "/game/" + gameId + "/");
         }
     }
+
 
     @RequestMapping(value = "finish/{gameId}")
     public String finishGame(@PathVariable Integer gameId) {

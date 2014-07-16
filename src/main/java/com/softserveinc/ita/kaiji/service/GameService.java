@@ -34,10 +34,12 @@ public interface GameService {
      * Another way to get player id from some game
      *
      * @param playerName name of the player to get
-     * @param gameName   game in which to look for player
+     * @param gameId   the game id in which to look for player
      * @return Integer player`s id
      */
-    public Integer getPlayerIdFromGame(String playerName, String gameName);
+    public Integer getPlayerIdFromGame(String playerName, Integer gameId);
+
+    Integer getAbandonedGameId(Integer currentGameId);
 
     /**
      * Finishes the game
