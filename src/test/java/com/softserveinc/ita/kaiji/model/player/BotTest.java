@@ -21,33 +21,34 @@ import static org.mockito.Mockito.mock;
 
 /**
  * Tests basic bot player
- * @author  Ievgen Sukhov
- * @since 23.03.14
+ *
+ * @author Ievgen Sukhov
  * @version 2.0
+ * @since 23.03.14
  */
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(value = {
         "file:src/main/webapp/WEB-INF/spring-tests/model-context.xml"})
 public class BotTest {
 
-   Bot testBot;
+    Bot testBot;
 
     @Autowired
     PlayerFactory playerFactory;
     private TestContextManager testContextManager;
 
     @Before
-    public void setUp() throws  Exception{
+    public void setUp() throws Exception {
         this.testContextManager = new TestContextManager(getClass());
         this.testContextManager.prepareTestInstance(this);
 
-        testBot = (Bot)playerFactory.makePlayer(Bot.Types.EASY, 1);
+        testBot = (Bot) playerFactory.makePlayer(Bot.Types.EASY, 1);
     }
 
     private static Object[] data() {
         return new Object[]{
                 new Object[]{Card.ROCK, Card.ROCK},
-                new Object[] {Card.PAPER, Card.PAPER},
+                new Object[]{Card.PAPER, Card.PAPER},
                 new Object[]{Card.SCISSORS, Card.SCISSORS}
         };
     }
@@ -70,7 +71,6 @@ public class BotTest {
     }
 
 
-
     @Test
     public void isBotTest() {
         assertTrue("Must be bot", testBot.isBot());
@@ -83,8 +83,8 @@ public class BotTest {
     }
 
     @Test
-    public  void gameDataTest() {
-        GameHistory testData =  mock(GameHistory.class);
+    public void gameDataTest() {
+        GameHistory testData = mock(GameHistory.class);
         testBot.setGameData(testData);
         assertNotNull("Must have data", testBot.getGameData());
     }
@@ -97,7 +97,7 @@ public class BotTest {
         assertEquals("Chosen card must match", fExpected, testBot.getChosenCard());
         testBot.commitTurn(Card.DuelResult.DRAW);
         assertThat("Must be in right state", testBot.getState(),
-                is(anyOf(is (Player.PlayerStatus.TURN_READY), is(Player.PlayerStatus.FINISHED))));
+                is(anyOf(is(Player.PlayerStatus.TURN_READY), is(Player.PlayerStatus.FINISHED))));
     }
 
     @Test
@@ -116,7 +116,8 @@ public class BotTest {
                 is(anyOf(is(Card.ROCK), is(Card.PAPER), is(Card.SCISSORS))));
 
     }
-   @Ignore //data needed
+
+    @Ignore //data needed
     @Test
     public void turnMakingTestforHardBot() {
         Player hardBot = playerFactory.makePlayer(Bot.Types.HARD, 1);

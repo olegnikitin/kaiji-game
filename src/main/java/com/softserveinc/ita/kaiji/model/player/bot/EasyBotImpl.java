@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.model.player.bot;
 
-
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
 import com.softserveinc.ita.kaiji.model.DeckImpl;
 import com.softserveinc.ita.kaiji.model.Gender;
@@ -22,7 +21,7 @@ public class EasyBotImpl extends Bot{
     protected EasyBotImpl(Integer cardNumber) {
         this.deck = new DeckImpl(cardNumber);
         this.user = new User("EASY_BOT", "EASY_BOT", "-");
-        this.user.setId(2);
+        this.user.setId(-1);
         this.user.setName("EASY_BOT");
         this.user.setGender(Gender.UNKNOWN);
         try {
@@ -37,6 +36,5 @@ public class EasyBotImpl extends Bot{
         protected void executeStrategy() {
             this.chosenCard = deck.getNextCard();
         }
-
 
 }
