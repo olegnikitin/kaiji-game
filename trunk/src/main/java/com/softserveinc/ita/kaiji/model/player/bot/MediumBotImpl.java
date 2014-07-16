@@ -21,7 +21,7 @@ public class MediumBotImpl extends Bot{
     protected MediumBotImpl(Integer cardNumber) {
         this.deck = new DeckImpl(cardNumber);
         this.user = new User("MEDIUM_BOT", "MEDIUM_BOT", "-");
-        this.user.setId(3);
+        this.user.setId(-2);
         this.user.setName("MEDIUM_BOT");
         this.user.setGender(Gender.UNKNOWN);
         try {

@@ -1,11 +1,14 @@
 package com.softserveinc.ita.kaiji.service;
 
 import java.util.*;
+import java.util.Set;
 
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
+import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
+import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.*;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPool;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPoolImpl;
@@ -85,11 +88,58 @@ public class GameServiceImpl implements GameService {
         Game game = getGameById(gameId);
         if (game != null && game.getState().equals(Game.State.GAME_FINISHED)) {
 
+            Player playerBot = null;
+
+            Iterator<Player> playerIterator = game.getGameHistory().getGameInfo().getPlayers().iterator();
+
+            while (playerIterator.hasNext()) {
+                playerBot = playerIterator.next();
+                if (playerBot.isBot()) {
+                    LOG.trace("Avoid write bot player to DB when game is completed");
+                    playerIterator.remove();
+                    break;
+                }
+            }
+
             GameHistoryEntity gameHistoryEntity = new GameHistoryEntity(game.getGameHistory());
+
+            Iterator<User> userIterator;
+            User currentUser;
+
+            //Prohibit to write bot player Round Results to DB ,i.e. bot doesn't exist in DB
+            for (RoundResultEntity roundResult : gameHistoryEntity.getRoundResults()) {
+                userIterator = roundResult.getRound().keySet().iterator();
+                while (userIterator.hasNext()) {
+                    currentUser = userIterator.next();
+                    //Not very good condition to determine bot player. Should be changed in future.
+                    if (currentUser.getName().equals(currentUser.getEmail())) {
+                        userIterator.remove();
+                    }
+                }
+            }
+
+            userIterator = gameHistoryEntity.getWinners().iterator();
+
+            //Prohibit to write winner bot player to DB ,i.e. bot doesn't exist in DB
+            while (userIterator.hasNext()) {
+                currentUser = userIterator.next();
+                //Not very good condition to determine bot player. Should be changed in future.
+                if (currentUser.getName().equals(currentUser.getEmail())) {
+                    userIterator.remove();
+                    break;
+                }
+            }
+
             gameHistoryEntityDAO.save(gameHistoryEntity);
 
+            LOG.trace("After insertion");
             GAMES_SYNC.release(gameId);
             game.finishGame();
+
+            if (game.getGameInfo().getPlayers().size() != 2) {
+                game.getGameInfo().getPlayers().add(playerBot);
+            }
+
             for (Player p : game.getGameInfo().getPlayers()) {
                 userService.removePlayer(p.getId());
             }
@@ -138,10 +188,26 @@ public class GameServiceImpl implements GameService {
 
         Game game = gameFactory.makeGame(gameInfo);
 
+        Player botPlayer = null;
+
+        Iterator<Player> playerIterator = gameInfo.getPlayers().iterator();
+
+        while (playerIterator.hasNext()) {
+            botPlayer = playerIterator.next();
+            if (botPlayer.isBot()) {
+                LOG.trace("Avoid write bot player to DB while creating game");
+                playerIterator.remove();
+                break;
+            }
+        }
+
         GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
         Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);
         gameInfo.setDatabaseId(databaseId);
-
+        if (gameInfo.getPlayers().size() != 2) {
+            LOG.trace("Add boot player " + botPlayer);
+            gameInfo.getPlayers().add(botPlayer);
+        }
         game.setId(GAMES_SYNC.size());
         GAMES_SYNC.put(game);
 

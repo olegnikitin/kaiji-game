@@ -42,7 +42,7 @@ public class HardBotImpl extends Bot {
     protected HardBotImpl(Integer cardNumber) {
         this.deck = new DeckImpl(cardNumber);
         this.user = new User("HARD_BOT", "HARD_BOT", "-");
-        this.user.setId(4);
+        this.user.setId(-3);
         this.user.setName("HARD_BOT");
         this.user.setGender(Gender.UNKNOWN);
         //AI pre-init
