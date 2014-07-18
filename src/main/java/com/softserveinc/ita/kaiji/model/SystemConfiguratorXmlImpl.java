@@ -51,10 +51,8 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     @Override
     public SystemConfiguration getSystemConfiguration() {
+        loadSystemConfiguration();
 
-        if(this.currentSystemConfiguration == null){
-            loadSystemConfiguration();
-        }
         return this.currentSystemConfiguration;
     }
 
@@ -85,7 +83,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             LOG.error("Unable to load configuration from file. " + e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -108,7 +105,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-            jaxbMarshaller.marshal(currentSystemConfiguration, filePath.toFile());
+            jaxbMarshaller.marshal(systemConfiguration, filePath.toFile());
 
         } catch (JAXBException e) {
             LOG.error("Unable to save configuration to file. " + e.getMessage());
