@@ -129,7 +129,6 @@ public class GameServiceImpl implements GameService {
                     break;
                 }
             }
-
             gameHistoryEntityDAO.save(gameHistoryEntity);
 
             LOG.trace("After insertion");
@@ -202,8 +201,10 @@ public class GameServiceImpl implements GameService {
         }
 
         GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
-        Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);
-        gameInfo.setDatabaseId(databaseId);
+
+        //Don't save game to DB. We must do it after game completion
+        //Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);
+        //gameInfo.setDatabaseId(databaseId);
         if (gameInfo.getPlayers().size() != 2) {
             LOG.trace("Add boot player " + botPlayer);
             gameInfo.getPlayers().add(botPlayer);
