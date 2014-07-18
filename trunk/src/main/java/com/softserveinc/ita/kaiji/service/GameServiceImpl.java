@@ -131,7 +131,6 @@ public class GameServiceImpl implements GameService {
             }
             gameHistoryEntityDAO.save(gameHistoryEntity);
 
-            LOG.trace("After insertion");
             GAMES_SYNC.release(gameId);
             game.finishGame();
 
