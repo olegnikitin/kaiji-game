@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.dto.game;
 
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game;
+import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;
@@ -53,6 +54,8 @@ public class GameInfoEntity implements Identifiable {
             inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private Set<User> users;
 
+    @OneToOne(mappedBy = "gameInfoEntity",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private GameHistoryEntity gameHistoryEntity;
 
     public GameInfoEntity(){}
 
@@ -67,6 +70,14 @@ public class GameInfoEntity implements Identifiable {
         for (Player p : gameInfo.getPlayers()) {
             users.add(p.getUser());
         }
+    }
+
+    public GameHistoryEntity getGameHistoryEntity() {
+        return gameHistoryEntity;
+    }
+
+    public void setGameHistoryEntity(GameHistoryEntity gameHistoryEntity) {
+        this.gameHistoryEntity = gameHistoryEntity;
     }
 
     public String getGameName() {
