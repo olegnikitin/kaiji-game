@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>DAO testing</title>
@@ -24,8 +25,11 @@
     /remove/game-info/{id}<br>
     /remove/game-history/{id}<br>
     <hr>
+    <a href="/">Kaiji</a>
 
     <br><br>
-    Data: ${data}
+    Data:<br>
+    <c:out value="${data}"></c:out>
+
 </body>
 </html>
