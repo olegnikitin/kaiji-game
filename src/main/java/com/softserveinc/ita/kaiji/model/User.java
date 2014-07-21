@@ -55,6 +55,14 @@ public class User implements Identifiable {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = getDefaultRoles();
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "link_game_to_user",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "game_id") })
+    private Set<GameInfoEntity> gameInfoEntities;
+
+
     public User() {
     }
 
@@ -206,4 +214,11 @@ public class User implements Identifiable {
         return defaultRoles;
     }
 
+    public Set<GameInfoEntity> getGameInfoEntities() {
+        return gameInfoEntities;
+    }
+
+    public void setGameInfoEntities(Set<GameInfoEntity> gameInfoEntities) {
+        this.gameInfoEntities = gameInfoEntities;
+    }
 }
