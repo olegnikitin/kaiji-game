@@ -51,8 +51,8 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     @Override
     public SystemConfiguration getSystemConfiguration() {
-        loadSystemConfiguration();
 
+        loadSystemConfiguration();
         return this.currentSystemConfiguration;
     }
 
@@ -75,6 +75,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
             this.currentSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
+            System.out.println(this.currentSystemConfiguration);
             if (!checkSystemConfiguration()) {
                 throw new RuntimeException("Incorrect configuration parameters");
             }

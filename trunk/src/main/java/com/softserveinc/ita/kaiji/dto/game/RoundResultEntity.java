@@ -63,6 +63,8 @@ public class RoundResultEntity implements Identifiable {
     private GameHistoryEntity gameHistory;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    //@OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+
     @JoinTable(
             name = "round_detail",
             joinColumns = {@JoinColumn(name = "round_id")})
@@ -93,6 +95,17 @@ public class RoundResultEntity implements Identifiable {
     @Override
     public Integer getId() {
         return id;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        for(Map.Entry<User,Entry> map : round.entrySet()){
+            builder.append(map.getKey().getName()).append("->");
+            builder.append(map.getValue().getCard()).append("->");
+            builder.append(map.getValue().getDuelResult()).append(";");
+        }
+        return builder.toString();
     }
 
     public Set<User> getUsers() {

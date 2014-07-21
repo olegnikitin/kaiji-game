@@ -10,6 +10,7 @@
 <spring:message code="header.logout" var="headerLogout" />
 <spring:message code="header.language" var="headerLanguage" />
 <spring:message code="header.settings" var="headerSettings" />
+<spring:message code="header.dao" var="headerDAO" />
 <spring:message code="header.welcome" var="headerWelcome" />
 <spring:message code="header.statistic" var="headerStatistic" />
 <spring:message code="header.register" var="headerRegister" />
@@ -68,6 +69,7 @@
             </li>
             <sec:authorize access="hasRole('ADMIN_ROLE')">
             <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerSettings}</a></li>
+            <li><a href="<spring:url value="/dao" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
             </sec:authorize>
         </ul>
     </div>
