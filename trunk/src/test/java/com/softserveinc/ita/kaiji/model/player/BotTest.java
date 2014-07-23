@@ -117,11 +117,10 @@ public class BotTest {
 
     }
 
-    @Ignore //data needed
     @Test
     public void turnMakingTestforHardBot() {
         Player hardBot = playerFactory.makePlayer(Bot.Types.HARD, 1);
-        hardBot.makeTurn(null);
+        hardBot.makeTurn(Card.ROCK);
         assertThat("First chosen card can be any for hard bot", hardBot.getChosenCard(),
                 is(anyOf(is(Card.ROCK), is(Card.PAPER), is(Card.SCISSORS))));
 

@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
+import java.nio.file.Path;
 
 /**
  * @author Vladyslav Shelest
@@ -44,5 +45,7 @@ public interface SystemConfigurator {
      */
 
     void saveSystemConfiguration(SystemConfiguration systemConfiguration);
+
+    void setConfigurationFile(Path filePath);
 
 }

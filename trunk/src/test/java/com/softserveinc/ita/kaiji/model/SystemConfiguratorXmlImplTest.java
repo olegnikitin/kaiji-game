@@ -1,11 +1,19 @@
 package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
+import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import org.junit.*;
 
-import java.lang.reflect.Field;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Vladyslav Shelest
@@ -14,53 +22,82 @@ import static org.junit.Assert.*;
  */
 public class SystemConfiguratorXmlImplTest {
 
+    private static final String CONFIGURATION_FILE = "system-configuration-test.xml";
+    private static SystemConfigurator systemConfigurator;
+    private static Path filePath;
     private SystemConfiguration systemConfiguration;
-    private SystemConfigurator systemConfigurator;
+
+    @BeforeClass
+    public static void setUp() {
+        filePath = Paths.get(CONFIGURATION_FILE);
+        systemConfigurator = new SystemConfiguratorXmlImpl();
+    }
 
     @Before
-    public void setUp() {
-        systemConfigurator = new SystemConfiguratorXmlImpl();
+    public void initSystemConfiguration() {
+        systemConfiguration = new SystemConfiguration();
+        try {
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+            }
+            Files.createFile(filePath);
+
+            systemConfiguration.setGameConnectionTimeout(60000L);
+            systemConfiguration.setRoundTimeout(30000L);
+            systemConfiguration.setGameName("Test");
+            systemConfiguration.setUserName("User");
+            systemConfiguration.setBotType(Bot.Types.HARD);
+            systemConfiguration.setNumberOfCards(3);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @After
     public void tearDown() {
-        systemConfiguration = null;
-        systemConfigurator = null;
+        try {
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Ignore
     @Test
     public void loadSystemConfigurationTest() {
 
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(SystemConfiguration.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            jaxbMarshaller.marshal(systemConfiguration, filePath.toFile());
+
+            systemConfigurator.setConfigurationFile(filePath);
+            systemConfigurator.loadSystemConfiguration();
+            SystemConfiguration expectedSystemConfiguration = systemConfigurator.getSystemConfiguration();
+
+            assertEquals(systemConfiguration, expectedSystemConfiguration);
+
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
     public void saveSystemConfigurationTest() {
-/*
+
         try {
-            Field field = SystemConfiguratorXmlImpl.class.getDeclaredField("xmlFilePath");
-            field.setAccessible(true);
-          //  field.set(systemConfigurator, new String("src/test/java/com/softserveinc/ita/kaiji/model/system-configuration-test.xml"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-/*
 
-        systemConfiguration = new SystemConfiguration();
-        systemConfiguration.setGameTimeOut(21122L);
-       // systemConfiguration.setBotType("HARD");
-        systemConfigurator.setSystemConfiguration(systemConfiguration);
-
-       // systemConfigurator.saveSystemConfiguration();
-        systemConfigurator.loadSystemConfiguration();
-
-        SystemConfiguration sysConf = systemConfigurator.getSystemConfiguration();
-        Long actualGameTimeOut = sysConf.getGameTimeOut();
-        Long expectedGameTimeOut = 21122L;
-        assertEquals(expectedGameTimeOut, actualGameTimeOut);
-*/
-
-
+            systemConfigurator.saveSystemConfiguration(systemConfiguration);
+            JAXBContext jaxbContext = JAXBContext.newInstance(SystemConfiguration.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            SystemConfiguration savedSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
+            assertEquals(systemConfiguration, savedSystemConfiguration);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
