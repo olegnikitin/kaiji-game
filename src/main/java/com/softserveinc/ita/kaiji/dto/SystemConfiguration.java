@@ -67,4 +67,28 @@ public class SystemConfiguration {
     public void setRoundTimeout(Long roundTimeout) {
         this.roundTimeout = roundTimeout;
     }
+
+    @Override
+    public boolean equals(Object obj){
+
+        if(obj == null){
+            return false;
+        }
+
+        if(this == obj){
+            return true;
+        }
+
+        if (obj instanceof SystemConfiguration){
+            SystemConfiguration configuration = (SystemConfiguration)obj;
+            return (this.gameName.equals(configuration.getGameName())&&
+                    this.userName.equals(configuration.getUserName())&&
+                    this.numberOfCards.equals(configuration.getNumberOfCards())&&
+                    this.botType.equals(configuration.botType)&&
+                    this.gameConnectionTimeout.equals(configuration.getGameConnectionTimeout())&&
+                    this.roundTimeout.equals(configuration.getRoundTimeout()));
+        }
+        return false;
+    }
+
 }

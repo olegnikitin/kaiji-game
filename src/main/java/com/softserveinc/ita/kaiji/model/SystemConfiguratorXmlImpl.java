@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import org.apache.log4j.Logger;
+import org.h2.store.fs.FilePath;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     private static final Logger LOG = Logger.getLogger(SystemConfiguratorXmlImpl.class);
 
-    private static final String CONFIGURATION_FILE = "system-configuration.xml";
+    //private String configurationFile;
     private static final String DEFAULT_GAME_NAME = "Duel";
     private static final String DEFAULT_USER_NAME = "Zoro";
     private static final Integer DEFAULT_CARDS_NUMBER = 4;
@@ -41,7 +42,13 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     private Path filePath;
 
     public SystemConfiguratorXmlImpl() {
-        this.filePath = Paths.get(CONFIGURATION_FILE);
+        //configurationFile  = "system-configuration.xml";
+        this.filePath = Paths.get("system-configuration.xml");
+    }
+
+    @Override
+    public void setConfigurationFile(Path filePath){
+        this.filePath = filePath;
     }
 
     @Override
@@ -75,7 +82,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
             this.currentSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
-            System.out.println(this.currentSystemConfiguration);
             if (!checkSystemConfiguration()) {
                 throw new RuntimeException("Incorrect configuration parameters");
             }
