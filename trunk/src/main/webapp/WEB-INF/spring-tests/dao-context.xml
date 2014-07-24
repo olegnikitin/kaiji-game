@@ -24,8 +24,8 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <jdbc:embedded-database id="dataSource" type="H2">
-        <!--<jdbc:script location="file:database/schema.sql"/>-->
-        <!--<jdbc:script location="file:database/insert.sql"/>-->
+  <!--      <jdbc:script location="file:database/schema.sql"/>
+        <jdbc:script location="file:database/insert.sql"/>-->
     </jdbc:embedded-database>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

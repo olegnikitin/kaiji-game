@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,6 +25,7 @@ public class GameServiceTest {
 
     @Autowired
     private GameService service;
+
     @Autowired
     private UserService userService;
 
@@ -50,9 +52,10 @@ public class GameServiceTest {
 	@Ignore
 	@Test
 	public void finishGameTest() {
-		boolean thrown = false;
+
+        boolean thrown = false;
         Integer infoId = service.setGameInfo(dto);
-		gameId = service.createGame(service.getGameInfo(infoId));
+        gameId = service.createGame(service.getGameInfo(infoId));
 		service.finishGame(gameId);
 		try {
 			service.getGameInfo(gameId);
