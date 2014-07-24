@@ -93,7 +93,7 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nickname` varchar(30) NOT NULL,
   `gender` enum('MALE','FEMALE','UNKNOWN') NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(60) NOT NULL,
   `name` varchar(40) NOT NULL,
   `email` varchar(40) NOT NULL,
   `registration_date` datetime DEFAULT NULL,
