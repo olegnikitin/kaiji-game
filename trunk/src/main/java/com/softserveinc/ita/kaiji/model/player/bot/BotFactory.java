@@ -8,9 +8,10 @@ import java.util.Random;
 
 /**
  * Manages bot creation based on data from services and controllers
- * @author  Ievgen Sukhov
- * @since 19.03.14.
+ *
+ * @author Ievgen Sukhov
  * @version 1.2
+ * @since 19.03.14.
  */
 
 @Component
@@ -19,42 +20,46 @@ public class BotFactory {
 
     private static final Logger LOG = Logger.getLogger(BotFactory.class);
 
-    private BotFactory() {}
+    private BotFactory() {
+    }
 
     /**
      * Creates instances of <code>Bot</code> variations
-     * @param type type of bot to create (difficulty)
+     *
+     * @param type      type of bot to create (difficulty)
      * @param cardCount integer number of cards of one type in deck
      * @return <code>Bot</code> instance
      */
-    public  Bot createBot(Bot.Types type, Integer cardCount) {
+    public Bot createBot(Bot.Types type, Integer cardCount) {
+
         if (LOG.isTraceEnabled()) {
             LOG.trace("Creating bot with type : " + type);
         }
         Bot bot;
+
         switch (type) {
-            case EASY: {
+            case EASY:
                 bot = new EasyBotImpl(cardCount);
                 dataGenerator(bot, type);
                 return bot;
-            }
-            case MEDIUM:{
+
+            case MEDIUM:
                 bot = new MediumBotImpl(cardCount);
                 dataGenerator(bot, type);
                 return bot;
-            }
-            case HARD:{
+
+            case HARD:
                 bot = new HardBotImpl(cardCount);
                 dataGenerator(bot, type);
                 return bot;
-            }
+
             default:
                 return new EasyBotImpl(cardCount);
 
         }
     }
 
-    private  void dataGenerator(Bot bot, Bot.Types type) {
+    private void dataGenerator(Bot bot, Bot.Types type) {
         Integer randomId = new Random().nextInt(100000);
         bot.setName(String.format("%s BOT %d", type, randomId));
         bot.setType(type);

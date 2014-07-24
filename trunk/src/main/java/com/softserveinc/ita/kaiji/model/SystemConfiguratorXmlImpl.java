@@ -28,7 +28,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     private static final Logger LOG = Logger.getLogger(SystemConfiguratorXmlImpl.class);
 
-    //private String configurationFile;
     private static final String DEFAULT_GAME_NAME = "Duel";
     private static final String DEFAULT_USER_NAME = "Zoro";
     private static final Integer DEFAULT_CARDS_NUMBER = 4;
@@ -42,7 +41,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     private Path filePath;
 
     public SystemConfiguratorXmlImpl() {
-        //configurationFile  = "system-configuration.xml";
         this.filePath = Paths.get("system-configuration.xml");
     }
 
@@ -83,7 +81,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
             this.currentSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
             if (!checkSystemConfiguration()) {
-                throw new RuntimeException("Incorrect configuration parameters");
+                throw new IllegalArgumentException("Incorrect configuration parameters");
             }
 
         } catch (JAXBException e) {
@@ -137,12 +135,12 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     }
 
     private boolean checkSystemConfiguration() {
-        return (currentSystemConfiguration.getGameConnectionTimeout() != null
+        return currentSystemConfiguration.getGameConnectionTimeout() != null
                 && currentSystemConfiguration.getGameName() != null
                 && currentSystemConfiguration.getBotType() != null
                 && currentSystemConfiguration.getNumberOfCards() != null
                 && currentSystemConfiguration.getRoundTimeout() != null
-                && currentSystemConfiguration.getUserName() != null);
+                && currentSystemConfiguration.getUserName() != null;
 
     }
 

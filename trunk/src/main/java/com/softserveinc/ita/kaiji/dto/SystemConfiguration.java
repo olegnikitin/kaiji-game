@@ -31,6 +31,7 @@ public class SystemConfiguration {
     public String getGameName() {
         return gameName;
     }
+
     @XmlElement
     public void setGameName(String gameName) {
         this.gameName = gameName;
@@ -39,6 +40,7 @@ public class SystemConfiguration {
     public String getUserName() {
         return userName;
     }
+
     @XmlElement
     public void setUserName(String userName) {
         this.userName = userName;
@@ -47,6 +49,7 @@ public class SystemConfiguration {
     public Integer getNumberOfCards() {
         return numberOfCards;
     }
+
     @XmlElement
     public void setNumberOfCards(Integer numberOfCards) {
         this.numberOfCards = numberOfCards;
@@ -55,6 +58,7 @@ public class SystemConfiguration {
     public Long getGameConnectionTimeout() {
         return gameConnectionTimeout;
     }
+
     @XmlElement
     public void setGameConnectionTimeout(Long gameConnectionTimeout) {
         this.gameConnectionTimeout = gameConnectionTimeout;
@@ -63,30 +67,31 @@ public class SystemConfiguration {
     public Long getRoundTimeout() {
         return roundTimeout;
     }
+
     @XmlElement
     public void setRoundTimeout(Long roundTimeout) {
         this.roundTimeout = roundTimeout;
     }
 
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) {
 
-        if(obj == null){
+        if (obj == null) {
             return false;
         }
 
-        if(this == obj){
+        if (this == obj) {
             return true;
         }
 
-        if (obj instanceof SystemConfiguration){
-            SystemConfiguration configuration = (SystemConfiguration)obj;
-            return (this.gameName.equals(configuration.getGameName())&&
-                    this.userName.equals(configuration.getUserName())&&
-                    this.numberOfCards.equals(configuration.getNumberOfCards())&&
-                    this.botType.equals(configuration.botType)&&
-                    this.gameConnectionTimeout.equals(configuration.getGameConnectionTimeout())&&
-                    this.roundTimeout.equals(configuration.getRoundTimeout()));
+        if (obj instanceof SystemConfiguration) {
+            SystemConfiguration configuration = (SystemConfiguration) obj;
+            return this.gameName.equals(configuration.getGameName())
+                    && this.userName.equals(configuration.getUserName())
+                    && this.numberOfCards.equals(configuration.getNumberOfCards())
+                    && this.botType.equals(configuration.botType)
+                    && this.gameConnectionTimeout.equals(configuration.getGameConnectionTimeout())
+                    && this.roundTimeout.equals(configuration.getRoundTimeout());
         }
         return false;
     }

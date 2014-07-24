@@ -2,7 +2,6 @@ package com.softserveinc.ita.kaiji.dto.game;
 
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game;
-import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;

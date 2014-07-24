@@ -1,5 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
+import org.apache.log4j.Logger;
+
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import java.io.IOException;
@@ -11,17 +13,20 @@ import java.io.IOException;
  * @version 1.0
  */
 public class TimeoutListener implements AsyncListener {
+
+    private static final Logger LOG = Logger.getLogger(TimeoutListener.class);
+
     @Override
     public void onComplete(AsyncEvent event) throws IOException {
-
+        LOG.trace("AsyncListener Event completed." + event.toString());
     }
     @Override
     public void onError(AsyncEvent event) throws IOException {
-
+        LOG.error("AsyncListener Event error." + event.toString());
     }
     @Override
     public void onStartAsync(AsyncEvent event) throws IOException {
-
+        LOG.error("AsyncListener Event started." + event.toString());
     }
     @Override
     public void onTimeout(AsyncEvent event) throws IOException {

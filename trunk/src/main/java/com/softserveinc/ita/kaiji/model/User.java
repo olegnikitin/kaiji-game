@@ -1,10 +1,7 @@
 package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
-import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
-import com.softserveinc.ita.kaiji.model.game.RoundResult;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
