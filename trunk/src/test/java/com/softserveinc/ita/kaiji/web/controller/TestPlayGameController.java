@@ -1,26 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.softserveinc.ita.kaiji.model.User;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.ui.ExtendedModelMap;
-
 import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game.State;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
@@ -30,9 +11,28 @@ import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot.Types;
 import com.softserveinc.ita.kaiji.service.GameService;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.ui.ExtendedModelMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Eugene Semenkov
@@ -40,8 +40,6 @@ import javax.servlet.http.HttpServletRequest;
  * @since 28.03.14
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = { "file:src/main/webapp/WEB-INF/spring-tests/web-context.xml" })
 public class TestPlayGameController {
 
 	private GameService gameService;
@@ -52,7 +50,7 @@ public class TestPlayGameController {
 	public void initPlayGameController(){
 		playGameController = new PlayGameController();
 	}
-    @Ignore
+
 	@Test
 	public void testInitGame() {
         User testUser1 = new User("Eric", "mail", "pass");
@@ -121,6 +119,7 @@ public class TestPlayGameController {
 
 		ExtendedModelMap uiModel = new ExtendedModelMap();
         HttpServletRequest request = mock(HttpServletRequest.class);
+        uiModel.addAttribute("playerId",0);
 		String result = playGameController.initGame(0,request, uiModel);
 		assertNotNull(result);
 		assertEquals("PlayGameController must return the play-game view ",
@@ -130,30 +129,15 @@ public class TestPlayGameController {
 		GameHistory gameHistory = (GameHistory) uiModel.get("gameHistory");
 		Player player = (Player) uiModel.get("playerObject");
 		Player enemy = (Player) uiModel.get("enemyObject");
-
 		assertEquals("Init Game must set correct gameId in the model ",
-				new Integer(0), gameId);
+                new Integer(0), gameId);
 		assertEquals("Init Game must set correct gamehistory in the model ",
 				this.gameHistory, gameHistory);
+
 		assertEquals("Init Game must set correct player in the model ",
 				player1, player);
 		assertEquals("Init Game must set correct enemy in the model ", player2,
 				enemy);
 	}
 
-    @Ignore
-	@Test
-	public void testGetCard() {
-		/*
-		gameService = mock(GameService.class);
-		doNothing().when(gameService).makeTurn(0, 0, Card.PAPER);			
-		ReflectionTestUtils.setField(playGameController, "gameService",
-				gameService);
-		
-		String result = playGameController.getCard(0, Card.PAPER.toString());
-		assertNotNull(result);
-		assertEquals("PlayGameController must return sthe play-game view ",
-				"redirect:/game/0/", result);
-				*/
-	}
 }

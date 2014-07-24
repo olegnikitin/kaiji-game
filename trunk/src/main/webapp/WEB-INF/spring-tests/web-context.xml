@@ -10,6 +10,10 @@
 
     <import resource="service-context.xml"/>
 
-    <context:component-scan base-package="com.softserveinc.ita.kaiji.web"/>
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <bean id ="systemConfigurationService" class="com.softserveinc.ita.kaiji.service.SystemConfigurationService"/>
+
+    <context:component-scan base-package="com.softserveinc.ita.kaiji"/>
+
 
 </beans>

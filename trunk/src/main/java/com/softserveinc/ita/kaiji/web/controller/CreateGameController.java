@@ -55,6 +55,7 @@ public class CreateGameController {
         if (LOG.isTraceEnabled()) {
             LOG.trace("CreateGameController got GET-request");
         }
+
         SystemConfiguration systemConfiguration = systemConfigurationService.getSystemConfiguration();
         GameInfoDto gameInfoDto = new GameInfoDto();
         gameInfoDto.setGameName(systemConfiguration.getGameName());
