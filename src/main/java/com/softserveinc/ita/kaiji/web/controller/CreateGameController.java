@@ -1,14 +1,10 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
+import com.softserveinc.ita.kaiji.dto.GameInfoDto;
+import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
-import com.softserveinc.ita.kaiji.service.UserService;
+import com.softserveinc.ita.kaiji.service.GameService;
+import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.SecondPlayerChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
@@ -21,11 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.softserveinc.ita.kaiji.dto.GameInfoDto;
-import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
-import com.softserveinc.ita.kaiji.service.GameService;
-import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
-
+import javax.servlet.AsyncContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 /**
@@ -45,8 +42,7 @@ public class CreateGameController {
 
     @Autowired
     private GameService gameService;
-    @Autowired
-    private UserService userService;
+
     @Autowired
     private SystemConfigurationService systemConfigurationService;
 

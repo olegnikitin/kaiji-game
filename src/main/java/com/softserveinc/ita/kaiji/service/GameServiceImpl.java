@@ -1,15 +1,15 @@
 package com.softserveinc.ita.kaiji.service;
 
-import java.util.*;
-import java.util.Set;
-
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
-import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
+import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
+import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.*;
+import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPool;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPoolImpl;
 import org.apache.log4j.Logger;
@@ -17,10 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import com.softserveinc.ita.kaiji.dto.GameInfoDto;
-import com.softserveinc.ita.kaiji.model.player.bot.Bot;
-import com.softserveinc.ita.kaiji.model.Card;
-import com.softserveinc.ita.kaiji.model.player.Player;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author Bohdan Shaposhnik, Ievgen Sukhov
@@ -41,8 +40,6 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private GameInfoEntityDAO gameInfoEntityDAO;
     @Autowired
     private GameHistoryEntityDAO gameHistoryEntityDAO;
 
@@ -199,10 +196,9 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
-
+        //GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
         //Don't save game to DB. We must do it after game completion
-        //Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);
+        /*Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);*/
         //gameInfo.setDatabaseId(databaseId);
         if (gameInfo.getPlayers().size() != 2) {
             LOG.trace("Add boot player " + botPlayer);

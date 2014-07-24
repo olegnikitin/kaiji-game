@@ -48,20 +48,24 @@ public class PlayGameRoundsTag extends SimpleTagSupport {
 
     private String getCardIconUrlByCard(Card card) {
 
+        String cardIcon;
+
         switch (card) {
 
             case PAPER:
-                return "http://i58.tinypic.com/2u6pb93.png";
-
+                cardIcon = "http://i58.tinypic.com/2u6pb93.png";
+                break;
             case ROCK:
-                return "http://i61.tinypic.com/2cyntlk.png";
-
+                cardIcon = "http://i61.tinypic.com/2cyntlk.png";
+                break;
             case SCISSORS:
-                return "http://i62.tinypic.com/xngqb9.png";
-
+                cardIcon = "http://i62.tinypic.com/xngqb9.png";
+                break;
+            default:
+                cardIcon = null;
         }
 
-        return null;
+        return cardIcon;
 
     }
 
