@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
     public synchronized Set<Player> createPlayer(GameInfoDto gameInfoDto) {
 
         Set<Player> result = new HashSet<>();
-
         User user = findUser(gameInfoDto.getPlayerName());
         Player player = playerFactory.makePlayer(user,gameInfoDto.getNumberOfCards());
         player.setId(PLAYERS.size());
