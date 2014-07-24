@@ -1,37 +1,41 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-
+import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
+import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.softserveinc.ita.kaiji.service.GameService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class TestCreateGameController {
 
     private MockMvc mockMvc;
-    
-	@Autowired
-    private GameService gameService;
-	
+
+    @InjectMocks
+    private CreateGameController gameController;
+
+    @Mock
+    private SystemConfigurationService systemConfigurationService;
+
     @Before
     public void setup() {
- 
-    	this.mockMvc = MockMvcBuilders.standaloneSetup(new CreateGameController()).build();
+        MockitoAnnotations.initMocks(this);
+    	this.mockMvc = MockMvcBuilders.standaloneSetup(gameController).build();
     	
     }
- 
-    @Ignore("method under test changed!")
+
     @Test()
     public void testSendToForm() throws Exception {
-        
+
+        Mockito.when(systemConfigurationService.getSystemConfiguration()).thenReturn(new SystemConfiguration());
+
         this.mockMvc.perform(get("/game/new"))
         		.andExpect(status().isOk())
         		.andExpect(view().name("create-game"))

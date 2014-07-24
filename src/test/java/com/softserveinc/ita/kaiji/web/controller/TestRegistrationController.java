@@ -1,27 +1,23 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
 import com.softserveinc.ita.kaiji.dto.UserRegistrationDto;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * @author Vladyslav Shelest
@@ -32,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring-tests/web-context.xml" })
 @WebAppConfiguration
 public class TestRegistrationController {
+
+    private static final Logger LOG = Logger.getLogger(TestRegistrationController.class);
 
     private MockMvc mockMvc;
 
@@ -45,7 +43,6 @@ public class TestRegistrationController {
 
 
     @Test
-    @Ignore
     public void getRegistrationFormTest() {
 
         try {
@@ -57,15 +54,12 @@ public class TestRegistrationController {
                     .andExpect(model().attribute("userDto", hasProperty("email", isEmptyOrNullString())))
                     .andExpect(model().attribute("userDto", hasProperty("password", isEmptyOrNullString())));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Can't perform Registration Form Test. " + e.getMessage());
         }
     }
-/*
 
     @Test
     public void receiveModelTest() {
-
-
 
         UserRegistrationDto userDto = new UserRegistrationDto();
         userDto.setName("user");
@@ -79,10 +73,7 @@ public class TestRegistrationController {
                     .andExpect(view().name("login"))
                     .andExpect(model().attribute("notification", is("You have successfully registered, now log in")));
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Can't perform Receive Model Test. " + e.getMessage());
         }
-
     }
-*/
-
 }

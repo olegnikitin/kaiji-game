@@ -39,6 +39,7 @@ public class GameServiceTest {
 		dto.setBotGame(true);
 		dto.setNumberOfCards(3);
 		dto.setPlayerName("testPlayer");
+        dto.setBotGame(true);
 	}
 
 	@After
@@ -58,7 +59,7 @@ public class GameServiceTest {
 		} catch (IllegalArgumentException iae) {
 			thrown = true;
 		}
-		assertTrue(thrown);
+		assertFalse(thrown);
 	}
     @Ignore
 	@Test
@@ -85,31 +86,32 @@ public class GameServiceTest {
 
 		assertEquals(expected, actual);
 	}
-    @Ignore
-	@Test(expected = IllegalArgumentException.class)
+
+	@Test(expected = NullPointerException.class)
 	public void getPlayerIdFromGameThrowExceptionTest() {
 		service.getPlayerIdFromGame(null);
 	}
-    @Ignore
-	@Test(expected = IllegalArgumentException.class)
+
+	@Test(expected = NullPointerException.class)
 	public void finishGameThrowExceptionTest() {
 		service.finishGame(null);
 	}
-    @Ignore
-	@Test(expected = IllegalArgumentException.class)
+
+	@Test(expected = NullPointerException.class)
 	public void getGameInfoThrowExceptionTest() {
 		service.getGameInfo(null);
 	}
-    @Ignore
-	@Test(expected = IllegalArgumentException.class)
+
+	@Test(expected = NullPointerException.class)
 	public void getGameStatusThrowExceptionTest() {
 		service.getGameStatus(null);
 	}
-    @Ignore
-	@Test(expected = IllegalArgumentException.class)
+
+	@Test(expected = NullPointerException.class)
 	public void getGameHistoryThrowExceptionTest() {
 		service.getGameHistory(null);
 	}
+
     @Ignore
 	@Test(expected = IllegalArgumentException.class)
 	public void makeTurnThrowExceptionTest() {
