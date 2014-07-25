@@ -96,4 +96,14 @@ public class SystemConfiguration {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int result = gameName != null ? gameName.hashCode() : 0;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (numberOfCards != null ? numberOfCards.hashCode() : 0);
+        result = 31 * result + (botType != null ? botType.toString().hashCode() : 0);
+        result = 31 * result + (gameConnectionTimeout != null ? gameConnectionTimeout.hashCode() : 0);
+        result = 31 * result + (roundTimeout != null ? roundTimeout.hashCode() : 0);
+        return result;
+    }
 }

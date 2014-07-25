@@ -19,7 +19,7 @@ public class TestCreateGameController {
     private MockMvc mockMvc;
 
     @InjectMocks
-    private CreateGameController gameController;
+    private CreateGameController gameController = new CreateGameController();
 
     @Mock
     private SystemConfigurationService systemConfigurationService;

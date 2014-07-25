@@ -193,7 +193,19 @@ public abstract class AbstractPlayer implements Player {
                 return true;
             }
         }
-
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = user != null ? user.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (deck != null ? deck.hashCode() : 0);
+        result = 31 * result + (chosenCard != null ? chosenCard.toString().hashCode() : 0);
+        result = 31 * result + (canPlay != null ? canPlay.hashCode() : 0);
+        result = 31 * result + (statistic != null ? statistic.hashCode() : 0);
+        result = 31 * result + (statusChanger != null ? statusChanger.hashCode() : 0);
+        return result;
     }
 }
