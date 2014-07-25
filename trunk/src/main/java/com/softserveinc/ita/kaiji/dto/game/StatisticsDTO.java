@@ -12,7 +12,8 @@ public class StatisticsDTO {
     private Long gameWins;
     private Long totalGames;
 
-    public StatisticsDTO() {}
+    public StatisticsDTO() {
+    }
 
     public Long getTotalGames() {
         return totalGames;

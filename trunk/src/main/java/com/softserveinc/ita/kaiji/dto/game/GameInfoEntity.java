@@ -56,7 +56,8 @@ public class GameInfoEntity implements Identifiable {
     @OneToOne(mappedBy = "gameInfoEntity",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private GameHistoryEntity gameHistoryEntity;
 
-    public GameInfoEntity(){}
+    public GameInfoEntity(){
+    }
 
     public GameInfoEntity(GameInfo gameInfo) {
         gameName = gameInfo.getGameName();
