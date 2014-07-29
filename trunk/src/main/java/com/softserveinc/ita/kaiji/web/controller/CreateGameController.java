@@ -94,7 +94,7 @@ public class CreateGameController {
         asyncContext.setTimeout(systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout());
         asyncContext.addListener(new TimeoutListener(), request, response);
         Integer gameId = gameService.setGameInfo(gameInfoDto);
-        Integer abandonedGameId = gameService.getAbandonedGameId(gameId);
+        Integer abandonedGameId = gameService.getAbandonedGameId(auth.getName(),gameId);
         if (abandonedGameId != null) {
             LOG.trace("Remove abandoned game from pool.");
             gameService.clearGameInfo(abandonedGameId);
