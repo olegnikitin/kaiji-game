@@ -67,8 +67,7 @@ public class TestPlayGameController {
 		GameInfo gameInfo = new GameInfoImpl(
 				"gameName", 
 				"ownerName", 
-				3, 
-				true,
+				3,
 				Types.EASY, players);
 
 		gameHistory = new GameHistory() {

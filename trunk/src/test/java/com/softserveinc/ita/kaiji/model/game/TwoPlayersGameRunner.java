@@ -31,7 +31,7 @@ public class TwoPlayersGameRunner {
         playersSet.add(player1);
         playersSet.add(player2);
 
-        return new GameInfoImpl("Test Game", "no one", 1, true, null, playersSet);
+        return new GameInfoImpl("Test Game", "no one", 1, null, playersSet);
     }
 
     static void printPlayer(Player player) {

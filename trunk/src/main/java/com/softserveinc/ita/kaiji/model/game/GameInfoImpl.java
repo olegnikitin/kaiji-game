@@ -46,7 +46,6 @@ public class GameInfoImpl implements GameInfo {
             String gameName
             , String ownerName
             , Integer numberOfCards
-            , boolean botGame
             , Types botType
             , Set<Player> players) {
         this.gameName = gameName;
@@ -59,10 +58,10 @@ public class GameInfoImpl implements GameInfo {
     }
 
 
-    @Override
+/*    @Override
     public boolean isBotGame() {
         return botGame;
-    }
+    }*/
 
     public void setBotGame(boolean botGame) {
         this.botGame = botGame;
