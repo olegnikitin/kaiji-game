@@ -23,14 +23,6 @@ public interface GameInfo extends Identifiable, Poolable<Integer> {
     Set<Player> getPlayers();
 
     /**
-     * @return if the game is player VS bot
-     * @deprecated
-     */
-
-    @Deprecated
-    boolean isBotGame();
-
-    /**
      * @return the name of the game
      */
     String getGameName();

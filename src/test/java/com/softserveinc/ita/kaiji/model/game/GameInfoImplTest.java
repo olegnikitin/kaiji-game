@@ -31,7 +31,6 @@ public class GameInfoImplTest {
 	private static String gameName;
 	private static String ownerName;
 	private static Integer numberOfCards;
-	private static boolean isBotGame;
 	private static Types botType;
 	private static Set<Player> players = new HashSet<Player>();
 	
@@ -41,7 +40,7 @@ public class GameInfoImplTest {
 		gameName = "game";
 		ownerName = "owner";
 		numberOfCards = 3;
-		isBotGame = true;
+		//isBotGame = true;
 		botType = Types.EASY;
         User testUser1 = new User("player1", "mail", "pass");
 		players.add(new HumanPlayer(testUser1, numberOfCards));
@@ -60,7 +59,6 @@ public class GameInfoImplTest {
 				gameName
 				, ownerName
 				, numberOfCards
-				, isBotGame
 				, botType
 				, players);
 		assertNotNull(gameInfo);

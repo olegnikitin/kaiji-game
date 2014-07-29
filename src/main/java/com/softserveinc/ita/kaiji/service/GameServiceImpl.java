@@ -61,10 +61,9 @@ public class GameServiceImpl implements GameService {
             LOG.trace("setGameInfo: bot added to the set of players");
         }
 
-
         GameInfo newGameInfo = new GameInfoImpl(gameInfoDto.getGameName(),
                 gameInfoDto.getPlayerName(), gameInfoDto.getNumberOfCards(),
-                gameInfoDto.getBotGame(), gameInfoDto.getBotType(), playersSet);
+                 gameInfoDto.getBotType(), playersSet);
         if (gameInfoDto.getBotGame()) {
             newGameInfo.setGameType(Game.Type.BOT_GAME);
         } else {
