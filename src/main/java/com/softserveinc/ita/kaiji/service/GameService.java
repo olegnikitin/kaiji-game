@@ -39,7 +39,7 @@ public interface GameService {
      */
     public Integer getPlayerIdFromGame(String playerName, Integer gameId);
 
-    Integer getAbandonedGameId(Integer currentGameId);
+    Integer getAbandonedGameId(String userName, Integer gameId);
 
     /**
      * Finishes the game

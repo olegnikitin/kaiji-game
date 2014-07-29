@@ -283,13 +283,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Integer getAbandonedGameId(Integer currentGameId) {
-
+    public Integer getAbandonedGameId(String userName, Integer gameId) {
+        System.out.println("getAbandonedGameId");
         Integer abandonedGameId = null;
         for (GameInfo gi : GAME_INFOS) {
-            if (gi.getGameType().equals(Game.Type.BOT_GAME) && !gi.getId().equals(currentGameId)) {
-                abandonedGameId = gi.getId();
-                break;
+            if (gi.getGameType().equals(Game.Type.BOT_GAME) && !gi.getId().equals(gameId)) {
+                for(Player player : gi.getPlayers()) {
+                    if(player.getName().equals(userName)) {
+                        abandonedGameId = gi.getId();
+                        break;
+                    }
+                }
             }
         }
         return abandonedGameId;
