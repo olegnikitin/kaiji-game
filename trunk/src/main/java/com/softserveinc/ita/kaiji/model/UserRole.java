@@ -7,7 +7,6 @@ package com.softserveinc.ita.kaiji.model;
  * @since 10.04.14
  */
 public enum UserRole {
-    GUEST_ROLE,
     USER_ROLE,
     ADMIN_ROLE
 }
