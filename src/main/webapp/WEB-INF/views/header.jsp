@@ -68,7 +68,7 @@
                 </ul>
             </li>
             <sec:authorize access="hasRole('ADMIN_ROLE')">
-            <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerSettings}</a></li>
+            <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b class="glyphicon glyphicon-wrench"> </b> ${headerSettings}</a></li>
             <li><a href="<spring:url value="/dao" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
             </sec:authorize>
         </ul>

@@ -10,6 +10,7 @@ import java.util.Set;
 
 /**
  * Represents basic User that can be introduced to system
+ *
  * @author Ievgen Sukhov
  * @author Paziy Evgeniy
  * @version 3.4
@@ -48,20 +49,19 @@ public class User implements Identifiable {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = {@JoinColumn(name = "user_id")})
     @Column(name = "role", nullable = false,
-            columnDefinition = "enum('GUEST_ROLE','USER_ROLE', 'ADMIN_ROLE')")
+            columnDefinition = "enum('USER_ROLE', 'ADMIN_ROLE')")
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = getDefaultRoles();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "link_game_to_user",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "game_id") })
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "game_id")})
     private Set<GameInfoEntity> gameInfoEntities;
 
 
-    public User() {
-    }
+    public User() {}
 
     public User(String nickname, String email, String password) {
         this.nickname = nickname;
@@ -81,6 +81,7 @@ public class User implements Identifiable {
 
     /**
      * Returns real user name under which current user is registered in system
+     *
      * @return {@link java.lang.String} user name
      */
     public String getName() {
@@ -89,6 +90,7 @@ public class User implements Identifiable {
 
     /**
      * Sets name of user.
+     *
      * @param name {@link java.lang.String} new user name
      */
     public void setName(String name) {
@@ -97,6 +99,7 @@ public class User implements Identifiable {
 
     /**
      * Returns user's nickname (login)
+     *
      * @return {@link java.lang.String} user's nickname
      */
     public String getNickname() {
@@ -105,6 +108,7 @@ public class User implements Identifiable {
 
     /**
      * Sets user's nickname (login)
+     *
      * @param nickname {@link java.lang.String} new user's nickname
      */
     public void setNickname(String nickname) {
@@ -113,6 +117,7 @@ public class User implements Identifiable {
 
     /**
      * Returns encrypted user's password
+     *
      * @return encrypted user's password
      */
     public String getPassword() {
@@ -121,6 +126,7 @@ public class User implements Identifiable {
 
     /**
      * Sets new encrypted password for user
+     *
      * @param password encrypted password for user
      */
     public void setPassword(String password) {
@@ -129,6 +135,7 @@ public class User implements Identifiable {
 
     /**
      * Returns date of user's registration
+     *
      * @return {@link java.util.Date} date of user's registration
      */
     public Date getRegistrationDate() {
@@ -137,6 +144,7 @@ public class User implements Identifiable {
 
     /**
      * Sets user registration date.
+     *
      * @param registrationDate {@link java.util.Date} date of user's registration
      */
     public void setRegistrationDate(Date registrationDate) {
@@ -145,6 +153,7 @@ public class User implements Identifiable {
 
     /**
      * Returns user's email
+     *
      * @return {@link java.lang.String} user's email
      */
     public String getEmail() {
@@ -153,6 +162,7 @@ public class User implements Identifiable {
 
     /**
      * Sets user's mail.
+     *
      * @param email {@link java.lang.String} new user's email
      */
     public void setEmail(String email) {
@@ -161,6 +171,7 @@ public class User implements Identifiable {
 
     /**
      * Return user's gender
+     *
      * @return {@link Gender} gender of user
      */
     public Gender getGender() {
@@ -169,6 +180,7 @@ public class User implements Identifiable {
 
     /**
      * Sets user's gender.
+     *
      * @param gender {@link Gender} gender of user
      */
     public void setGender(Gender gender) {
@@ -194,19 +206,8 @@ public class User implements Identifiable {
                 '}';
     }
 
-    /**
-     * Return true is user password match to entered password
-     * @param password entered decrypted password
-     * @return result of verifying
-     */
-    public boolean verifyPassword(String password) {
-        //todo implement this method when passwords will be used and encrypt
-        return this.password.equals(password);
-    }
-
     public static Set<UserRole> getDefaultRoles() {
-        Set<UserRole> defaultRoles = new HashSet<>(2);
-        defaultRoles.add(UserRole.GUEST_ROLE);
+        Set<UserRole> defaultRoles = new HashSet<>();
         defaultRoles.add(UserRole.USER_ROLE);
         return defaultRoles;
     }
