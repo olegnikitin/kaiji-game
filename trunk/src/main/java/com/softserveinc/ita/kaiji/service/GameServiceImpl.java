@@ -63,7 +63,7 @@ public class GameServiceImpl implements GameService {
 
         GameInfo newGameInfo = new GameInfoImpl(gameInfoDto.getGameName(),
                 gameInfoDto.getPlayerName(), gameInfoDto.getNumberOfCards(),
-                 gameInfoDto.getBotType(), playersSet);
+                gameInfoDto.getBotType(), playersSet);
         if (gameInfoDto.getBotGame()) {
             newGameInfo.setGameType(Game.Type.BOT_GAME);
         } else {
@@ -102,13 +102,11 @@ public class GameServiceImpl implements GameService {
             Iterator<User> userIterator;
             User currentUser;
 
-            //Prohibit to write bot player Round Results to DB ,i.e. bot doesn't exist in DB
             for (RoundResultEntity roundResult : gameHistoryEntity.getRoundResults()) {
                 userIterator = roundResult.getRound().keySet().iterator();
                 while (userIterator.hasNext()) {
                     currentUser = userIterator.next();
-                    //Not very good condition to determine bot player. Should be changed in future.
-                    if (currentUser.getName().equals(currentUser.getEmail())) {
+                    if (currentUser.getId() < 0){
                         userIterator.remove();
                     }
                 }
@@ -116,11 +114,9 @@ public class GameServiceImpl implements GameService {
 
             userIterator = gameHistoryEntity.getWinners().iterator();
 
-            //Prohibit to write winner bot player to DB ,i.e. bot doesn't exist in DB
             while (userIterator.hasNext()) {
                 currentUser = userIterator.next();
-                //Not very good condition to determine bot player. Should be changed in future.
-                if (currentUser.getName().equals(currentUser.getEmail())) {
+                if (currentUser.getId() < 0) {
                     userIterator.remove();
                     break;
                 }
@@ -287,8 +283,8 @@ public class GameServiceImpl implements GameService {
         Integer abandonedGameId = null;
         for (GameInfo gi : GAME_INFOS) {
             if (gi.getGameType().equals(Game.Type.BOT_GAME) && !gi.getId().equals(gameId)) {
-                for(Player player : gi.getPlayers()) {
-                    if(player.getName().equals(userName)) {
+                for (Player player : gi.getPlayers()) {
+                    if (player.getName().equals(userName)) {
                         abandonedGameId = gi.getId();
                         break;
                     }
