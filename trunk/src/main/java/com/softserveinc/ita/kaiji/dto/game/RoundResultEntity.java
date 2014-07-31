@@ -7,7 +7,6 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -71,10 +70,6 @@ public class RoundResultEntity implements Identifiable {
     @MapKeyJoinColumn(name = "user_id", nullable = false)
     private Map<User, Entry> round;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "end_time")
-    private Date endTime;
-
     public RoundResultEntity() {
     }
 
@@ -83,8 +78,6 @@ public class RoundResultEntity implements Identifiable {
         for (Player p : roundResult.getPlayers()) {
             round.put(p.getUser(), new Entry(roundResult.getCard(p), roundResult.getDuelResult(p)));
         }
-
-        endTime = roundResult.getEndTime();
     }
 
     @Override
@@ -126,14 +119,6 @@ public class RoundResultEntity implements Identifiable {
 
     public void setGameHistory(GameHistoryEntity gameHistory) {
         this.gameHistory = gameHistory;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
     }
 
     public Integer getNumber() {
