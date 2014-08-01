@@ -103,7 +103,6 @@ public class CreateGameController {
         Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameId);
         model.addAttribute("playerId", playerId);
         asyncContext.start(new SecondPlayerChecker(asyncContext, gameId, gameService));
-
         if (LOG.isTraceEnabled()) {
             LOG.trace("Game started. AsyncContext working. ");
         }

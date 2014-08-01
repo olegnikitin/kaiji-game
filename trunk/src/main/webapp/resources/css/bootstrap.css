@@ -245,7 +245,7 @@ th {
   .dropup > .btn > .caret {
     border-top-color: #000 !important;
   }
-  .label {
+    .label {
     border: 1px solid #000;
   }
   .table {
@@ -1646,6 +1646,7 @@ legend {
   border: 0;
   border-bottom: 1px solid #e5e5e5;
 }
+
 label {
   display: inline-block;
   margin-bottom: 5px;

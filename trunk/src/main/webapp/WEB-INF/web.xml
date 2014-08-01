@@ -31,6 +31,14 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- Http Session Listener -->
+
+    <listener>
+        <listener-class>
+            com.softserveinc.ita.kaiji.model.util.CheckOnlineUsers
+        </listener-class>
+    </listener>
+
     <!--     Filter encodes resources to UTF-8  -->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>

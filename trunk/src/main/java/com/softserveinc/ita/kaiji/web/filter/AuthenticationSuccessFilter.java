@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.web.filter;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -26,8 +27,13 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
                                         HttpServletResponse response, Authentication authentication) throws IOException,
             ServletException {
         String name = authentication.getName();
-        User user = userDAO.getByNickname(name);
 
+        Set<String> users = (Set<String> )request.getSession().getServletContext().getAttribute("nicknames");
+        users.add(name);
+        request.getSession().getServletContext().setAttribute("nicknames", users);
+        request.getSession().setAttribute("nickname", name);
+
+        User user = userDAO.getByNickname(name);
         if (user != null) {
             Cookie userCookie = new Cookie("personId", user.getId().toString());
             userCookie.setMaxAge(60 * 60 * 24 * 30);
