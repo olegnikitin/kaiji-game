@@ -23,4 +23,9 @@ public class StartPageController {
         return "statistics";
     }
 
+    @RequestMapping("/roomchat")
+    public String getChatPage() {
+        return "chat";
+    }
+
 }

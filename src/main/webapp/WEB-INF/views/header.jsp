@@ -70,6 +70,10 @@
             <sec:authorize access="hasRole('ADMIN_ROLE')">
             <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b class="glyphicon glyphicon-wrench"> </b> ${headerSettings}</a></li>
             <li><a href="<spring:url value="/dao" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
+
+            </sec:authorize>
+            <sec:authorize access="hasRole('USER_ROLE')">
+            <li><a href="<spring:url value="/roomchat" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
             </sec:authorize>
         </ul>
     </div>
