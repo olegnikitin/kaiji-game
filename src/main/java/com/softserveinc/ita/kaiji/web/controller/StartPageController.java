@@ -23,7 +23,7 @@ public class StartPageController {
         return "statistics";
     }
 
-    @RequestMapping("/roomchat")
+    @RequestMapping("/gamechat")
     public String getChatPage() {
         return "chat";
     }

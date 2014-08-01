@@ -54,9 +54,12 @@
         <intercept-url pattern="/config/**" access="hasRole('ADMIN_ROLE')" />
         <form-login login-page="/login" default-target-url="/"
                     authentication-failure-url="/login?error" username-parameter="username"
-                    password-parameter="password" />
+                    password-parameter="password"
+                    authentication-success-handler-ref="authenticationSuccessHandler"/>
         <logout logout-success-url="/" />
     </http>
+
+    <beans:bean id="authenticationSuccessHandler" class="com.softserveinc.ita.kaiji.web.filter.AuthenticationSuccessFilter"/>
 
     <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 

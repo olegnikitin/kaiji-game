@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.chat;
 
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -30,7 +31,7 @@ public class ChatMessageDecoder implements Decoder.Text<ChatMessage> {
 				.readObject();
 		chatMessage.setMessage(obj.getString("message"));
 		chatMessage.setSender(obj.getString("sender"));
-		chatMessage.setReceived(new Date());
+        chatMessage.setReceived(new Date());
 		return chatMessage;
 	}
 
