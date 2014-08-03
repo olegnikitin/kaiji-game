@@ -1,7 +1,9 @@
 package com.softserveinc.ita.kaiji.web.filter;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URI;
+import java.rmi.UnknownHostException;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -40,7 +42,9 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
         request.getSession().setAttribute("nickname", name);
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-        String uri = "ws://localhost:8080/users" ;
+
+        InetAddress ip = InetAddress.getLocalHost();
+        String uri = "ws://" + ip.getHostAddress() + ":8080" +"/users" ;
         try {
             container.connectToServer(ChatClientUpdateEndpoint.class,
                     URI.create(uri));
