@@ -13,9 +13,7 @@ public class StartPageController {
 
     @RequestMapping("/*")
     public String getStartPage() {
-
         return "start-page";
-
     }
 
     @RequestMapping("/statistic/user")

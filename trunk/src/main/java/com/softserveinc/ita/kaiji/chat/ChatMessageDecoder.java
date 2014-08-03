@@ -1,10 +1,8 @@
 package com.softserveinc.ita.kaiji.chat;
 
+import org.apache.log4j.Logger;
 import java.io.StringReader;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Logger;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.websocket.DecodeException;
@@ -13,7 +11,7 @@ import javax.websocket.EndpointConfig;
 
 public class ChatMessageDecoder implements Decoder.Text<ChatMessage> {
 	
-    private final Logger log = Logger.getLogger(getClass().getName());
+    private final Logger LOG = Logger.getLogger(ChatMessageDecoder.class);
     
     @Override
 	public void init(final EndpointConfig config) {
@@ -25,13 +23,15 @@ public class ChatMessageDecoder implements Decoder.Text<ChatMessage> {
 
 	@Override
 	public ChatMessage decode(final String textMessage) throws DecodeException {
-	    log.info("Decode message " + textMessage);
+
+        LOG.trace("Decode message " + textMessage);
 	    ChatMessage chatMessage = new ChatMessage();
-		JsonObject obj = Json.createReader(new StringReader(textMessage))
+
+        JsonObject obj = Json.createReader(new StringReader(textMessage))
 				.readObject();
-		chatMessage.setMessage(obj.getString("message"));
-		chatMessage.setSender(obj.getString("sender"));
-        chatMessage.setReceived(new Date());
+            chatMessage.setMessage(obj.getString("message"));
+            chatMessage.setSender(obj.getString("sender"));
+            chatMessage.setReceived(new Date());
 		return chatMessage;
 	}
 
