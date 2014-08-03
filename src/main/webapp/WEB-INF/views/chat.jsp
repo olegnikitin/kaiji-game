@@ -11,6 +11,12 @@
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 
+    <script type="text/javascript">
+        window.location.hash="no-back-button";
+        window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+        window.onhashchange=function(){window.location.hash="no-back-button";}
+    </script>
+
     <!-- Styles -->
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css" rel="stylesheet">
 
@@ -21,30 +27,51 @@
             background-color: #f5f5f5;
         }
 
-        .received {
+        .received{
             width: 250px;
             font-size: 14px;
             font-weight: bold;
+        }
+
+        .users{
+            width: 250px;
+            font-weight: bold;
+            font-size: 22px;
+            color: blue;
         }
     </style>
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-responsive.css" rel="stylesheet">
 
     <script>
         var wsocket;
+        var updateWsocket;
         var serviceLocation = "ws://" + document.location.host + "/chat/";
+        var updateServiceLocation = "ws://" + document.location.host + "/users";
         var $nickName;
         var $message;
         var $chatWindow;
+        var $activeUsers;
         var group = 'DP-059';
 
         function onMessageReceived(evt) {
             var msg = JSON.parse(evt.data); // native API
-            var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
-                    + '</td><td class="message badge">' + msg.message
-                    + '<td class="received">' + msg.received
-                    + '</td></tr>');
-            $chatWindow.append($messageLine);
+                var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
+                        + '</td><td class="message badge">' + msg.message
+                        + '<td class="received">' + msg.received
+                        + '</td></tr>');
+                $chatWindow.append($messageLine);
         }
+
+        function onMessageUpdateReceived(evt) {
+            var msg = JSON.parse(evt.data);
+            var users = msg.users.toString().split(',');
+            var content = ' '
+            users.forEach(
+                    function buildString(user) { content += (user + '; ')}
+            );
+            $activeUsers.text(content);
+        }
+
         function sendMessage() {
             var msg = '{"message":"' + $message.val() + '", "sender":"'
                     + $nickName + '", "received":""}';
@@ -52,49 +79,55 @@
             $message.val('').focus();
         }
 
-        function connectToChatserver() {
+        function connectToChatServer() {
             wsocket = new WebSocket(serviceLocation + group);
+            updateWsocket = new WebSocket(updateServiceLocation);
             wsocket.onmessage = onMessageReceived;
+            updateWsocket.onmessage= onMessageUpdateReceived;
+        }
+
+        window.onbeforeunload = function (evt) {
+            wsocket.close();
+            updateWsocket.close();
         }
 
         $(document).ready(function () {
+
             $nickName = '${pageContext.request.userPrincipal.name}';
             $message = $('#message');
             $chatWindow = $('#response');
-            connectToChatserver();
+            $activeUsers = $('#activeUsers')
+            connectToChatServer();
             $('.chat-wrapper h2').text('Welcome to chat : ' + $nickName);
-
-            $('.chat-wrapper').show();
+            //$('.chat-wrapper').show();
             $message.focus();
+
+            var content = '';
+            <c:forEach var = "item" items="<%=application.getAttribute(\"nicknames\")%>">
+               content += ("${item}" + "; ")
+            </c:forEach>
+            $activeUsers.text(content);
 
             $('#do-chat').submit(function (evt) {
                 evt.preventDefault();
                 sendMessage()
             });
-        });
+        })
     </script>
 </head>
 
 <body>
 
-<%--<script type="text/javascript">
-    setInterval(function () {
-
-        alert(nicknames)
-       /* */
-       /* alert(request.getServletContext().getAttribute("nicknames"))*/
-    }, 5000);
-</script>--%>
+<jsp:include page="header.jsp"/>
 
 <div class="container chat-wrapper">
     <form id="do-chat">
         <h2 class="alert alert-success"></h2>
+        <h3> Online users : <label id="activeUsers"  class="users"></label> </h3>
         <table id="response" class="table table-bordered"></table>
         <fieldset>
-            <legend>Enter your message..</legend>
-
+            <legend>Enter your message...</legend>
             <div class="controls">
-                Nicknames <%=application.getAttribute("nicknames") %>
                 <input type="text" class="input-block-level" placeholder="Print your message..." id="message"
                        style="height:60px"/>
                 <input type="submit" class="btn btn-large btn-block btn-primary"

@@ -36,6 +36,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        window.location.hash="no-back-button";
+        window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+        window.onhashchange=function(){window.location.hash="no-back-button";}
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -86,6 +92,7 @@
             <c:if test="${isFinished}">
                 -
                 <script type="text/javascript">
+
                     $(document).ready(function () {
 
                         $('.bs-example-modal-lg').modal('toggle');

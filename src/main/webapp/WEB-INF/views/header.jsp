@@ -1,19 +1,19 @@
-<%@ page language="java" isELIgnored="false"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ page language="java" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<spring:message code="header.kaiji" var="headerKaiji" />
-<spring:message code="header.login" var="headerLogin" />
-<spring:message code="header.logout" var="headerLogout" />
-<spring:message code="header.language" var="headerLanguage" />
-<spring:message code="header.settings" var="headerSettings" />
-<spring:message code="header.dao" var="headerDAO" />
-<spring:message code="header.welcome" var="headerWelcome" />
-<spring:message code="header.statistic" var="headerStatistic" />
-<spring:message code="header.register" var="headerRegister" />
+<spring:message code="header.kaiji" var="headerKaiji"/>
+<spring:message code="header.login" var="headerLogin"/>
+<spring:message code="header.logout" var="headerLogout"/>
+<spring:message code="header.language" var="headerLanguage"/>
+<spring:message code="header.settings" var="headerSettings"/>
+<spring:message code="header.dao" var="headerDAO"/>
+<spring:message code="header.welcome" var="headerWelcome"/>
+<spring:message code="header.statistic" var="headerStatistic"/>
+<spring:message code="header.register" var="headerRegister"/>
 
 <html>
 <head>
@@ -45,18 +45,21 @@
             </a>
         </div>
 
-       <div class="navbar-brand">
-           <c:choose>
-        <c:when test="${pageContext.request.userPrincipal.name != null}">
-            ${headerWelcome} : ${pageContext.request.userPrincipal.name} |
-               <a href="<c:url value="/statistic/user" />" > ${headerStatistic}  <span class="glyphicon glyphicon-stats"></span> </a>
-            | <a href="<c:url value="/j_spring_security_logout" />" > ${headerLogout}   <span class="glyphicon glyphicon-share"></span></a>
-        </c:when>
-               <c:otherwise>
-                   <a href="<c:url value="/login" />" > ${headerLogin}</a>  /  <a href="<c:url value="/registration" />" >${headerRegister}</a>
-               </c:otherwise>
-           </c:choose>
-       </div>
+        <div class="navbar-brand">
+            <c:choose>
+                <c:when test="${pageContext.request.userPrincipal.name != null}">
+                    ${headerWelcome} : ${pageContext.request.userPrincipal.name} |
+                    <a href="<c:url value="/statistic/user" />"> ${headerStatistic} <span
+                            class="glyphicon glyphicon-stats"></span> </a>
+                    | <a href="<c:url value="/j_spring_security_logout" />"> ${headerLogout} <span
+                        class="glyphicon glyphicon-share"></span></a>
+                </c:when>
+                <c:otherwise>
+                    <a href="<c:url value="/login" />"> ${headerLogin}</a> / <a
+                        href="<c:url value="/registration" />">${headerRegister}</a>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -69,27 +72,31 @@
             </li>
 
             <sec:authorize access="hasRole('ADMIN_ROLE')">
-            <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b class="glyphicon glyphicon-wrench"> </b> ${headerSettings}</a></li>
-            <li><a href="<spring:url value="/dao" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
+                <li><a href="<spring:url value="/config" htmlEscape="true"/>"><b
+                        class="glyphicon glyphicon-wrench"> </b> ${headerSettings}</a></li>
+                <li><a href="<spring:url value="/dao" htmlEscape="true"/>"><b
+                        class="glyphicon glyphicon-user"> </b> ${headerDAO}</a></li>
+            </sec:authorize>
 
-            </sec:authorize>
             <sec:authorize access="hasRole('USER_ROLE')">
-            <li><a href="<spring:url value="/gamechat" htmlEscape="true"/>"><b class="glyphicon glyphicon-user"> </b>Chat</a></li>
+                <li><a href="<spring:url value="/gamechat" htmlEscape="true"/>"><b
+                        class="glyphicon glyphicon-user"> </b>Chat</a></li>
             </sec:authorize>
+
         </ul>
     </div>
 </div>
 
 </br></br></br>
 <c:if test="${notification ne null}">
-<div class="container">
-    <div class="alert alert-warning alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <div class="container">
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
 
-         <h3>   ${notification} </h3>
+            <h3> ${notification} </h3>
 
+        </div>
     </div>
-</div>
 </c:if>
 
 <script
