@@ -34,8 +34,8 @@ public class CheckOnlineUsers implements HttpSessionListener {
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
             try {
-                InetAddress ip = InetAddress.getLocalHost();
-                String uri = "ws://" + ip.getHostAddress() + ":8080" +"/users" ;
+                String hostname = (String)se.getSession().getServletContext().getAttribute("hostname");
+                String uri = "ws://" + hostname  +"/users" ;
                 container.connectToServer(ChatClientUpdateEndpoint.class,
                         URI.create(uri));
             } catch (IOException | javax.websocket.DeploymentException e) {
