@@ -43,8 +43,11 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
-        InetAddress ip = InetAddress.getLocalHost();
-        String uri = "ws://" + ip.getHostAddress() + ":8080" +"/users" ;
+        String url = request.getRequestURL().toString();
+        int tempString = url.indexOf("//") + 2;
+        String hostname = url.substring(tempString, url.indexOf('/', tempString));
+        request.getSession().getServletContext().setAttribute("hostname",hostname);
+        String uri = "ws://" + hostname + "/users" ;
         try {
             container.connectToServer(ChatClientUpdateEndpoint.class,
                     URI.create(uri));
