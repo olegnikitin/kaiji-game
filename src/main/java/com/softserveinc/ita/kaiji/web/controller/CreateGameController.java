@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for New Game form
@@ -122,9 +123,8 @@ public class CreateGameController {
             rd.forward(request, response);
         } else {
             final AsyncContext asyncContext = request.startAsync(request, response);
-            asyncContext.setTimeout(systemConfigurationService
-                    .getSystemConfiguration().getGameConnectionTimeout());
-
+            asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService
+                    .getSystemConfiguration().getGameConnectionTimeout(),TimeUnit.MILLISECONDS.SECONDS));
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             Integer playerId = gameService.addPlayer(auth.getName(), gameName);
             model.addAttribute("playerId", playerId);
