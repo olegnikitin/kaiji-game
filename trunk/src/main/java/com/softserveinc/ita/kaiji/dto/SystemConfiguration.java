@@ -1,7 +1,11 @@
 package com.softserveinc.ita.kaiji.dto;
 
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,11 +16,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class SystemConfiguration {
+    @NotEmpty
+    @Size(min = 2, max= 30)
     private String gameName;
+    @NotEmpty
+    @Size(min = 2, max= 30)
     private String userName;
+    @NotNull
+    @Range(min =  1, max = 20)
     private Integer numberOfCards;
+    @NotNull
     private Bot.Types botType;
+    @NotNull
+    @Range(min =  1, max = 300)
     private Long gameConnectionTimeout;
+    @NotNull
+    @Range(min =  1, max = 100)
     private Long roundTimeout;
 
     public Bot.Types getBotType() {

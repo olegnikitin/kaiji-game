@@ -60,7 +60,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">${headerLanguage} <b class="caret"></b></a>

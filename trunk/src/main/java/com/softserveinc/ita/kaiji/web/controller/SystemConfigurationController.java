@@ -70,7 +70,7 @@ public class SystemConfigurationController {
                 LOG.info("Binding failed: systemConfiguration model is NOT VALID");
             }
 
-            return "redirect:/config/";
+            return "system-configuration";
         }
         switch (action) {
             case "refresh":

@@ -1,10 +1,11 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
 
-import java.io.IOException;
-import java.util.Locale;
-import java.util.Set;
-
+import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.game.GameHistory;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.service.UserService;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
@@ -15,17 +16,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import com.softserveinc.ita.kaiji.model.Card;
-import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
-import com.softserveinc.ita.kaiji.model.player.Player;
-import com.softserveinc.ita.kaiji.service.GameService;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Time;
+import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Eugene Semenkov
@@ -120,7 +123,7 @@ public class PlayGameController {
         //starting async
         if (!enemy.isBot() & (enemy.getCardCount() != player.getCardCount())) {
             final AsyncContext asyncContext = request.startAsync(request, response);
-            asyncContext.setTimeout(systemConfigurationService.getSystemConfiguration().getRoundTimeout());
+            asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService.getSystemConfiguration().getRoundTimeout(), TimeUnit.SECONDS));
             asyncContext.addListener(new TimeoutListener(), request, response);
 
             asyncContext.start(new TurnChecker(asyncContext, gameId, userService, enemy.getId(), personId));

@@ -32,10 +32,10 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     private static final String DEFAULT_USER_NAME = "Zoro";
     private static final Integer DEFAULT_CARDS_NUMBER = 4;
     private static final Bot.Types DEFAULT_BOT_TYPE = Bot.Types.EASY;
-    //300000L -> 5 minutes
-    private static final Long DEFAULT_GAME_CONNECTION_TIMEOUT = 300000L;
-    //60000L -> 1 minute
-    private static final Long DEFAULT_ROUND_CONNECTION_TIMEOUT = 60000L;
+    // 260 seconds -> 4 minutes
+    private static final Long DEFAULT_GAME_CONNECTION_TIMEOUT = 260L;
+    // 90 seconds
+    private static final Long DEFAULT_ROUND_CONNECTION_TIMEOUT = 90L;
 
     private SystemConfiguration currentSystemConfiguration;
     private Path filePath;
@@ -56,7 +56,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
 
     @Override
     public SystemConfiguration getSystemConfiguration() {
-
         loadSystemConfiguration();
         return this.currentSystemConfiguration;
     }
@@ -83,7 +82,6 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             if (!checkSystemConfiguration()) {
                 throw new IllegalArgumentException("Incorrect configuration parameters");
             }
-
         } catch (JAXBException e) {
             LOG.error("Unable to load configuration from file. " + e.getMessage());
             throw new RuntimeException(e);
