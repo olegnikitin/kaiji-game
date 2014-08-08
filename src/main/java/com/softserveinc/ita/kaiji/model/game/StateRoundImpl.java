@@ -50,6 +50,7 @@ class StateRoundImpl implements Round {
         if (statusChanger.getPreviousState() == State.ROUND_READY_TO_FINISH) {
             List<Player> playerList = new ArrayList<>(players);
             roundResult = new RoundResult(playerList.get(0), playerList.get(1));
+
         }
     }
 
@@ -128,6 +129,8 @@ class StateRoundImpl implements Round {
         buildRoundResult();
 
         Integer quantity;
+        Integer maxWins = 0;
+        Integer deckSize = 0;
         for (Player p : players) {
             if (p.isGameWithStars()) {
                 quantity = p.getStar().getQuantity();
@@ -138,6 +141,14 @@ class StateRoundImpl implements Round {
                 }
             }
             p.commitTurn(roundResult.getDuelResult(p));
+            deckSize = p.getDeck().getDeckSize();
+            maxWins = Math.max(maxWins,p.getStatistic().getSpecificStat(Card.DuelResult.WIN));
+        }
+
+        if (maxWins > deckSize){
+            for(Player p : players){
+                p.finish();
+            }
         }
 
         if (LOGGER.isDebugEnabled()) {
