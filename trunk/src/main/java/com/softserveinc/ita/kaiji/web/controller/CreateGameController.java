@@ -59,6 +59,7 @@ public class CreateGameController {
         gameInfoDto.setPlayerName(systemConfiguration.getUserName());
         gameInfoDto.setNumberOfCards(systemConfiguration.getNumberOfCards());
         gameInfoDto.setBotType(systemConfiguration.getBotType());
+        gameInfoDto.setNumberOfStars(systemConfiguration.getNumberOfStars());
         model.addAttribute("gameInfo", gameInfoDto);
         model.addAttribute("playerId", new Integer(0));
 
@@ -77,7 +78,7 @@ public class CreateGameController {
             LOG.trace("Checking BindingResult for mistakes");
         }
         if (br.hasErrors()) {
-            LOG.info("Registration failed: gameInfo model NOT VALID");
+            LOG.error("Registration failed: gameInfo model NOT VALID");
             return "create-game";
         }
         return "redirect:/game/new/start";
@@ -92,10 +93,11 @@ public class CreateGameController {
         gameInfoDto.setPlayerName(auth.getName());
 
         final AsyncContext asyncContext = request.startAsync(request, response);
-        asyncContext.setTimeout(systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout());
+        asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(
+                systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.SECONDS));
         asyncContext.addListener(new TimeoutListener(), request, response);
         Integer gameId = gameService.setGameInfo(gameInfoDto);
-        Integer abandonedGameId = gameService.getAbandonedGameId(auth.getName(),gameId);
+        Integer abandonedGameId = gameService.getAbandonedGameId(auth.getName(), gameId);
         if (abandonedGameId != null) {
             LOG.trace("Remove abandoned game from pool.");
             gameService.clearGameInfo(abandonedGameId);
@@ -124,7 +126,7 @@ public class CreateGameController {
         } else {
             final AsyncContext asyncContext = request.startAsync(request, response);
             asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService
-                    .getSystemConfiguration().getGameConnectionTimeout(),TimeUnit.MILLISECONDS.SECONDS));
+                    .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS));
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             Integer playerId = gameService.addPlayer(auth.getName(), gameName);
             model.addAttribute("playerId", playerId);

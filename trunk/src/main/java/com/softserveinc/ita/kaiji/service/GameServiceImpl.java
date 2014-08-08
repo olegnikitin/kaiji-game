@@ -63,6 +63,7 @@ public class GameServiceImpl implements GameService {
 
         GameInfo newGameInfo = new GameInfoImpl(gameInfoDto.getGameName(),
                 gameInfoDto.getPlayerName(), gameInfoDto.getNumberOfCards(),
+                gameInfoDto.getNumberOfStars(),
                 gameInfoDto.getBotType(), playersSet);
         if (gameInfoDto.getBotGame()) {
             newGameInfo.setGameType(Game.Type.BOT_GAME);
@@ -279,7 +280,6 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Integer getAbandonedGameId(String userName, Integer gameId) {
-        System.out.println("getAbandonedGameId");
         Integer abandonedGameId = null;
         for (GameInfo gi : GAME_INFOS) {
             if (gi.getGameType().equals(Game.Type.BOT_GAME) && !gi.getId().equals(gameId)) {

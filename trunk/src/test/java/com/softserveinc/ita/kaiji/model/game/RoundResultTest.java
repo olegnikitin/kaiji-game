@@ -24,9 +24,9 @@ public class RoundResultTest {
     @Before
     public void setup() {
         User testUser1 = new User("player1", "mail", "pass");
-        first = new HumanPlayer(testUser1, 1);
+        first = new HumanPlayer(testUser1, 1, 1);
         User testUser2 = new User("player2", "mail", "pass");
-        second = new HumanPlayer(testUser2, 1);
+        second = new HumanPlayer(testUser2, 1, 1);
     }
 
     @After

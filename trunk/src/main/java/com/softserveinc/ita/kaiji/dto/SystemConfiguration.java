@@ -23,8 +23,11 @@ public class SystemConfiguration {
     @Size(min = 2, max= 30)
     private String userName;
     @NotNull
-    @Range(min =  1, max = 20)
+    @Range(min =  1, max = 5)
     private Integer numberOfCards;
+    @NotNull
+    @Range(min =  1, max = 10)
+    private Integer numberOfStars;
     @NotNull
     private Bot.Types botType;
     @NotNull
@@ -88,6 +91,15 @@ public class SystemConfiguration {
         this.roundTimeout = roundTimeout;
     }
 
+    public Integer getNumberOfStars() {
+        return numberOfStars;
+    }
+
+    @XmlElement
+    public void setNumberOfStars(Integer numberOfStars) {
+        this.numberOfStars = numberOfStars;
+    }
+
     @Override
     public boolean equals(Object obj) {
 
@@ -106,7 +118,8 @@ public class SystemConfiguration {
                     && this.numberOfCards.equals(configuration.getNumberOfCards())
                     && this.botType.equals(configuration.botType)
                     && this.gameConnectionTimeout.equals(configuration.getGameConnectionTimeout())
-                    && this.roundTimeout.equals(configuration.getRoundTimeout());
+                    && this.roundTimeout.equals(configuration.getRoundTimeout())
+                    && this.numberOfStars.equals(configuration.getNumberOfStars());
         }
         return false;
     }
@@ -119,6 +132,7 @@ public class SystemConfiguration {
         result = 31 * result + (botType != null ? botType.toString().hashCode() : 0);
         result = 31 * result + (gameConnectionTimeout != null ? gameConnectionTimeout.hashCode() : 0);
         result = 31 * result + (roundTimeout != null ? roundTimeout.hashCode() : 0);
+        result = 31 * result + (numberOfStars != null ? numberOfStars.hashCode() : 0);
         return result;
     }
 }

@@ -31,7 +31,7 @@ public class HumanPlayerTest {
     @Before
     public void setUp() {
         User testUser = new User("testName", "mail", "pass");
-       testPlayer = new HumanPlayer(testUser, 1);
+       testPlayer = new HumanPlayer(testUser, 1 ,1);
 
     }
 
@@ -145,7 +145,7 @@ public class HumanPlayerTest {
     @Test
     public void compareTest() {
         User testUser = new User("testName", "mail", "pass");
-        Player anotherPlayer = new HumanPlayer(testUser, 2);
+        Player anotherPlayer = new HumanPlayer(testUser, 2, 2);
         testPlayer.setId(1);
         anotherPlayer.setId(2);
         assertTrue("Compare not working", testPlayer.compareTo(anotherPlayer) == -1);

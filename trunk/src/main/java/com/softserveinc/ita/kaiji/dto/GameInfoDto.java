@@ -28,10 +28,22 @@ public class GameInfoDto {
     @NotNull(message = "{NotNull.gameinfodtoimpl.numberofcards}")
     @Range(min = 1, max = 5, message = "{Range.gameinfodtoimpl.numberofcards}")
     private Integer numberOfCards;
+    @NotNull(message = "{NotNull.gameinfodtoimpl.numberofstars}")
+    @Range(min = 1, max = 10, message = "{Range.gameinfodtoimpl.numberofstars}")
+    private Integer numberOfStars;
+
     private Bot.Types botType;
 
     private Game.Type gameType;
     private Integer gameId;
+
+    public Integer getNumberOfStars() {
+        return numberOfStars;
+    }
+
+    public void setNumberOfStars(Integer numberOfStars) {
+        this.numberOfStars = numberOfStars;
+    }
 
     public Game.Type getGameType() {
         return gameType;

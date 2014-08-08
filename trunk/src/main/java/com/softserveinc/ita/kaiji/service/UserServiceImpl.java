@@ -18,10 +18,11 @@ import java.util.Set;
 /**
  * Basic implementation of {@link com.softserveinc.ita.kaiji.service.UserService}
  * for interactions with User and Player entities
+ *
  * @author Ievgen Sukhov
  * @version 2.0
  * @since 12.04.14
- *
+ * <p/>
  * Will be redesigned later!
  */
 
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-         userRepository.update(user);
+        userRepository.update(user);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(User user) {
-          userRepository.delete(user);
+        userRepository.delete(user);
     }
 
     @Override
@@ -66,19 +67,22 @@ public class UserServiceImpl implements UserService {
 
         Set<Player> result = new HashSet<>();
         User user = findUser(gameInfoDto.getPlayerName());
-        Player player = playerFactory.makePlayer(user,gameInfoDto.getNumberOfCards());
+        Player player = playerFactory.makePlayer(user, gameInfoDto.getNumberOfCards(), gameInfoDto.getNumberOfStars());
         player.setId(PLAYERS.size());
+        player.setGameWithStars(true);
+        if (gameInfoDto.getBotGame()) {
+            player.setGameWithStars(false);
+        }
         PLAYERS.put(player);
         result.add(player);
-
 
         if (gameInfoDto.getBotGame()) {
             Player bot = playerFactory.makePlayer(gameInfoDto.getBotType(),
                     gameInfoDto.getNumberOfCards());
             bot.setId(PLAYERS.size());
+            bot.setGameWithStars(false);
             PLAYERS.put(bot);
             result.add(bot);
-
         }
 
         return result;
@@ -86,16 +90,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Player getPlayerById(Integer playerId) {
-       Player result = PLAYERS.allocate(playerId);
-       PLAYERS.release(playerId);
-       return result;
+        Player result = PLAYERS.allocate(playerId);
+        PLAYERS.release(playerId);
+        return result;
     }
 
     @Override
     public synchronized Player addPlayer(String nickname, GameInfo gameInfo) {
         User user = findUser(nickname);
-        Player player = playerFactory.makePlayer(user,gameInfo.getNumberOfCards());
+        Player player = playerFactory.makePlayer(user, gameInfo.getNumberOfCards(), gameInfo.getNumberOfStars());
         player.setId(PLAYERS.size());
+        player.setGameWithStars(true);
         PLAYERS.put(player);
         return player;
     }

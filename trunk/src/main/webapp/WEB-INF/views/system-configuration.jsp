@@ -5,7 +5,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-
 <spring:message code="system_configuration.headTitle" var="head_title"/>
 <spring:message code="system_configuration.homeReference" var="home_reference"/>
 <spring:message code="system_configuration.defBotType" var="def_bot_type"/>
@@ -15,6 +14,7 @@
 <spring:message code="system_configuration.gameName" var="game_name"/>
 <spring:message code="system_configuration.userName" var="user_name"/>
 <spring:message code="system_configuration.numberOfCards" var="number_of_cards"/>
+<spring:message code="system_configuration.numberOfStars" var="number_of_stars"/>
 <spring:message code="system_configuration.roundTimeout" var="round_timeout"/>
 <spring:message code="system_configuration.gameConnectionTimeout" var="game_connection_timeout"/>
 <spring:message code="system_configuration.refresh" var="refresh"/>
@@ -65,6 +65,8 @@
                 <form:errors path="userName" cssClass="error"/><br>
                 ${number_of_cards}: <form:input type="text" path="numberOfCards" size="20" class="form-control"/>
                 <form:errors path="numberOfCards" cssClass="error"/><br>
+                ${number_of_stars}: <form:input type="text" path="numberOfStars" size="20" class="form-control"/>
+                <form:errors path="numberOfStars" cssClass="error"/><br>
                 ${game_connection_timeout}: <form:input type="text" path="gameConnectionTimeout" size="20"
                                                         class="form-control"/>
                 <form:errors path="gameConnectionTimeout" cssClass="error"/><br>

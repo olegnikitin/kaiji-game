@@ -54,9 +54,9 @@ public class TestPlayGameController {
 	@Test
 	public void testInitGame() {
         User testUser1 = new User("Eric", "mail", "pass");
-		Player player1 = new HumanPlayer(testUser1, 3);
+		Player player1 = new HumanPlayer(testUser1, 3 ,3);
         User testUser2 = new User("Shon", "mail", "pass");
-		Player player2 = new HumanPlayer(testUser2, 3);
+		Player player2 = new HumanPlayer(testUser2, 3 ,3);
 		player1.setId(0);
 		player2.setId(1);
 
@@ -68,6 +68,7 @@ public class TestPlayGameController {
 				"gameName", 
 				"ownerName", 
 				3,
+                3,
 				Types.EASY, players);
 
 		gameHistory = new GameHistory() {

@@ -30,9 +30,9 @@ public class StateRoundImplTest {
         round = new StateRoundImpl();
 
         User testUser1 = new User("player1", "mail", "pass");
-        firstPlayer = new HumanPlayer(testUser1, 1);
+        firstPlayer = new HumanPlayer(testUser1, 1 , 1);
         User testUser2 = new User("player2", "mail", "pass");
-        secondPlayer = new HumanPlayer(testUser2, 1);
+        secondPlayer = new HumanPlayer(testUser2, 1, 1);
 
     }
 
@@ -137,7 +137,7 @@ public class StateRoundImplTest {
         round.makeTurn(Card.ROCK, firstPlayer);
         round.makeTurn(Card.PAPER, secondPlayer);
         User testUser1 = new User("player1", "mail", "pass");
-        round.makeTurn(Card.SCISSORS, new HumanPlayer(testUser1, 1));
+        round.makeTurn(Card.SCISSORS, new HumanPlayer(testUser1, 1, 1));
     }
 
 }

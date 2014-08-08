@@ -31,6 +31,7 @@ public class GameInfoImplTest {
 	private static String gameName;
 	private static String ownerName;
 	private static Integer numberOfCards;
+    private static Integer numberOfStars;
 	private static Types botType;
 	private static Set<Player> players = new HashSet<Player>();
 	
@@ -40,10 +41,11 @@ public class GameInfoImplTest {
 		gameName = "game";
 		ownerName = "owner";
 		numberOfCards = 3;
+        numberOfStars = 4;
 		//isBotGame = true;
 		botType = Types.EASY;
         User testUser1 = new User("player1", "mail", "pass");
-		players.add(new HumanPlayer(testUser1, numberOfCards));
+		players.add(new HumanPlayer(testUser1, numberOfCards,numberOfStars));
 		Player bot = playerFactory.makePlayer(botType, numberOfCards);
 
 		players.add(bot);
@@ -59,6 +61,7 @@ public class GameInfoImplTest {
 				gameName
 				, ownerName
 				, numberOfCards
+                , numberOfStars
 				, botType
 				, players);
 		assertNotNull(gameInfo);
