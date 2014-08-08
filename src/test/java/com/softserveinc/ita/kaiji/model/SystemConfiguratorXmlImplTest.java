@@ -42,10 +42,11 @@ public class SystemConfiguratorXmlImplTest {
             }
             Files.createFile(filePath);
 
-            systemConfiguration.setGameConnectionTimeout(60000L);
-            systemConfiguration.setRoundTimeout(30000L);
+            systemConfiguration.setGameConnectionTimeout(200L);
+            systemConfiguration.setRoundTimeout(50L);
             systemConfiguration.setGameName("Test");
             systemConfiguration.setUserName("User");
+            systemConfiguration.setNumberOfStars(3);
             systemConfiguration.setBotType(Bot.Types.HARD);
             systemConfiguration.setNumberOfCards(3);
         } catch (IOException e) {

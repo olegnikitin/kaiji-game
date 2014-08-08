@@ -4,6 +4,7 @@ import com.softserveinc.ita.kaiji.exception.MakeTurnException;
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.DeckImpl;
+import com.softserveinc.ita.kaiji.model.Star;
 import com.softserveinc.ita.kaiji.model.User;
 import org.apache.log4j.Logger;
 
@@ -22,9 +23,10 @@ public class HumanPlayer extends AbstractPlayer {
     private HumanPlayer() {
     }
 
-    public HumanPlayer(User user, Integer cardNumber) {
+    public HumanPlayer(User user, Integer cardNumber, Integer starNumber) {
         this.name = user.getNickname();
         this.deck = new DeckImpl(cardNumber);
+        this.star = new Star(starNumber);
         this.user = user;
         try {
             statusChanger.switchState(PlayerStatus.TURN_READY);

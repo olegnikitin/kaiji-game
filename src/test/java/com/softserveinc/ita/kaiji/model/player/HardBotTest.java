@@ -57,7 +57,7 @@ public class HardBotTest {
 
         playersSet = new HashSet<>();
         User testUser = new User("testName", "mail", "pass");
-        testPlayer = new HumanPlayer(testUser, 1);
+        testPlayer = new HumanPlayer(testUser, 1, 1);
         testPlayer.setId(1);
         testBot = (Bot) playerFactory.makePlayer(Bot.Types.HARD, 1);
         botClass = testBot.getClass();
@@ -65,7 +65,7 @@ public class HardBotTest {
         playersSet.add(testPlayer);
         playersSet.add(testBot);
 
-        gameInfo = new GameInfoImpl("Game1", "Human1", 1, Bot.Types.HARD, playersSet);
+        gameInfo = new GameInfoImpl("Game1", "Human1", 1, 1, Bot.Types.HARD, playersSet);
         gameInfo.setGameType(Game.Type.BOT_GAME);
         testGame = gameFactory.makeGame(gameInfo);
 

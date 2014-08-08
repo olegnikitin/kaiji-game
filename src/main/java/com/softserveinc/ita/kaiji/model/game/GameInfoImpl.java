@@ -29,6 +29,8 @@ public class GameInfoImpl implements GameInfo {
 
     private Integer numberOfCards = 0;
 
+    private Integer numberOfStars;
+
     private Game.Type gameType;
 
     private Date gameStartTime;
@@ -46,22 +48,18 @@ public class GameInfoImpl implements GameInfo {
             String gameName
             , String ownerName
             , Integer numberOfCards
+            , Integer numberOfStars
             , Types botType
             , Set<Player> players) {
         this.gameName = gameName;
         this.numberOfCards = numberOfCards;
+        this.numberOfStars = numberOfStars;
         this.botGame = botGame;
         this.players = players;
         if (this.botGame && LOG.isDebugEnabled()) {
             LOG.trace("GameInfoImpl: the mod is: bot VS player");
         }
     }
-
-
-/*    @Override
-    public boolean isBotGame() {
-        return botGame;
-    }*/
 
     public void setBotGame(boolean botGame) {
         this.botGame = botGame;
@@ -79,6 +77,11 @@ public class GameInfoImpl implements GameInfo {
     @Override
     public Integer getNumberOfCards() {
         return numberOfCards;
+    }
+
+    @Override
+    public Integer getNumberOfStars() {
+        return numberOfStars;
     }
 
     public void setNumberOfCards(int numberOfCards) {

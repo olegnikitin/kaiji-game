@@ -31,6 +31,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     private static final String DEFAULT_GAME_NAME = "Duel";
     private static final String DEFAULT_USER_NAME = "Zoro";
     private static final Integer DEFAULT_CARDS_NUMBER = 4;
+    private static final Integer DEFAULT_STARS_NUMBER = 3;
     private static final Bot.Types DEFAULT_BOT_TYPE = Bot.Types.EASY;
     // 260 seconds -> 4 minutes
     private static final Long DEFAULT_GAME_CONNECTION_TIMEOUT = 260L;
@@ -107,9 +108,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
             jaxbMarshaller.marshal(systemConfiguration, filePath.toFile());
-
         } catch (JAXBException e) {
             LOG.error("Unable to save configuration to file. " + e.getMessage());
             throw new RuntimeException(e);
@@ -125,6 +124,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
         currentSystemConfiguration.setGameName(DEFAULT_GAME_NAME);
         currentSystemConfiguration.setUserName(DEFAULT_USER_NAME);
         currentSystemConfiguration.setNumberOfCards(DEFAULT_CARDS_NUMBER);
+        currentSystemConfiguration.setNumberOfStars(DEFAULT_STARS_NUMBER);
         currentSystemConfiguration.setBotType(DEFAULT_BOT_TYPE);
         currentSystemConfiguration.setGameConnectionTimeout(DEFAULT_GAME_CONNECTION_TIMEOUT);
         currentSystemConfiguration.setRoundTimeout(DEFAULT_ROUND_CONNECTION_TIMEOUT);
@@ -138,7 +138,8 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
                 && currentSystemConfiguration.getBotType() != null
                 && currentSystemConfiguration.getNumberOfCards() != null
                 && currentSystemConfiguration.getRoundTimeout() != null
-                && currentSystemConfiguration.getUserName() != null;
+                && currentSystemConfiguration.getUserName() != null
+                && currentSystemConfiguration.getNumberOfStars()!= null;
 
     }
 

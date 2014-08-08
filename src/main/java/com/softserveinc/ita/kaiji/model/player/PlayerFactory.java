@@ -32,9 +32,10 @@ public final class PlayerFactory {
         playerFactory = new Factory<User, Player, PlayerCreator>(creators);
     }
 
-    public Player makePlayer(User user, Integer cardNumber) {
+    public Player makePlayer(User user, Integer cardNumber, Integer starNumber) {
         AbstractPlayer resultPlayer = (AbstractPlayer) playerFactory.create(user);
         resultPlayer.setDeck(cardNumber);
+        resultPlayer.setStar(starNumber);
         return resultPlayer;
     }
 

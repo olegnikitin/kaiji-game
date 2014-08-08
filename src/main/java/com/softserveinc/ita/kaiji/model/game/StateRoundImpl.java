@@ -6,6 +6,7 @@ import com.softserveinc.ita.kaiji.exception.game.PlayerAlreadyMadeTurnInThisRoun
 
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
 import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.Star;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.FiniteStateMachine;
 import org.apache.log4j.Logger;
@@ -115,7 +116,7 @@ class StateRoundImpl implements Round {
             LOGGER.debug("<in> finishRound(); Finishing round");
         }
 
-        try{
+        try {
             statusChanger.switchState(State.ROUND_FINISHED);
         } catch (SwitchStateException ex) {
             String message = "Can't finish round. Wrong state!";
@@ -126,7 +127,16 @@ class StateRoundImpl implements Round {
 
         buildRoundResult();
 
+        Integer quantity;
         for (Player p : players) {
+            if (p.isGameWithStars()) {
+                quantity = p.getStar().getQuantity();
+                if (roundResult.getDuelResult(p) == Card.DuelResult.WIN) {
+                    p.getStar().setQuantity(++quantity);
+                } else if (roundResult.getDuelResult(p) == Card.DuelResult.LOSE) {
+                    p.getStar().setQuantity(--quantity);
+                }
+            }
             p.commitTurn(roundResult.getDuelResult(p));
         }
 
@@ -169,8 +179,9 @@ class StateRoundImpl implements Round {
 
     /**
      * Making schema for Finite-state machine possible state switches
-     * @see com.softserveinc.ita.kaiji.model.util.FiniteStateMachine
+     *
      * @return schema ror Finite-state machine
+     * @see com.softserveinc.ita.kaiji.model.util.FiniteStateMachine
      */
     private static Map<State, Set<State>> initStatusSchema() {
         if (LOGGER.isTraceEnabled()) {

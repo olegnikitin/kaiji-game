@@ -33,6 +33,11 @@ public interface GameInfo extends Identifiable, Poolable<Integer> {
     Integer getNumberOfCards();
 
     /**
+     * @return the number of cards of each type
+     */
+    Integer getNumberOfStars();
+
+    /**
      * Returns type of game.
      *
      * @return type of game.

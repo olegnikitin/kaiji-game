@@ -22,6 +22,7 @@
 <spring:message code="play-game.gameStart" var="gameStart"/>
 <spring:message code="play-game.newGame" var="newGame"/>
 <spring:message code="play-game.rules" var="rules"/>
+<spring:message code="play-game.stars" var="stars"/>
 
 <c:set var="cardList" value="<%=Card.values()%>"/>
 <c:set var="roundsCount" value="${fn:length(gameHistory.getRoundResults()) }"/>
@@ -37,9 +38,11 @@
 <html lang="en">
 <head>
     <script>
-        window.location.hash="no-back-button";
-        window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
-        window.onhashchange=function(){window.location.hash="no-back-button";}
+        window.location.hash = "no-back-button";
+        window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
+        window.onhashchange = function () {
+            window.location.hash = "no-back-button";
+        }
     </script>
 
     <meta charset="utf-8">
@@ -85,6 +88,13 @@
 <div class="container">
 <div class="row">
 <div class="col-md-4" style="height: 600px">
+    <c:if test="${playerObject.isGameWithStars()}">
+        <div class="col-md-12 alert alert-success"
+             style="text-align: left; height: 40px; width: 100px;  padding: 2px">
+            <c:out value="${stars}"/>
+            <span class="card-count" style="color: black">${playerObject.getStar().getQuantity()}</span>
+        </div>
+    </c:if>
     <div class="row">
         <div class="col-md-12 alert alert-info"
              style="text-align: center; height: 30px; padding: 7px">
@@ -251,6 +261,14 @@
 </div>
 
 <div class="col-md-4" style="height: 600px">
+    <c:if test="${enemyObject.isGameWithStars()}">
+        <div class="col-md-12 alert alert-success"
+             style="text-align: left; height: 40px; width: 100px;  padding: 2px">
+            <c:out value="${stars}"/>
+            <span class="card-count" style="color: black">${enemyObject.getStar().getQuantity()}</span>
+        </div>
+    </c:if>
+
     <div class="row">
         <div class="col-md-12 alert alert-danger"
              style="text-align: center; height: 30px; padding: 7px">

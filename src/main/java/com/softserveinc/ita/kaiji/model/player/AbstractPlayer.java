@@ -1,10 +1,7 @@
 package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
-import com.softserveinc.ita.kaiji.model.Card;
-import com.softserveinc.ita.kaiji.model.Deck;
-import com.softserveinc.ita.kaiji.model.DeckImpl;
-import com.softserveinc.ita.kaiji.model.User;
+import com.softserveinc.ita.kaiji.model.*;
 import com.softserveinc.ita.kaiji.model.util.FiniteStateMachine;
 import com.softserveinc.ita.kaiji.model.util.PlayerStates;
 import org.apache.log4j.Logger;
@@ -24,6 +21,8 @@ public abstract class AbstractPlayer implements Player {
     protected Integer id;
     protected String name;
     protected Deck deck;
+    protected Star star;
+    protected boolean gameWithStars;
     protected Card chosenCard;
     protected Boolean canPlay;
 
@@ -74,6 +73,26 @@ public abstract class AbstractPlayer implements Player {
         this.deck = new DeckImpl(cardNumber);
     }
 
+
+    @Override
+    public boolean isGameWithStars(){
+        return gameWithStars;
+    }
+
+    @Override
+    public void setGameWithStars(boolean gameWithStars){
+        this.gameWithStars = gameWithStars;
+    }
+
+    @Override
+    public Star getStar() {
+        return this.star;
+    }
+
+    public void setStar(Integer starNumber) {
+        this.star = new Star(starNumber);
+    }
+
     @Override
     public Card getChosenCard() {
         LOG.info(this.name + " has chosen card: " + this.chosenCard);
@@ -89,7 +108,14 @@ public abstract class AbstractPlayer implements Player {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Commiting turn for " + this.name);
         }
-        if (this.deck.getDeckSize() > 0) {
+        boolean finishGame = false;
+        if(this.isGameWithStars()){
+            if(this.star.getQuantity() < 1){
+                finishGame = true;
+            }
+        }
+
+        if (this.deck.getDeckSize() > 0 && !finishGame) {
             try {
                 statusChanger.switchState(PlayerStatus.TURN_READY);
             } catch (SwitchStateException sse) {
@@ -122,8 +148,8 @@ public abstract class AbstractPlayer implements Player {
             }
         } else {
 
-                statusChanger.trySwitchState(PlayerStatus.PLAYER_BROKEN);
-                throw new IllegalStateException("Can not rollback turn, wrong state");
+            statusChanger.trySwitchState(PlayerStatus.PLAYER_BROKEN);
+            throw new IllegalStateException("Can not rollback turn, wrong state");
 
         }
     }
@@ -180,16 +206,16 @@ public abstract class AbstractPlayer implements Player {
 
     @Override
     public boolean equals(Object object) {
-        if(object == null){
+        if (object == null) {
             return false;
         }
-        if(this == object){
+        if (this == object) {
             return true;
         }
 
-        if(object instanceof AbstractPlayer){
-            AbstractPlayer player = (AbstractPlayer)object;
-            if (this.id.equals(player.getId())){
+        if (object instanceof AbstractPlayer) {
+            AbstractPlayer player = (AbstractPlayer) object;
+            if (this.id.equals(player.getId())) {
                 return true;
             }
         }

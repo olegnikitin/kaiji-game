@@ -33,7 +33,7 @@ public class TurnMakingTest {
     @Before
     public void setUp() {
         User testUser = new User("testName", "mail", "pass");
-        testPlayer = new HumanPlayer(testUser, 1);
+        testPlayer = new HumanPlayer(testUser, 1 ,1);
     }
 
     private static Object[] data() {

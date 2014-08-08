@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.Deck;
+import com.softserveinc.ita.kaiji.model.Star;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;
 import com.softserveinc.ita.kaiji.model.util.Statable;
@@ -84,6 +85,15 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
      * @return Deck object from current Player
      */
     Deck getDeck();
+
+    boolean isGameWithStars();
+    void setGameWithStars(boolean gameWithStars);
+
+    /**
+     * Return player's stars
+     * @return Star object from current Player
+     */
+    Star getStar();
 
     /**
      * Checks if this object is not real player

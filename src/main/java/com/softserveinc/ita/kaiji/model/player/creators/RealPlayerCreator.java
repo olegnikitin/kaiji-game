@@ -24,6 +24,6 @@ public class RealPlayerCreator implements PlayerCreator {
 
     @Override
     public Player create(User creatorInfo) {
-        return new HumanPlayer(creatorInfo, 1);
+        return new HumanPlayer(creatorInfo, 1, 1);
     }
 }

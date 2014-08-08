@@ -21,9 +21,9 @@ public class TwoPlayersGameRunner {
     static GameInfo makeGameInfo() {
         Set<Player> playersSet = new HashSet<>();
         User testUser1 = new User("player1", "mail", "pass");
-        Player player1 = new HumanPlayer(testUser1, 1);
+        Player player1 = new HumanPlayer(testUser1, 1, 1);
         User testUser2 = new User("player2", "mail", "pass");
-        Player player2 = new HumanPlayer(testUser2, 1);
+        Player player2 = new HumanPlayer(testUser2, 1, 1);
 
         player1.setId(1);
         player2.setId(2);
@@ -31,7 +31,7 @@ public class TwoPlayersGameRunner {
         playersSet.add(player1);
         playersSet.add(player2);
 
-        return new GameInfoImpl("Test Game", "no one", 1, null, playersSet);
+        return new GameInfoImpl("Test Game", "no one", 1, 1, null, playersSet);
     }
 
     static void printPlayer(Player player) {
