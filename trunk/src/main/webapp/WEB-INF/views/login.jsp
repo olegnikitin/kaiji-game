@@ -44,7 +44,9 @@
 </head>
 <body>
 
-<jsp:include page="header.jsp"/>
+<jsp:include page="header.jsp">
+    <jsp:param name="socketActive" value="false"/>
+</jsp:include>
 
 	<div id="login-box">
 		

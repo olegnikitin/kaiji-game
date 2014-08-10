@@ -2,8 +2,11 @@ package com.softserveinc.ita.kaiji.web.controller.async;
 
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.RequestDispatcher;
 
 /**
  * Checks asynchronously if game is available
@@ -40,6 +43,7 @@ public class GameChecker implements Runnable{
         } catch (InterruptedException e) {
             LOG.error( "Failed to check game asynchronously. " + e.getMessage());
         }
+
         asyncContext.dispatch("/game/" + gameId + "/");
     }
 }

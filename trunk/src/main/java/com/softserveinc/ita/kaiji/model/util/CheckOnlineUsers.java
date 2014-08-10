@@ -1,7 +1,8 @@
 package com.softserveinc.ita.kaiji.model.util;
 
-import com.softserveinc.ita.kaiji.chat.ActiveUsers;
+import com.softserveinc.ita.kaiji.chat.ChatUtils;
 import com.softserveinc.ita.kaiji.chat.ChatClientUpdateEndpoint;
+import com.softserveinc.ita.kaiji.session.SessionUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -10,29 +11,26 @@ import javax.servlet.http.HttpSessionListener;
 import javax.websocket.ContainerProvider;
 import javax.websocket.WebSocketContainer;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CheckOnlineUsers implements HttpSessionListener {
 
     private static final Logger LOG =  Logger.getLogger(CheckOnlineUsers.class);
     private static final String KEY = CheckOnlineUsers.class.getName();
 
-    private Set<String> activeUsers = Collections.synchronizedSet(new HashSet<String>());
-
-
     public void sessionCreated(HttpSessionEvent se) {
         registerInServletContext(se.getSession().getServletContext());
     }
 
     public void sessionDestroyed(HttpSessionEvent se) {
-        Set<String> users = (Set<String>) se.getSession().getServletContext().getAttribute("nicknames");
-        if (users.remove(se.getSession().getAttribute("nickname"))) {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 
+        String nickname = (String)se.getSession().getAttribute("nickname");
+        if (ChatUtils.getActiveUsers().remove(nickname)) {
+            LOG.trace("Delete Session");
+            SessionUtils.getUserSession().get(nickname).getTimer().cancel();
+            SessionUtils.getUserSession().remove(nickname);
+            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             try {
                 String hostname = (String)se.getSession().getServletContext().getAttribute("hostname");
                 String uri = "ws://" + hostname  +"/users" ;
@@ -42,14 +40,13 @@ public class CheckOnlineUsers implements HttpSessionListener {
                LOG.error("Failed to open client WebSocket. " + e.getMessage());
             }
         }
-        ActiveUsers.setUsers(users);
+
     }
 
 
     private void registerInServletContext(ServletContext servletContext) {
 
-        if (servletContext.getAttribute(KEY) == null) {
-            servletContext.setAttribute("nicknames", activeUsers);
+        if (servletContext.getAttribute(KEY) == null) {;
             servletContext.setAttribute(KEY, this);
         }
     }

@@ -1,3 +1,4 @@
+<%@ page import="com.softserveinc.ita.kaiji.chat.ChatUtils" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -12,9 +13,11 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 
     <script type="text/javascript">
-        window.location.hash="no-back-button";
-        window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
-        window.onhashchange=function(){window.location.hash="no-back-button";}
+        window.location.hash = "no-back-button";
+        window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
+        window.onhashchange = function () {
+            window.location.hash = "no-back-button";
+        }
     </script>
 
     <!-- Styles -->
@@ -27,13 +30,13 @@
             background-color: #f5f5f5;
         }
 
-        .received{
+        .received {
             width: 250px;
             font-size: 14px;
             font-weight: bold;
         }
 
-        .users{
+        .users {
             width: 250px;
             font-weight: bold;
             font-size: 22px;
@@ -55,11 +58,20 @@
 
         function onMessageReceived(evt) {
             var msg = JSON.parse(evt.data); // native API
-                var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
-                        + '</td><td class="message badge">' + msg.message
-                        + '<td class="received">' + msg.received
-                        + '</td></tr>');
-                $chatWindow.append($messageLine);
+            var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
+                    + '</td><td class="message badge">' + msg.message
+                    + '<td class="received">' + msg.received
+                    + '</td></tr>');
+            $chatWindow.append($messageLine);
+        }
+
+        function convertJSONToTable(message) {
+            var msg = JSON.parse(message);
+            var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
+                    + '</td><td class="message badge">' + msg.message
+                    + '<td class="received">' + msg.received
+                    + '</td></tr>');
+            return $messageLine;
         }
 
         function onMessageUpdateReceived(evt) {
@@ -67,7 +79,9 @@
             var users = msg.users.toString().split(',');
             var content = ' '
             users.forEach(
-                    function buildString(user) { content += (user + '; ')}
+                    function buildString(user) {
+                        content += (user + '; ')
+                    }
             );
             $activeUsers.text(content);
         }
@@ -83,7 +97,7 @@
             wsocket = new WebSocket(serviceLocation + group);
             updateWsocket = new WebSocket(updateServiceLocation);
             wsocket.onmessage = onMessageReceived;
-            updateWsocket.onmessage= onMessageUpdateReceived;
+            updateWsocket.onmessage = onMessageUpdateReceived;
         }
 
         window.onbeforeunload = function (evt) {
@@ -99,14 +113,16 @@
             $activeUsers = $('#activeUsers')
             connectToChatServer();
             $('.chat-wrapper h2').text('Welcome to chat : ' + $nickName);
-            //$('.chat-wrapper').show();
             $message.focus();
-
             var content = '';
-            <c:forEach var = "item" items="<%=application.getAttribute(\"nicknames\")%>">
-               content += ("${item}" + "; ")
+            <c:forEach var = "item" items="<%=ChatUtils.getActiveUsers()%>">
+            content += ("${item}" + "; ")
             </c:forEach>
             $activeUsers.text(content);
+
+            <c:forEach items="${messages}" var = "message">
+            $chatWindow.append(convertJSONToTable('${message}'))
+            </c:forEach>
 
             $('#do-chat').submit(function (evt) {
                 evt.preventDefault();
@@ -118,12 +134,16 @@
 
 <body>
 
-<jsp:include page="header.jsp"/>
+<jsp:include page="header.jsp">
+    <jsp:param name="socketActive" value="false"/>
+</jsp:include>
+
 
 <div class="container chat-wrapper">
     <form id="do-chat">
         <h2 class="alert alert-success"></h2>
-        <h3> Online users : <label id="activeUsers"  class="users"></label> </h3>
+
+        <h3> Online users : <label id="activeUsers" class="users"></label></h3>
         <table id="response" class="table table-bordered"></table>
         <fieldset>
             <legend>Enter your message...</legend>
