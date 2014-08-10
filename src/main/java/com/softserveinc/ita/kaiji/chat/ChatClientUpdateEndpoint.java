@@ -18,7 +18,7 @@ public class ChatClientUpdateEndpoint {
         try {
             JSONObject obj = new JSONObject();
             JSONArray list = new JSONArray();
-            for(String user : ActiveUsers.getUsers()) {
+            for(String user : ChatUtils.getActiveUsers()) {
                 list.add(user);
             }
             obj.put("users", list);

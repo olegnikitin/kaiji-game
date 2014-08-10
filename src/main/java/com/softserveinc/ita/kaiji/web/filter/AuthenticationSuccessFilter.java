@@ -1,10 +1,8 @@
 package com.softserveinc.ita.kaiji.web.filter;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URI;
-import java.rmi.UnknownHostException;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -13,8 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.websocket.ContainerProvider;
 import javax.websocket.WebSocketContainer;
 
-import com.softserveinc.ita.kaiji.chat.ActiveUsers;
+import com.softserveinc.ita.kaiji.chat.ChatUtils;
 import com.softserveinc.ita.kaiji.chat.ChatClientUpdateEndpoint;
+import com.softserveinc.ita.kaiji.session.SessionData;
+import com.softserveinc.ita.kaiji.session.SessionTimer;
+import com.softserveinc.ita.kaiji.session.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -32,21 +33,24 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException,
-            ServletException {
+        ServletException {
         String name = authentication.getName();
 
-        Set<String> users = (Set<String> )request.getSession().getServletContext().getAttribute("nicknames");
-        users.add(name);
-        ActiveUsers.setUsers(users);
-        request.getSession().getServletContext().setAttribute("nicknames", users);
         request.getSession().setAttribute("nickname", name);
+        ChatUtils.getUnReadMessages().put(name,false);
+        ChatUtils.getActiveUsers().add(name);
 
+        TimerTask timerTask = new SessionTimer(name);
+        Timer timer = new Timer(true);
+        SessionUtils.getUserSession().put(name, new SessionData(System.currentTimeMillis(),timer,request.getSession()));
+        timer.scheduleAtFixedRate(timerTask, 0, 3*1000);
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-
         String url = request.getRequestURL().toString();
+
         int tempString = url.indexOf("//") + 2;
         String hostname = url.substring(tempString, url.indexOf('/', tempString));
         request.getSession().getServletContext().setAttribute("hostname",hostname);
+
         String uri = "ws://" + hostname + "/users" ;
         try {
             container.connectToServer(ChatClientUpdateEndpoint.class,
@@ -63,7 +67,5 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
         }
 
         super.onAuthenticationSuccess(request, response, authentication);
-
     }
-
 }

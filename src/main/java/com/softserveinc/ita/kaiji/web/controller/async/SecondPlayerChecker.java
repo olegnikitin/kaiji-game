@@ -3,6 +3,8 @@ package com.softserveinc.ita.kaiji.web.controller.async;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.AsyncContext;
 
@@ -43,6 +45,7 @@ public class SecondPlayerChecker implements Runnable {
             LOG.error( "Failed asynchronously check second player. " + e.getMessage());
 
         }
+
         asyncContext.dispatch("/game/" + gameId +"/");
     }
 }

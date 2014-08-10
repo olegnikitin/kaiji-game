@@ -86,10 +86,14 @@
         <async-supported>true</async-supported>
 
     </filter>
- 
+
+    <!--http://docs.spring.io/spring-security/site/docs/3.2.0.CI-SNAPSHOT/reference/html/servletapi.html -->
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
 	</filter-mapping>
+
 
 </web-app>

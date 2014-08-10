@@ -78,7 +78,9 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp"/>
+<jsp:include page="header.jsp">
+    <jsp:param name="socketActive" value="true"/>
+</jsp:include>
 
 <br>
 <br>
