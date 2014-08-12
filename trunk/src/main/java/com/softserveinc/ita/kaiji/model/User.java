@@ -38,10 +38,6 @@ public class User implements Identifiable {
     @Column(name = "password", nullable = false, length = 20)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false, columnDefinition = "enum('MALE','FEMALE', 'UNKNOWN')")
-    private Gender gender = Gender.UNKNOWN;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "registration_date", nullable = true)
     private Date registrationDate = new Date();
@@ -167,24 +163,6 @@ public class User implements Identifiable {
      */
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    /**
-     * Return user's gender
-     *
-     * @return {@link Gender} gender of user
-     */
-    public Gender getGender() {
-        return gender;
-    }
-
-    /**
-     * Sets user's gender.
-     *
-     * @param gender {@link Gender} gender of user
-     */
-    public void setGender(Gender gender) {
-        this.gender = gender;
     }
 
     public Set<UserRole> getRoles() {

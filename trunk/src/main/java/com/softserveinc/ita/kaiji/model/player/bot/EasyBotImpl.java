@@ -2,7 +2,6 @@ package com.softserveinc.ita.kaiji.model.player.bot;
 
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
 import com.softserveinc.ita.kaiji.model.DeckImpl;
-import com.softserveinc.ita.kaiji.model.Gender;
 import com.softserveinc.ita.kaiji.model.User;
 
 /**
@@ -23,7 +22,6 @@ public class EasyBotImpl extends Bot{
         this.user = new User("EASY_BOT", "EASY_BOT", "-");
         this.user.setId(-1);
         this.user.setName("EASY_BOT");
-        this.user.setGender(Gender.UNKNOWN);
         try {
             statusChanger.switchState(PlayerStatus.TURN_READY);
         } catch (SwitchStateException sse) {

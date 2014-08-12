@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.model.player.bot;
 import com.softserveinc.ita.kaiji.exception.util.SwitchStateException;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.DeckImpl;
-import com.softserveinc.ita.kaiji.model.Gender;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.game.RoundResult;
@@ -44,7 +43,6 @@ public class HardBotImpl extends Bot {
         this.user = new User("HARD_BOT", "HARD_BOT", "-");
         this.user.setId(-3);
         this.user.setName("HARD_BOT");
-        this.user.setGender(Gender.UNKNOWN);
         //AI pre-init
         numberOfCardTypes = Card.values().length;
         markovCounters = new int[numberOfCardTypes][numberOfCardTypes];
