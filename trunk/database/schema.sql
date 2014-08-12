@@ -63,7 +63,6 @@ DROP TABLE IF EXISTS `round`;
 CREATE TABLE `round` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `game_history_id` int(11) NOT NULL,
-  `end_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_rnakpvjutx4qx35m2i6qalggw` (`game_history_id`),
   CONSTRAINT `FK_rnakpvjutx4qx35m2i6qalggw` FOREIGN KEY (`game_history_id`) REFERENCES `game_history` (`id`)
