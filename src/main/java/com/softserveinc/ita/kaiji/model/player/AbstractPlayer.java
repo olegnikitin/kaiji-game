@@ -215,7 +215,11 @@ public abstract class AbstractPlayer implements Player {
 
         if (object instanceof AbstractPlayer) {
             AbstractPlayer player = (AbstractPlayer) object;
-            if (this.id.equals(player.getId())) {
+            if (this.id.equals(player.getId()) &&
+            	this.name.equals(player.getName()) &&
+            	this.deck.equals(player.getDeck()) &&
+            	this.statistic.equals(player.getStatistic()) &&
+            	this.statusChanger.equals(player.statusChanger)) {
                 return true;
             }
         }
