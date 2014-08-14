@@ -17,5 +17,5 @@ public interface GameInfoEntityDAO extends GenericDAO<GameInfoEntity> {
      * @param user for whom looking games
      * @return list of games in which user was playing
      */
-    List<GameInfoEntity> getGameInfoFor(User user);
+    List<GameInfoEntity> getGameInfoFor(Integer userId);
 }

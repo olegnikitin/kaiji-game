@@ -3,17 +3,21 @@ package com.softserveinc.ita.kaiji.web.controller;
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
+import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.model.User;
+import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.*;
 
 /**
  * @author Paziy Evgeniy
@@ -41,43 +45,54 @@ public class TestDAOController {
         return "dao-test";
     }
 
-//  !!!!!!!!!!!!!!!!!!!  User
+    @RequestMapping("/users")
+    public String userPage(Model model) {
+        model.addAttribute("newUser", new User());
+        model.addAttribute("usersList", userDAO.getAll());
+        return "admin-user";
+    }
 
-    @RequestMapping(value = "/save/user/{nick}/{email}")
-    public String saveUser(
-            Model model,
-            @PathVariable(value = "nick") String nick,
-            @PathVariable(value = "email") String email) {
-        User user = new User(nick, email, "pass");
+    @RequestMapping(value = "/users/save")
+    public String saveUser(@ModelAttribute("newUser") User user) {
+        user.setPassword("12345");
         userDAO.save(user);
-
-        model.addAttribute("data", user);
-        return "dao-test";
+        return "redirect:/dao/users";
     }
 
-    @RequestMapping(value = "/get/user/{id}")
-    public String getUser(Model model, @PathVariable(value = "id") Integer id) {
-        model.addAttribute("data", userDAO.get(id));
-        return "dao-test";
-
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public String getUser(@RequestParam("nickname") String nickname, @RequestParam("email") String email,
+                          RedirectAttributes redirectAttributes) {
+        User user = null;
+        if (!nickname.equals("") && !email.equals("")) {
+            if (userDAO.getByEmail(email).getId().equals(userDAO.getByNickname(nickname).getId())) {
+                user = userDAO.getByEmail(email);
+            }
+        } else if (!nickname.equals("")) {
+            user = userDAO.getByNickname(nickname);
+        } else if (!email.equals("")) {
+            user = userDAO.getByEmail(email);
+        } else {
+            return "redirect:/dao/users";
+        }
+        redirectAttributes.addFlashAttribute("user", user);
+        return "redirect:/dao/users";
     }
 
-    @RequestMapping(value = "/get/user/all")
-    public String getAllUsers(Model model) {
-        model.addAttribute("data", userDAO.getAll());
-        return "dao-test";
-    }
-
-    @RequestMapping(value = "/remove/user/{id}")
-    public String removeUser(@PathVariable(value = "id") Integer id) {
+    @RequestMapping(value = "/users/remove")
+    public String removeUser(@RequestParam("id") Integer id) {
         userDAO.delete(userDAO.get(id));
-        return "dao-test";
+        return "redirect:/dao/users";
     }
 
-//  !!!!!!!!!!!!!!!!!!!  GameInfoEntity
+    @RequestMapping("/gameinfo")
+    public String gameInfoPage(Model model) {
+        model.addAttribute("usersList", userDAO.getAll());
+        model.addAttribute("gamesList", gameInfoEntityDAO.getAll());
+        return "admin-gameinfo";
+    }
 
-    @RequestMapping(value = "/save/game-info/{game-runtime-id}")
-    public String saveGameInfoEntity(
+   /* @RequestMapping(value = "/save/game-info/{game-runtime-id}")
+       public String saveGameInfoEntity(
             Model model,
             @PathVariable(value = "game-runtime-id") Integer gameId) {
 
@@ -87,9 +102,9 @@ public class TestDAOController {
         model.addAttribute("data", gameInfoEntity);
 
         return "dao-test";
-    }
+    }*/
 
-    @RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-info-id}")
+    /*@RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-info-id}")
     public String updateGameInfoEntity(
             Model model,
             @PathVariable(value = "game-runtime-id") Integer gameId,
@@ -102,30 +117,30 @@ public class TestDAOController {
         model.addAttribute("data", gameInfoEntity);
 
         return "dao-test";
+    }*/
+
+    @RequestMapping(value = "/gameinfo", method = RequestMethod.POST)
+    public String getGameInfoEntity(@RequestParam("userId") String userId, RedirectAttributes redirectAttributes) {
+        if (!userId.equals("default")) {
+            redirectAttributes.addFlashAttribute("userGames", gameInfoEntityDAO.getGameInfoFor(Integer.valueOf(userId)));
+        }
+        return "redirect:/dao/gameinfo";
     }
 
-    @RequestMapping(value = "/get/game-info/{id}")
-    public String getGameInfoEntity(Model model, @PathVariable(value = "id") Integer id) {
-        model.addAttribute("data", gameInfoEntityDAO.get(id));
-        return "dao-test";
-    }
-
-    @RequestMapping(value = "/get/game-info/all")
-    public String getGameInfoEntity(Model model) {
-        model.addAttribute("data", gameInfoEntityDAO.getAll());
-        return "dao-test";
-    }
-
-    @RequestMapping(value = "/remove/game-info/{id}")
-    public String removeGameInfoEntity(@PathVariable(value = "id") Integer id) {
+    @RequestMapping(value = "/gameinfo/remove")
+    public String removeGameInfoEntity(@RequestParam("id") Integer id) {
         gameInfoEntityDAO.delete(gameInfoEntityDAO.get(id));
-        return "dao-test";
+        return "redirect:/dao/gameinfo";
     }
 
+    @RequestMapping(value = "/gamehistory")
+    public String getGameHistoryPage(Model model) {
+        model.addAttribute("usersList", userDAO.getAll());
+        model.addAttribute("gameHistoryList", gameHistoryEntityDAO.getAll());
+        return "admin-gamehistory";
+    }
 
-//  !!!!!!!!!!!!!!!!!!!  GameHistoryEntity
-
-    @RequestMapping(value = "/save/game-history/{game-runtime-id}")
+   /* @RequestMapping(value = "/save/game-history/{game-runtime-id}")
     public String saveGameHistoryEntity(
             Model model,
             @PathVariable(value = "game-runtime-id") Integer gameId) {
@@ -136,9 +151,9 @@ public class TestDAOController {
         model.addAttribute("data", gameHistoryEntity);
 
         return "dao-test";
-    }
+    }*/
 
-    @RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-history-id}")
+   /* @RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-history-id}")
     public String updateGameHistoryEntity(
             Model model,
             @PathVariable(value = "game-runtime-id") Integer gameId,
@@ -151,24 +166,29 @@ public class TestDAOController {
         model.addAttribute("data", gameHistoryEntity);
 
         return "dao-test";
+    }*/
+
+    @RequestMapping(value = "/gamehistory", method = RequestMethod.POST)
+    public String getGameHistoryEntity(@RequestParam(value = "id") Integer id,
+                                       @RequestParam(value = "userId") String userId, RedirectAttributes redirectAttributes) {
+        List<GameHistoryEntity> result = new ArrayList<>();
+        if (id != null) {
+            GameHistoryEntity gameHistoryEntity = gameHistoryEntityDAO.get(id);
+            if (gameHistoryEntity != null) {
+                result.add(gameHistoryEntity);
+            }
+        } else if (!userId.equals("default")) {
+            result.addAll(gameHistoryEntityDAO.getGameHistoryByWinner(Integer.valueOf(userId)));
+        }
+
+        redirectAttributes.addFlashAttribute("searchGameHistory", result);
+        return "redirect:/dao/gamehistory";
     }
 
-    @RequestMapping(value = "/get/game-history/{id}")
-    public String getGameHistoryEntity(Model model, @PathVariable(value = "id") Integer id) {
-        model.addAttribute("data", gameHistoryEntityDAO.get(id));
-        return "dao-test";
-    }
-
-    @RequestMapping(value = "/get/game-history/all")
-    public String getGameHistoryEntity(Model model) {
-        model.addAttribute("data", gameHistoryEntityDAO.getAll());
-        return "dao-test";
-    }
-
-    @RequestMapping(value = "/remove/game-history/{id}")
-    public String removeGameHistoryEntity(@PathVariable(value = "id") Integer id) {
+    @RequestMapping(value = "/gamehistory/remove")
+    public String removeGameHistoryEntity(@RequestParam("id") Integer id) {
         gameHistoryEntityDAO.delete(gameHistoryEntityDAO.get(id));
-        return "dao-test";
+        return "redirect:/dao/gamehistory";
     }
 
 }

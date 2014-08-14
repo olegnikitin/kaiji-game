@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.dao.hibernate;
 
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
+import com.softserveinc.ita.kaiji.model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -70,5 +71,13 @@ public class GameHistoryEntityHibernateDAOImpl implements GameHistoryEntityDAO {
     public void delete(GameHistoryEntity gameHistoryEntity) {
         Session session = sessionFactory.getCurrentSession();
         session.delete(gameHistoryEntity);
+    }
+
+    @Override
+    public List<GameHistoryEntity> getGameHistoryByWinner(Integer userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from GameHistoryEntity as g where :winner in elements(g.winners)");
+        query.setInteger("winner",userId);
+        return query.list();
     }
 }
