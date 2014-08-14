@@ -75,8 +75,10 @@ public class GameInfoEntityHibernateDAOImpl implements GameInfoEntityDAO {
     }
 
     @Override
-    public List<GameInfoEntity> getGameInfoFor(User user) {
-        //todo implement
-        return new ArrayList<>();
+    public List<GameInfoEntity> getGameInfoFor(Integer userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from GameInfoEntity as g where :user in elements(g.users)");
+        query.setInteger("user", userId);
+        return (List<GameInfoEntity>) query.list();
     }
 }
