@@ -17,6 +17,24 @@
         <!--Version of Spring libraries -->
         <spring.version>4.0.3.RELEASE</spring.version>
         <spring.security.version>3.2.3.RELEASE</spring.security.version>
+        <jackson.version>1.9.13</jackson.version>
+        <servlet.api.version>3.0.1</servlet.api.version>
+        <servlet.jsp.api.version>2.3.1</servlet.jsp.api.version>
+        <jstl.version>1.2</jstl.version>
+        <mysql.connector.version>5.1.29</mysql.connector.version>
+        <h2database.version>1.3.175</h2database.version>
+        <hibernate.core.version>4.2.8.Final</hibernate.core.version>
+        <hibernate.validator.version>5.1.0.Final</hibernate.validator.version>
+        <log4j.version>1.2.17</log4j.version>
+        <cglib.version>3.1</cglib.version>
+        <junit.version>4.11</junit.version>
+        <hamcrest.version>1.3</hamcrest.version>
+        <pragmatists.verison>1.0.2</pragmatists.verison>
+        <mockito.version>1.9.5</mockito.version>
+        <javaee.api.version>7.0</javaee.api.version>
+        <javax.json.version>1.0</javax.json.version>
+        <json.simple.version>1.1</json.simple.version>
+        <javax.mail.version>1.4</javax.mail.version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -25,25 +43,16 @@
     <dependencies>
 
         <!-- JSON -->
-
-        <!--
-                <dependency>
-                    <groupId>org.springframework.ws</groupId>
-                    <artifactId>spring-oxm</artifactId>
-                    <version>1.5.10</version>
-                </dependency>
-        -->
-
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
-            <version>1.9.13</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- JSR-000315 JavaTM Servlet 3.0 -->
@@ -52,23 +61,22 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <version>${servlet.api.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.1</version>
+            <version>${servlet.jsp.api.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>${jstl.version}</version>
         </dependency>
-
         <!--
                 <dependency>
                     <groupId>javax.ws.rs</groupId>
@@ -125,48 +133,49 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.29</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
 
+        <!--H2 Database-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.3.175</version>
+            <version>${h2database.version}</version>
         </dependency>
 
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.2.8.Final</version>
+            <version>${hibernate.core.version}</version>
         </dependency>
 
         <!-- Hibernate Validation -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.1.0.Final</version>
+            <version>${hibernate.validator.version}</version>
         </dependency>
 
         <!-- Logging -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- Java Reflection -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.1</version>
+            <version>${cglib.version}</version>
         </dependency>
 
         <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -179,19 +188,20 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
-            <version>1.3</version>
+            <version>${hamcrest.version}</version>
         </dependency>
 
         <dependency>
             <groupId>pl.pragmatists</groupId>
             <artifactId>JUnitParams</artifactId>
-            <version>1.0.2</version>
+            <version>${pragmatists.verison}</version>
         </dependency>
 
+        <!--Mockito-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <version>${mockito.version}</version>
         </dependency>
 
         <!-- Spring security  -->
@@ -217,29 +227,35 @@
             <version>${spring.security.version}</version>
         </dependency>
 
-        <!--chat dependency-->
+        <!--Chat dependency-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
+            <version>${javaee.api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.json</groupId>
             <artifactId>javax.json-api</artifactId>
-            <version>1.0</version>
+            <version>${javax.json.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
-            <version>1.0</version>
+            <version>${javax.json.version}</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
-            <version>1.1</version>
+            <version>${json.simple.version}</version>
+        </dependency>
+
+        <!--Java mail-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${javax.mail.version}</version>
         </dependency>
 
     </dependencies>
@@ -268,7 +284,6 @@
                     <warName>ROOT</warName>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

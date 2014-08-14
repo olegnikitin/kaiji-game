@@ -15,9 +15,9 @@ public class SessionTimer extends TimerTask {
 
     @Override
     public void run() {
-        System.err.println("Saved time " + SessionUtils.getUserSession().get(name).getCurrentTime() + " " +
+ /*       System.err.println("Saved time " + SessionUtils.getUserSession().get(name).getCurrentTime() + " " +
                             "Current time " + System.currentTimeMillis() +
-                            " Diff " + (System.currentTimeMillis() - SessionUtils.getUserSession().get(name).getCurrentTime()));
+                            " Diff " + (System.currentTimeMillis() - SessionUtils.getUserSession().get(name).getCurrentTime());*/
         if(System.currentTimeMillis() - SessionUtils.getUserSession().get(name).getCurrentTime() > 20000L){
             if(SessionUtils.getUserSession().get(name).getSession() != null) {
                 SessionUtils.getUserSession().get(name).getSession().invalidate();
