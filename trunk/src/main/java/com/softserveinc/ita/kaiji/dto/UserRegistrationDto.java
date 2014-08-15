@@ -4,12 +4,15 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
+import com.softserveinc.ita.kaiji.model.util.FieldEquals;
+
 /**
  * @author Vladyslav Shelest
  * @version 1.0
  * @since 22.04.14.
  */
 @Component
+@FieldEquals(field="password", equalsTo="confirmPassword" )
 public class UserRegistrationDto {
     @NotEmpty(message = "{NotEmpty.userregistrationdto.name}")
     private String name;
@@ -20,6 +23,9 @@ public class UserRegistrationDto {
     private String email;
     @NotEmpty(message = "{NotEmpty.userregistrationdto.password}")
     private String password;
+    @NotEmpty(message = "{NotEmpty.userregistrationdto.password}")
+    //http://www.seostella.com/ru/article/2012/06/21/annotaciya-dlya-proverki-ravenstva-dvuh-poley-formy-v-spring-mvc.html
+    private String confirmPassword;
 
     public String getName() {
         return name;
@@ -62,4 +68,12 @@ public class UserRegistrationDto {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
 }

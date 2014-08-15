@@ -11,6 +11,11 @@
 <spring:message code="registration.defNickname" var="def_nickname" />
 <spring:message code="registration.defEmail" var="def_email" />
 <spring:message code="registration.defPass" var="def_pass" />
+<spring:message code="registration.textName" var="textName" />
+<spring:message code="registration.textNickName" var="textNickName" />
+<spring:message code="registration.textEmail" var="textEmail" />
+<spring:message code="registration.textPassword" var="textPassword" />
+<spring:message code="registration.textPassword2" var="textPassword2" />
 
 <html>
 <head>
@@ -48,26 +53,52 @@
         <div class="form-group has-error has-feedback">
             <form:errors path="*" class="control-label" for="inputError"/>
          </div>
- </br>
+ <br>
     <center>
             <table>
-                <tr>
+            	<tr>
+            		<td>${textName}</td>
+            	</tr>
+            	
+                <tr>                	
                     <td><form:input path="name" id="inputError" class="form-control" placeholder="${def_name}" size="25"/></td>
 
                 </tr>
-
+				
+				
+				<tr>
+            		<td>${textNickName}</td>
+            	</tr>
+            	
                 <tr>
                     <td><form:input path="nickname" id="inputError" class="form-control" placeholder="${def_nickname}" size="25"/></td>
 
                 </tr>
-
+				
+				<tr>
+            		<td>${textEmail}</td>
+            	</tr>
+				
                 <tr>
                     <td><form:input path="email" id="inputError" class="form-control" placeholder="${def_email}" size="25"/></td>
 
                 </tr>
 
+				<tr>
+            		<td>${textPassword}</td>
+            	</tr>
+				
                 <tr>
                     <td><form:password path="password" id="inputError" class="form-control" placeholder="${def_pass}" size="25"/></td>
+
+                </tr>
+                
+                <tr>
+            		<td>${textPassword2}</td>
+            	</tr>
+				
+                <tr>
+                    <td><form:password path="confirmPassword" id="inputError" class="form-control" placeholder="${def_pass}" size="25"/></td>
 
                 </tr>
 
@@ -82,7 +113,6 @@
     </div>
 </div>
 
-    </div>
 
 </body>
 </html>
