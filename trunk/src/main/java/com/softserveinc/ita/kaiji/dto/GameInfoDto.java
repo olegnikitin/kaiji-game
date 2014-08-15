@@ -5,9 +5,10 @@ import javax.validation.constraints.Size;
 
 import com.softserveinc.ita.kaiji.model.game.Game;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.stereotype.Component;
+
 
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
+import org.springframework.stereotype.Component;
 
 /**
  * Represents Data Transfer Object which is used

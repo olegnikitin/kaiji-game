@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.model.util.Identifiable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -49,6 +50,7 @@ public class User implements Identifiable {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = getDefaultRoles();
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "link_game_to_user",

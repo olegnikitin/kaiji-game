@@ -1,10 +1,13 @@
 package com.softserveinc.ita.kaiji.dto.game;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Ievgen Sukhov
  * @since  21.04.14
  * @version 1.0
  */
+
 public class StatisticsDTO {
     private Long win;
     private Long lose;
@@ -54,7 +57,6 @@ public class StatisticsDTO {
     public void setWin(Long win) {
         this.win = win;
     }
-
 
 }
 

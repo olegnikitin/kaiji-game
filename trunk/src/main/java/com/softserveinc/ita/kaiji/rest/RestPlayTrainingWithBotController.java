@@ -25,9 +25,9 @@ import com.softserveinc.ita.kaiji.service.GameService;
  * @since 05.04.14
  */
 
-@RestController
+//@RestController
 public class RestPlayTrainingWithBotController {
-    private static final Logger LOG = Logger.getLogger(RestPlayTrainingWithBotController.class);
+/*    private static final Logger LOG = Logger.getLogger(RestPlayTrainingWithBotController.class);
 
     @Autowired
     private GameService gameService;
@@ -95,7 +95,7 @@ public class RestPlayTrainingWithBotController {
             }
         }
         return null;
-    }
+    }*/
 
 
 }
