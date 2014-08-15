@@ -50,7 +50,7 @@
           access-decision-manager-ref="accessDecisionManager"
           use-expressions="true">
         <intercept-url pattern="/game/**" access="hasRole('USER_ROLE')" />
-        <intercept-url pattern="/statistic/**" access="hasRole('USER_ROLE')" />
+        <!--<intercept-url pattern="/statistic/**" access="hasRole('USER_ROLE')" />-->
         <intercept-url pattern="/config/**" access="hasRole('ADMIN_ROLE')" />
         <form-login login-page="/login" default-target-url="/"
                     authentication-failure-url="/login?error" username-parameter="username"
