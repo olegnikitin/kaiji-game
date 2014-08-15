@@ -48,7 +48,7 @@
 
     <listener>
         <listener-class>
-            com.softserveinc.ita.kaiji.model.util.CheckOnlineUsers
+            com.softserveinc.ita.kaiji.session.CheckOnlineUsers
         </listener-class>
     </listener>
 

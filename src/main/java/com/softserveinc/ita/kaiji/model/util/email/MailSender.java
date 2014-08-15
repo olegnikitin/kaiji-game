@@ -26,18 +26,19 @@ public class MailSender {
      * @param recipientMail  email of recipient person
      * @param messageSubject email subject
      * @param messageText   email text
+     * @return  true if message was successfully send, otherwise - false
      */
-    public void send(String recipientMail, String messageSubject, String messageText) {
+    public boolean send(String recipientMail, String messageSubject, String messageText) {
 
         if ("".equals(recipientMail)) {
             LOG.error("Empty recipient email address ");
-            return;
+            return false;
         }
 
         Properties mailProperties = propertyFileReader.readMailProperty(filePath);
         if(mailProperties == null){
             LOG.error("Error while reading email properties");
-            return;
+            return false;
         }
 
         String from = mailProperties.getProperty("email.address");
@@ -69,8 +70,9 @@ public class MailSender {
 
         } catch (MessagingException e) {
             LOG.error("Can't sent message to recipient " + recipientMail + " " + e.getMessage());
-            throw new RuntimeException(e);
+            return false;
         }
+        return true;
     }
 
     public String getFilePath() {
