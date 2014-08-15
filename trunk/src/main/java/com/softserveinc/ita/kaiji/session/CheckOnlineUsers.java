@@ -1,8 +1,7 @@
-package com.softserveinc.ita.kaiji.model.util;
+package com.softserveinc.ita.kaiji.session;
 
-import com.softserveinc.ita.kaiji.chat.ChatUtils;
 import com.softserveinc.ita.kaiji.chat.ChatClientUpdateEndpoint;
-import com.softserveinc.ita.kaiji.session.SessionUtils;
+import com.softserveinc.ita.kaiji.chat.ChatUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -12,7 +11,6 @@ import javax.websocket.ContainerProvider;
 import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
 
 public class CheckOnlineUsers implements HttpSessionListener {
 
@@ -40,9 +38,7 @@ public class CheckOnlineUsers implements HttpSessionListener {
                LOG.error("Failed to open client WebSocket. " + e.getMessage());
             }
         }
-
     }
-
 
     private void registerInServletContext(ServletContext servletContext) {
 
