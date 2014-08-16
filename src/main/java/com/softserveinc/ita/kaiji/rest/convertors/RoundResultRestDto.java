@@ -3,11 +3,11 @@ package com.softserveinc.ita.kaiji.rest.convertors;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoundResultJson {
+public class RoundResultRestDto {
 
     private Integer id;
 
-    private List<RoundResultEntry> entries = new ArrayList<>();
+    private List<RoundResultEntryDto> entries = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -17,11 +17,11 @@ public class RoundResultJson {
         this.id = id;
     }
 
-    public List<RoundResultEntry> getEntries() {
+    public List<RoundResultEntryDto> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<RoundResultEntry> entries) {
+    public void setEntries(List<RoundResultEntryDto> entries) {
         this.entries = entries;
     }
 }
