@@ -1,13 +1,13 @@
 package com.softserveinc.ita.kaiji.rest.convertors;
 import com.softserveinc.ita.kaiji.model.Card;
 
-public class RoundResultEntry {
+public class RoundResultEntryDto {
 
     private String userName;
     private Card card;
     private Card.DuelResult duelResult;
 
-    public RoundResultEntry(String userName, Card card, Card.DuelResult duelResult) {
+    public RoundResultEntryDto(String userName, Card card, Card.DuelResult duelResult) {
         this.userName = userName;
         this.card = card;
         this.duelResult = duelResult;

@@ -2,10 +2,9 @@ package com.softserveinc.ita.kaiji.rest.convertors;
 
 import com.softserveinc.ita.kaiji.model.UserRole;
 
-import java.util.HashSet;
 import java.util.Set;
 
-public class UserJson {
+public class UserRestDto {
 
     private Integer id;
     private String name;

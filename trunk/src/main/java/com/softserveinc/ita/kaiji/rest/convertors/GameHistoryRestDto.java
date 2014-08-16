@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.rest.convertors;
 
-import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
 import com.softserveinc.ita.kaiji.model.game.Game;
 
 import java.util.ArrayList;
@@ -8,11 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GameHistoryJson {
+public class GameHistoryRestDto {
 
     private Integer id;
-    private GameInfoJson gameInfoJson;
-    private List<RoundResultJson> roundResults = new ArrayList<>();
+    private GameInfoRestDto gameInfoRest;
+    private List<RoundResultRestDto> roundResults = new ArrayList<>();
     private Set<String> winners = new HashSet<>();
     private Game.State gameState;
 
@@ -24,19 +23,19 @@ public class GameHistoryJson {
         this.id = id;
     }
 
-    public GameInfoJson getGameInfoJson() {
-        return gameInfoJson;
+    public GameInfoRestDto getGameInfoRest() {
+        return gameInfoRest;
     }
 
-    public void setGameInfoJson(GameInfoJson gameInfoJson) {
-        this.gameInfoJson = gameInfoJson;
+    public void setGameInfoRest(GameInfoRestDto gameInfoRest) {
+        this.gameInfoRest = gameInfoRest;
     }
 
-    public List<RoundResultJson> getRoundResults() {
+    public List<RoundResultRestDto> getRoundResults() {
         return roundResults;
     }
 
-    public void setRoundResults(List<RoundResultJson> roundResults) {
+    public void setRoundResults(List<RoundResultRestDto> roundResults) {
         this.roundResults = roundResults;
     }
 

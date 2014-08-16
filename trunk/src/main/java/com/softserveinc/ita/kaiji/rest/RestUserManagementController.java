@@ -5,14 +5,13 @@ import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
+import com.softserveinc.ita.kaiji.rest.convertors.ConvertToRestDto;
+import com.softserveinc.ita.kaiji.rest.convertors.GameInfoRestDto;
+import com.softserveinc.ita.kaiji.rest.convertors.UserRestDto;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.UserRole;
-import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
-import com.softserveinc.ita.kaiji.rest.convertors.GameHistoryJson;
-import com.softserveinc.ita.kaiji.rest.convertors.GameInfoJson;
-import com.softserveinc.ita.kaiji.rest.convertors.ToJsonConvertor;
-import com.softserveinc.ita.kaiji.rest.convertors.UserJson;
+import com.softserveinc.ita.kaiji.rest.convertors.GameHistoryRestDto;
+import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
-
 
 /**
  * @author Ievgen Sukhov
@@ -49,10 +47,13 @@ public class RestUserManagementController {
     private GameHistoryEntityDAO gameHistoryEntityDAO;
 
     @Autowired
+    SystemConfigurationService systemConfigurationService;
+
+    @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    ToJsonConvertor toJsonConvertor;
+    ConvertToRestDto convertToRestDto;
 
     private static final Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
 
@@ -61,12 +62,13 @@ public class RestUserManagementController {
     @Path("/statistic")
     @Produces("application/json")
     public Response getPlayerStats(@QueryParam("nickname") String nickname) {
-        if("".equals(nickname)){
+        if ("".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
-        if(userDAO.getByNickname(nickname) == null){
+        if (userDAO.getByNickname(nickname) == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+
         return Response.ok(userService.getStatsForUser(nickname)).build();
     }
 
@@ -75,10 +77,11 @@ public class RestUserManagementController {
     @Path("/users")
     @Produces("application/json")
     public Response getUsers() {
-        List<UserJson> users = new ArrayList<>();
-        for(User user: userDAO.getAll()){
-            users.add(toJsonConvertor.UserToJson(user));
+        List<UserRestDto> users = new ArrayList<>();
+        for (User user : userDAO.getAll()) {
+            users.add(convertToRestDto.userToDto(user));
         }
+
         return Response.ok(users).build();
     }
 
@@ -87,13 +90,14 @@ public class RestUserManagementController {
     @Path("/user")
     @Produces("application/json")
     public Response getUser(@QueryParam("nickname") String nickname) {
-        if("".equals(nickname)){
+        if ("".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
-        if(userDAO.getByNickname(nickname) == null){
+        if (userDAO.getByNickname(nickname) == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return Response.ok(toJsonConvertor.UserToJson(userDAO.getByNickname(nickname))).build();
+
+        return Response.ok(convertToRestDto.userToDto(userDAO.getByNickname(nickname))).build();
     }
 
 
@@ -102,22 +106,22 @@ public class RestUserManagementController {
     @Path("/user/add")
     @Produces("application/json")
     public Response AddUser(@QueryParam("name") String name,
-                               @QueryParam ("nickname") String nickname,
-                               @QueryParam("email") String email,
-                               @QueryParam("password") String password) {
-        if("".equals(name) && "".equals(nickname) && "".equals(email) && "".equals(password)){
+                            @QueryParam("nickname") String nickname,
+                            @QueryParam("email") String email,
+                            @QueryParam("password") String password) {
+        if ("".equals(name) && "".equals(nickname) && "".equals(email) && "".equals(password)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(!pattern.matcher(email).matches()){
+        if (!pattern.matcher(email).matches()) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(userDAO.getByNickname(nickname) != null){
+        if (userDAO.getByNickname(nickname) != null) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(userDAO.getByEmail(email) != null){
+        if (userDAO.getByEmail(email) != null) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = new User();
@@ -128,24 +132,24 @@ public class RestUserManagementController {
         user.setRegistrationDate(new Date());
         user.getRoles().add(UserRole.USER_ROLE);
         userDAO.save(user);
-        return Response.ok(toJsonConvertor.UserToJson(user)).build();
+        return Response.ok(convertToRestDto.userToDto(user)).build();
     }
 
     //http://localhost:8080/rest/management/user/delete?nickname=ssh
     @POST
     @Path("/user/delete")
     @Produces("application/json")
-    public Response removeUser(@QueryParam ("nickname") String nickname) {
+    public Response removeUser(@QueryParam("nickname") String nickname) {
 
-        if("".equals(nickname) ){
+        if ("".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
-        if(userDAO.getByNickname(nickname) == null){
+        if (userDAO.getByNickname(nickname) == null) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         userDAO.delete(user);
-        return Response.ok(toJsonConvertor.UserToJson(user)).build();
+        return Response.ok(convertToRestDto.userToDto(user)).build();
     }
 
     //http://localhost:8080/rest/management/gameinfos
@@ -154,9 +158,9 @@ public class RestUserManagementController {
     @Produces("application/json")
     public Response getAllGameInfo() {
 
-        List<GameInfoJson> gameInfos = new ArrayList<>();
-        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getAll()){
-            gameInfos.add(toJsonConvertor.GameInfoToJson(gameInfo));
+        List<GameInfoRestDto> gameInfos = new ArrayList<>();
+        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getAll()) {
+            gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
         return Response.ok(gameInfos).build();
     }
@@ -165,18 +169,18 @@ public class RestUserManagementController {
     @GET
     @Path("/gameinfo")
     @Produces("application/json")
-    public Response getGameInfoByUser(@QueryParam ("nickname") String nickname) {
-        if("".equals(nickname)){
+    public Response getGameInfoByUser(@QueryParam("nickname") String nickname) {
+        if ("".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
-        if(user == null){
+        if (user == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
-        List<GameInfoJson> gameInfos = new ArrayList<>();
-        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getGameInfoFor(user.getId())){
-            gameInfos.add(toJsonConvertor.GameInfoToJson(gameInfo));
+        List<GameInfoRestDto> gameInfos = new ArrayList<>();
+        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getGameInfoFor(user.getId())) {
+            gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
         return Response.ok(gameInfos).build();
     }
@@ -185,16 +189,16 @@ public class RestUserManagementController {
     @POST
     @Path("/gameinfo/delete")
     @Produces("application/json")
-    public Response deleteGameInfo(@QueryParam ("gameId") Integer gameId) {
-        if("".equals(gameId)){
+    public Response deleteGameInfo(@QueryParam("gameId") Integer gameId) {
+        if ("".equals(gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         GameInfoEntity gameInfo = gameInfoEntityDAO.get(gameId);
-        if(gameInfo == null){
+        if (gameInfo == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         gameInfoEntityDAO.delete(gameInfo);
-        return Response.ok(toJsonConvertor.GameInfoToJson(gameInfo)).build();
+        return Response.ok(convertToRestDto.gameInfoToDto(gameInfo)).build();
     }
 
     //http://localhost:8080/rest/management/gamehistories
@@ -202,9 +206,9 @@ public class RestUserManagementController {
     @Path("/gamehistories")
     @Produces("application/json")
     public Response getAllGameHistory() {
-        List<GameHistoryJson> gameHistories = new ArrayList<>();
-        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getAll()){
-            gameHistories.add(toJsonConvertor.GameHistoryToJson(gameHistory));
+        List<GameHistoryRestDto> gameHistories = new ArrayList<>();
+        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getAll()) {
+            gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
         return Response.ok(gameHistories).build();
     }
@@ -213,16 +217,16 @@ public class RestUserManagementController {
     @POST
     @Path("/gamehistory/delete")
     @Produces("application/json")
-    public Response deleteGameHistory(@QueryParam ("gameId") Integer gameId) {
-        if("".equals(gameId)){
+    public Response deleteGameHistory(@QueryParam("gameId") Integer gameId) {
+        if ("".equals(gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         GameHistoryEntity gameHistory = gameHistoryEntityDAO.get(gameId);
-        if(gameHistory == null){
+        if (gameHistory == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         gameHistoryEntityDAO.delete(gameHistory);
-        return Response.ok(toJsonConvertor.GameHistoryToJson(gameHistory)).build();
+        return Response.ok(convertToRestDto.gameHistoryToDto(gameHistory)).build();
     }
 
 
@@ -230,21 +234,27 @@ public class RestUserManagementController {
     @GET
     @Path("/gamehistory")
     @Produces("application/json")
-    public Response getGameHistoryByUser(@QueryParam ("nickname") String nickname) {
+    public Response getGameHistoryByUser(@QueryParam("nickname") String nickname) {
 
-        if("".equals(nickname)){
+        if ("".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         User user = userDAO.getByNickname(nickname);
-        if(user == null){
+        if (user == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        List<GameHistoryJson> gameHistories = new ArrayList<>();
-        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getGameHistoryByWinner(user.getId())){
-            gameHistories.add(toJsonConvertor.GameHistoryToJson(gameHistory));
+        List<GameHistoryRestDto> gameHistories = new ArrayList<>();
+        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getGameHistoryByWinner(user.getId())) {
+            gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
         return Response.ok(gameHistories).build();
     }
 
+    @GET
+    @Path("/system-configuration")
+    @Produces("application/json")
+    public Response getSystemConfiguration() {
+        return Response.ok(systemConfigurationService.getSystemConfiguration()).build();
+    }
 }

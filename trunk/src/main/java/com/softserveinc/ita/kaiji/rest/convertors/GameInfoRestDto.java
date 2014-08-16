@@ -1,12 +1,11 @@
 package com.softserveinc.ita.kaiji.rest.convertors;
 
-import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class GameInfoJson {
+public class GameInfoRestDto {
 
     private Integer id;
     private String gameName;
