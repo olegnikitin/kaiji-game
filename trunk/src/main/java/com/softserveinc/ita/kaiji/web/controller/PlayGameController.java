@@ -117,6 +117,7 @@ public class PlayGameController {
         }
 
         gameService.makeTurn(gameId, personId, playerChosenCard);
+
         Player player = userService.getPlayerById(personId);
         Player enemy = (Player) model.asMap().get("enemyObject");
 

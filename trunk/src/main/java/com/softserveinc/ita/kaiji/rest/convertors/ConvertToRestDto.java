@@ -7,6 +7,7 @@ import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.Deck;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,6 @@ public class ConvertToRestDto {
         return roundResultRestDto;
     }
 
-
     public CurrentGameRestInfoDto currentGameInfoToDto(Integer playerId, Integer gameId, Card chosenCard, GameHistory gameHistory){
 
         CurrentGameRestInfoDto currentGameRestInfoDto = new CurrentGameRestInfoDto();
@@ -117,5 +117,18 @@ public class ConvertToRestDto {
         currentGameRestInfoDto.setGameId(gameId);
 
         return  currentGameRestInfoDto;
+    }
+
+    public GameJoinRestDto joinGameInfoToDto(GameInfo gameInfo){
+
+        GameJoinRestDto gameJoinRestDto = new GameJoinRestDto();
+        gameJoinRestDto.setId(gameInfo.getId());
+        gameJoinRestDto.setGameName(gameInfo.getGameName());
+        for(Player player : gameInfo.getPlayers()) {
+            gameJoinRestDto.getPlayers().add(player.getName());
+        }
+        gameJoinRestDto.setNumberOfCards(gameInfo.getNumberOfCards());
+
+        return gameJoinRestDto;
     }
 }

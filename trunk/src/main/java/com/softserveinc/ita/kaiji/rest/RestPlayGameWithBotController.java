@@ -3,6 +3,7 @@ package com.softserveinc.ita.kaiji.rest;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.rest.convertors.ConvertToRestDto;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
@@ -35,13 +36,24 @@ public class RestPlayGameWithBotController {
     public Response makeTurn(@PathParam("gameId") Integer gameId,
                              @PathParam("chosenCard") Card chosenCard) {
 
-        GameHistory gameHistory = gameService.getGameHistory(gameId);
-        if(gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)){
+        if(gameService.getAllGameInfos().size() == 0){
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
+        Integer currentGameId = null;
+
+        for(GameInfo gameInfo :gameService.getAllGameInfos()){
+            if (gameId.equals(gameInfo.getId())){
+                currentGameId = gameId;
+                break;
+            }
+        }
+        if(currentGameId == null){
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+
         Integer playerId = gameService.getPlayerIdFromGame(gameId);
         gameService.makeTurn(gameId, playerId,chosenCard);
-        gameHistory = gameService.getGameHistory(gameId);
+        GameHistory gameHistory = gameService.getGameHistory(gameId);
         if(gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
             gameService.finishGame(gameId);
         }

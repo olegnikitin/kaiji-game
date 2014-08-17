@@ -63,7 +63,6 @@ public class RoundResultEntity implements Identifiable {
 
     @ElementCollection(fetch = FetchType.EAGER)
     //@OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-
     @JoinTable(
             name = "round_detail",
             joinColumns = {@JoinColumn(name = "round_id")})

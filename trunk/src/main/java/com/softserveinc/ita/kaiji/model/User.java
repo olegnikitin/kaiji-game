@@ -50,14 +50,12 @@ public class User implements Identifiable {
     @Enumerated(EnumType.STRING)
     private Set<UserRole> roles = getDefaultRoles();
 
-    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "link_game_to_user",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "game_id")})
     private Set<GameInfoEntity> gameInfoEntities;
-
 
     public User() {}
 

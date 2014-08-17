@@ -37,7 +37,6 @@ public class ChatServerEndpoint {
             JSONMessage = JSONMessage.replace("'", "\\'");
             ChatUtils.getMessages().add(JSONMessage);
 
-            System.err.println("ChatServerEndpoint");
             for(String user : ChatUtils.getActiveUsers()){
                 ChatUtils.getUnReadMessages().put(user,true);
             }

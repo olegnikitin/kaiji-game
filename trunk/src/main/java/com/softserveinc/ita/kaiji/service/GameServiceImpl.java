@@ -74,7 +74,6 @@ public class GameServiceImpl implements GameService {
         GAME_INFOS.put(newGameInfo);
 
         return newGameInfo.getId();
-
     }
 
     @Override

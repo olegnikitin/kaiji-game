@@ -43,7 +43,6 @@ public class GameChecker implements Runnable{
         } catch (InterruptedException e) {
             LOG.error( "Failed to check game asynchronously. " + e.getMessage());
         }
-
         asyncContext.dispatch("/game/" + gameId + "/");
     }
 }

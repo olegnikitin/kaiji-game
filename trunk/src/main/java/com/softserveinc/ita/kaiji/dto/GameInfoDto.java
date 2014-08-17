@@ -33,10 +33,18 @@ public class GameInfoDto {
     @Range(min = 1, max = 10, message = "{Range.gameinfodtoimpl.numberofstars}")
     private Integer numberOfStars;
 
-    private Bot.Types botType;
-
-    private Game.Type gameType;
     private Integer gameId;
+    private Bot.Types botType;
+    private Game.Type gameType;
+    private Integer playerId;
+
+    public Integer getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Integer playerId) {
+        this.playerId = playerId;
+    }
 
     public Integer getNumberOfStars() {
         return numberOfStars;
