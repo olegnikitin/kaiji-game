@@ -32,7 +32,7 @@ public class GameHistoryEntity implements Identifiable {
     private GameInfoEntity gameInfoEntity;
 
     @OneToMany(mappedBy = "gameHistory", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<RoundResultEntity> roundResults;
+    private Set<RoundResultEntity> roundResults;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -59,7 +59,7 @@ public class GameHistoryEntity implements Identifiable {
 
 
         List <RoundResult> roundResultList = gameHistory.getRoundResults();
-        roundResults = new ArrayList<>(roundResultList.size());
+        roundResults = new HashSet<>(roundResultList.size());
         for (int i = 0; i < gameHistory.getRoundResults().size(); ++i) {
             RoundResultEntity roundResultEntity = new RoundResultEntity(roundResultList.get(i));
             roundResultEntity.setNumber(i);
@@ -93,11 +93,11 @@ public class GameHistoryEntity implements Identifiable {
         this.gameInfoEntity = gameInfo;
     }
 
-    public List<RoundResultEntity> getRoundResults() {
+    public Set<RoundResultEntity> getRoundResults() {
         return roundResults;
     }
 
-    public void setRoundResults(List<RoundResultEntity> roundResults) {
+    public void setRoundResults(Set<RoundResultEntity> roundResults) {
         this.roundResults = roundResults;
     }
 

@@ -18,9 +18,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
- * Creates new bot game with REST. GET-request creates default game-settings object.
- * POST-request creates custom game-settings object, which can be passed to RestPlayGameController.
- *
  * @author Boiko Eduard
  * @version 1.1
  * @since 1.04.14
@@ -44,14 +41,14 @@ public class RestCreateGameWithBotController {
     /*
      *  Example of JSON client will receive:
      *  {"gameName":"Duel","playerName":"user1","botGame":true,
-     *  "numberOfCards":4,"botType":"EASY","gameType":"BOT_GAME","gameId":?}
+     *  "numberOfCards":4,"numberOfStars":2,"botType":"EASY","gameType":"BOT_GAME","gameId":?}
      */
     @POST
     @Produces("application/json")
     public Response createRestGameWithCustomSettings(@QueryParam("name") String name,
                                                      @QueryParam("gamename") String gameName,
                                                      @QueryParam("cards") Integer cards,
-                                                     @QueryParam("bot") String typeOfBot) {
+                                                     @QueryParam("bot") Bot.Types typeOfBot) {
 
         SystemConfiguration systemConfiguration = systemConfigurationService.getSystemConfiguration();
 
@@ -67,19 +64,13 @@ public class RestCreateGameWithBotController {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        try {
-            Bot.Types.valueOf(typeOfBot);
-        } catch (IllegalArgumentException e) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
         GameInfoDto gameInfoDto = new GameInfoDto();
         gameInfoDto.setGameName(gameName);
         gameInfoDto.setPlayerName(name);
         gameInfoDto.setNumberOfCards(cards);
         gameInfoDto.setNumberOfStars(0);
         gameInfoDto.setGameType(Game.Type.BOT_GAME);
-        gameInfoDto.setBotType(Bot.Types.valueOf(typeOfBot));
+        gameInfoDto.setBotType(typeOfBot);
         GameInfo info = gameService.getGameInfo(gameService.setGameInfo(gameInfoDto));
         gameInfoDto.setGameId(gameService.createGame(info));
 
