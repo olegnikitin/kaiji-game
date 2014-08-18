@@ -1,4 +1,4 @@
-package com.softserveinc.ita.kaiji.rest.convertors;
+package com.softserveinc.ita.kaiji.rest.dto;
 
 import java.util.HashSet;
 import java.util.Set;

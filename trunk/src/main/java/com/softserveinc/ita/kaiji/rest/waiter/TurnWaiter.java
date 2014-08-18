@@ -14,13 +14,10 @@ public class TurnWaiter implements Runnable {
     private UserService userService;
     private Player enemy;
     private Player player;
-    private Integer gameId;
 
-    public TurnWaiter(Integer gameId,
-                      Integer enemyId,
+    public TurnWaiter(Integer enemyId,
                       Integer personId,
                       UserService userService) {
-        this.gameId = gameId;
         this.userService = userService;
         this.enemy = userService.getPlayerById(enemyId);
         this.player = userService.getPlayerById(personId);

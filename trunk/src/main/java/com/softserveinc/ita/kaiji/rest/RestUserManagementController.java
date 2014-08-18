@@ -5,13 +5,12 @@ import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
-import com.softserveinc.ita.kaiji.rest.convertors.ConvertToRestDto;
-import com.softserveinc.ita.kaiji.rest.convertors.GameInfoRestDto;
-import com.softserveinc.ita.kaiji.rest.convertors.UserRestDto;
+import com.softserveinc.ita.kaiji.rest.dto.ConvertToRestDto;
+import com.softserveinc.ita.kaiji.rest.dto.GameInfoRestDto;
+import com.softserveinc.ita.kaiji.rest.dto.UserRestDto;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.UserRole;
-import com.softserveinc.ita.kaiji.rest.convertors.GameHistoryRestDto;
-import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
+import com.softserveinc.ita.kaiji.rest.dto.GameHistoryRestDto;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,12 +22,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
-
-/**
- * @author Ievgen Sukhov
- * @since 23.04.14
- * @version 1.0
- */
 
 @Path("/management")
 @Component
@@ -46,8 +39,6 @@ public class RestUserManagementController {
     @Autowired
     private GameHistoryEntityDAO gameHistoryEntityDAO;
 
-    @Autowired
-    SystemConfigurationService systemConfigurationService;
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
@@ -57,16 +48,16 @@ public class RestUserManagementController {
 
     private static final Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
 
-    //http://localhost:8080/rest/management/statistic?nickname=petya
+    //http://localhost:8080/rest/management/statistic/user/petya
     @GET
-    @Path("/statistic")
+    @Path("/statistic/{nickname}")
     @Produces("application/json")
-    public Response getPlayerStats(@QueryParam("nickname") String nickname) {
-        if ("".equals(nickname)) {
+    public Response getPlayerStats(@PathParam("nickname") String nickname) {
+        if (nickname == null || "".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         return Response.ok(userService.getStatsForUser(nickname)).build();
@@ -85,16 +76,16 @@ public class RestUserManagementController {
         return Response.ok(users).build();
     }
 
-    //http://localhost:8080/rest/management/user?nickname=petya
+    //http://localhost:8080/rest/management/user/petya
     @GET
-    @Path("/user")
+    @Path("/user/{nickname}")
     @Produces("application/json")
-    public Response getUser(@QueryParam("nickname") String nickname) {
-        if ("".equals(nickname)) {
+    public Response getUser(@PathParam("nickname") String nickname) {
+        if (nickname == null || "".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         return Response.ok(convertToRestDto.userToDto(userDAO.getByNickname(nickname))).build();
@@ -109,21 +100,32 @@ public class RestUserManagementController {
                             @QueryParam("nickname") String nickname,
                             @QueryParam("email") String email,
                             @QueryParam("password") String password) {
-        if ("".equals(name) && "".equals(nickname) && "".equals(email) && "".equals(password)) {
+
+        if (name == null || nickname == null || email == null || password == null) {
+            System.err.println("NULL");
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        if ("".equals(name) || "".equals(nickname) || "".equals(email) || "".equals(password)) {
+            System.err.println("EMPTY");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         if (!pattern.matcher(email).matches()) {
+            System.err.println("WRONG EMAIL");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         if (userDAO.getByNickname(nickname) != null) {
+            System.err.println("NICKNAME");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         if (userDAO.getByEmail(email) != null) {
+            System.err.println("EMAIL EXIST");
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
+
         User user = new User();
         user.setName(name);
         user.setNickname(nickname);
@@ -132,16 +134,16 @@ public class RestUserManagementController {
         user.setRegistrationDate(new Date());
         user.getRoles().add(UserRole.USER_ROLE);
         userDAO.save(user);
+
         return Response.ok(convertToRestDto.userToDto(user)).build();
     }
 
-    //http://localhost:8080/rest/management/user/delete?nickname=ssh
-    @POST
-    @Path("/user/delete")
-    @Produces("application/json")
-    public Response removeUser(@QueryParam("nickname") String nickname) {
+    //http://localhost:8080/rest/management/user/delete/ssh
+    @DELETE
+    @Path("/user/delete/{nickname}")
+    public Response removeUser(@PathParam("nickname") String nickname) {
 
-        if ("".equals(nickname)) {
+        if (nickname == null || "".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
@@ -149,7 +151,7 @@ public class RestUserManagementController {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         userDAO.delete(user);
-        return Response.ok(convertToRestDto.userToDto(user)).build();
+        return Response.ok().build();
     }
 
     //http://localhost:8080/rest/management/gameinfos
@@ -165,17 +167,18 @@ public class RestUserManagementController {
         return Response.ok(gameInfos).build();
     }
 
-    //http://localhost:8080/rest/management/gameinfo?nickname=petya
+    //http://localhost:8080/rest/management/gameinfo/=petya
     @GET
-    @Path("/gameinfo")
+    @Path("/gameinfo/{nickname}")
     @Produces("application/json")
-    public Response getGameInfoByUser(@QueryParam("nickname") String nickname) {
-        if ("".equals(nickname)) {
+    public Response getGameInfoByUser(@PathParam("nickname") String nickname) {
+
+        if (nickname == null || "".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         List<GameInfoRestDto> gameInfos = new ArrayList<>();
@@ -185,20 +188,20 @@ public class RestUserManagementController {
         return Response.ok(gameInfos).build();
     }
 
-    //http://localhost:8080/rest/management/gameinfo/delete?gameId=13
-    @POST
-    @Path("/gameinfo/delete")
-    @Produces("application/json")
-    public Response deleteGameInfo(@QueryParam("gameId") Integer gameId) {
-        if ("".equals(gameId)) {
+    //http://localhost:8080/rest/management/gameinfo/delete/13
+    @DELETE
+    @Path("/gameinfo/delete/{gameId}")
+    public Response deleteGameInfo(@PathParam("gameId") Integer gameId) {
+
+        if (gameId == null || "".equals(gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         GameInfoEntity gameInfo = gameInfoEntityDAO.get(gameId);
         if (gameInfo == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         gameInfoEntityDAO.delete(gameInfo);
-        return Response.ok(convertToRestDto.gameInfoToDto(gameInfo)).build();
+        return Response.ok().build();
     }
 
     //http://localhost:8080/rest/management/gamehistories
@@ -206,6 +209,7 @@ public class RestUserManagementController {
     @Path("/gamehistories")
     @Produces("application/json")
     public Response getAllGameHistory() {
+
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
         for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getAll()) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
@@ -213,48 +217,42 @@ public class RestUserManagementController {
         return Response.ok(gameHistories).build();
     }
 
-    //http://localhost:8080/rest/management/gamehistory/delete?gameId=?
-    @POST
-    @Path("/gamehistory/delete")
-    @Produces("application/json")
-    public Response deleteGameHistory(@QueryParam("gameId") Integer gameId) {
-        if ("".equals(gameId)) {
+    //http://localhost:8080/rest/management/gamehistory/delete/12
+    @DELETE
+    @Path("/gamehistory/delete/{gameId}")
+    public Response deleteGameHistory(@PathParam("gameId") Integer gameId) {
+
+        if (gameId == null || "".equals(gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         GameHistoryEntity gameHistory = gameHistoryEntityDAO.get(gameId);
         if (gameHistory == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         gameHistoryEntityDAO.delete(gameHistory);
-        return Response.ok(convertToRestDto.gameHistoryToDto(gameHistory)).build();
+
+        return Response.ok().build();
     }
 
-
-    //http://localhost:8080/rest/management/gamehistory?nickname=?
+    //http://localhost:8080/rest/management/gameHistory/vasya
     @GET
-    @Path("/gamehistory")
+    @Path("/gamehistory/{nickname}")
     @Produces("application/json")
-    public Response getGameHistoryByUser(@QueryParam("nickname") String nickname) {
+    public Response getGameHistoryByUser(@PathParam("nickname") String nickname) {
 
-        if ("".equals(nickname)) {
+        if (nickname == null || "".equals(nickname)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
         for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getGameHistoryByWinner(user.getId())) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
-        return Response.ok(gameHistories).build();
-    }
 
-    @GET
-    @Path("/system-configuration")
-    @Produces("application/json")
-    public Response getSystemConfiguration() {
-        return Response.ok(systemConfigurationService.getSystemConfiguration()).build();
+        return Response.ok(gameHistories).build();
     }
 }

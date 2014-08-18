@@ -1,4 +1,4 @@
-package com.softserveinc.ita.kaiji.rest.convertors;
+package com.softserveinc.ita.kaiji.rest.dto;
 
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
@@ -17,7 +17,6 @@ import java.util.Map;
 
 @Component
 public class ConvertToRestDto {
-
 
     @Autowired
     GameService gameService;
@@ -88,6 +87,7 @@ public class ConvertToRestDto {
         String enemyName = null;
         String enemyCard = null;
         Deck playersDeck = null;
+        Integer starsLeft = null;
         String roundWinner = "DRAW";
 
         for (Player player : gameHistory.getGameInfo().getPlayers()) {
@@ -95,10 +95,16 @@ public class ConvertToRestDto {
                 playerName = player.getName();
                 playersDeck = player.getDeck();
                 currentGameRestInfoDto.setPlayerWin(player.getStatistic().getSpecificStat(Card.DuelResult.WIN));
+                if(!player.isBot()) {
+                    starsLeft = player.getStar().getQuantity();
+                }
             } else {
                 enemyName = player.getName();
                 enemyCard = gameHistory.getLastRoundResultFor(player).getCard(player).toString();
                 currentGameRestInfoDto.setEnemyWin(player.getStatistic().getSpecificStat(Card.DuelResult.WIN));
+                if(!player.isBot()) {
+                    starsLeft = player.getStar().getQuantity();
+                }
             }
             if (gameHistory.getLastRoundResultFor(player).getDuelResult(player).equals(Card.DuelResult.WIN)) {
                 roundWinner = player.getName();
@@ -109,6 +115,7 @@ public class ConvertToRestDto {
         currentGameRestInfoDto.setCardPaperLeft(playersDeck.getCardTypeCount(Card.PAPER));
         currentGameRestInfoDto.setCardRockLeft(playersDeck.getCardTypeCount(Card.ROCK));
         currentGameRestInfoDto.setCardScissorsLeft(playersDeck.getCardTypeCount(Card.SCISSORS));
+        currentGameRestInfoDto.setStarsLeft(starsLeft);
         currentGameRestInfoDto.setPlayerName(playerName);
         currentGameRestInfoDto.setEnemyName(enemyName);
         currentGameRestInfoDto.setGameState(gameHistory.getGameStatus());

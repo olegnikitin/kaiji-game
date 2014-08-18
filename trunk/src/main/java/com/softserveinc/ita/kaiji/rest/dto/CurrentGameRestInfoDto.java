@@ -1,4 +1,4 @@
-package com.softserveinc.ita.kaiji.rest.convertors;
+package com.softserveinc.ita.kaiji.rest.dto;
 
 import com.softserveinc.ita.kaiji.model.game.Game;
 
@@ -13,13 +13,14 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 
 public class CurrentGameRestInfoDto {
 
-    private int gameId;
+    private Integer gameId;
     private String playerName;
     private String enemyName;
     private Game.State gameState;
-    private int cardPaperLeft;
-    private int cardScissorsLeft;
-    private int cardRockLeft;
+    private Integer cardPaperLeft;
+    private Integer cardScissorsLeft;
+    private Integer cardRockLeft;
+    private Integer starsLeft;
     private String enemyChosenCard;
     private String yourCard;
     private String roundResultForPlayer;
@@ -43,28 +44,36 @@ public class CurrentGameRestInfoDto {
         this.enemyChosenCard = enemyChosenCard;
     }
 
-    public int getCardPaperLeft() {
+    public Integer getCardPaperLeft() {
         return cardPaperLeft;
     }
 
-    public void setCardPaperLeft(int cardPaperLeft) {
+    public void setCardPaperLeft(Integer cardPaperLeft) {
         this.cardPaperLeft = cardPaperLeft;
     }
 
-    public int getCardScissorsLeft() {
+    public Integer getCardScissorsLeft() {
         return cardScissorsLeft;
     }
 
-    public void setCardScissorsLeft(int cardScissorsLeft) {
+    public void setCardScissorsLeft(Integer cardScissorsLeft) {
         this.cardScissorsLeft = cardScissorsLeft;
     }
 
-    public int getCardRockLeft() {
+    public Integer getCardRockLeft() {
         return cardRockLeft;
     }
 
-    public void setCardRockLeft(int cardRockLeft) {
+    public void setCardRockLeft(Integer cardRockLeft) {
         this.cardRockLeft = cardRockLeft;
+    }
+
+    public Integer getStarsLeft() {
+        return starsLeft;
+    }
+
+    public void setStarsLeft(Integer starsLeft) {
+        this.starsLeft = starsLeft;
     }
 
     public Game.State getGameState() {
@@ -99,11 +108,11 @@ public class CurrentGameRestInfoDto {
         this.enemyName = enemyName;
     }
 
-    public int getGameId() {
+    public Integer getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(Integer gameId) {
         this.gameId = gameId;
     }
 
