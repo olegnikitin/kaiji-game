@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import com.softserveinc.ita.kaiji.model.util.FieldEquals;
 
 /**
- * @author Vladyslav Shelest
+ * @author Vladyslav Shelest, Oleg Nikitn
  * @version 1.0
  * @since 22.04.14.
+ * Edited page: had set input confirmPassord
+ * @since 04.08.14.
  */
 @Component
 @FieldEquals(field="password", equalsTo="confirmPassword" )

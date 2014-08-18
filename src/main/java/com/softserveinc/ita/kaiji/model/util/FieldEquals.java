@@ -14,6 +14,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = FieldEqualsValidator.class)
 @Documented
+/** * 
+ * @author Oleg Nikitin
+ * @version 0.1
+ * @since 04.08.14
+ */
 public @interface FieldEquals {
 	public static final String MESSAGE = "fields.notMatches";
 

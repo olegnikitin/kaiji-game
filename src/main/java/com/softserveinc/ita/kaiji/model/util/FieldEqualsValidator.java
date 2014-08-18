@@ -5,6 +5,11 @@ import java.lang.reflect.Method;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/** * 
+ * @author Oleg Nikitin
+ * @version 0.1
+ * @since 04.08.14
+ */
 public class FieldEqualsValidator implements ConstraintValidator<FieldEquals, Object> {
 	private String field;
 	private String equalsTo;
