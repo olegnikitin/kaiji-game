@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @since 19.03.14.
  */
 @Component
-public class GameInfoDto {
+public class GameInfoDto implements Cloneable {
 
     @Size(min = 1, max = 10, message = "{Size.gameinfodtoimpl.gamename}")
     private String gameName;
@@ -109,5 +109,9 @@ public class GameInfoDto {
 
     public void setBotType(Bot.Types botType) {
         this.botType = botType;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
