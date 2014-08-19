@@ -1,8 +1,13 @@
 package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.exception.MakeTurnException;
+import com.softserveinc.ita.kaiji.exception.game.NoBotPlayerInGameException;
 import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.User;
+import com.softserveinc.ita.kaiji.model.game.BotGameImpl;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.game.GameInfoImpl;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -12,6 +17,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,6 +41,7 @@ import static org.mockito.Mockito.mock;
 public class BotTest {
 
     Bot testBot;
+    Player player;
 
     @Autowired
     PlayerFactory playerFactory;
@@ -42,6 +53,7 @@ public class BotTest {
         this.testContextManager.prepareTestInstance(this);
 
         testBot = (Bot) playerFactory.makePlayer(Bot.Types.EASY, 1);
+        player=new HumanPlayer(new User(), 3, 3);
     }
 
     private static Object[] data() {
@@ -138,6 +150,45 @@ public class BotTest {
     public void turnMakingWrongStateTest(Card fInput, Card fExpected) {
         testBot.makeTurn(fInput);
         testBot.makeTurn(fInput);
+    }
+
+    @Test(expected = NoBotPlayerInGameException.class)
+    public void mustThrowExceptionThatGameIsBrokenCauseInDuelHumanvsBotThereIsNoBot() {
+        //Arrange
+        Set<Player> players = new HashSet<>();
+        players.add(new HumanPlayer(new User(), 3, 3));
+        players.add(new HumanPlayer(new User(), 3, 3));
+        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
+        //Act //Assert
+        BotGameImpl botGame = new BotGameImpl(gameInfo);
+    }
+    @Test
+    public void canContinueGame() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //Arrange
+        Set<Player> players = new HashSet<>();
+        players.add(player);
+        players.add(testBot);
+        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
+        //Act
+        BotGameImpl botGame = new BotGameImpl(gameInfo);
+        Method canContinueGame = botGame.getClass().getDeclaredMethod("canContinueGame");
+        canContinueGame.setAccessible(true);
+        //Assert
+        canContinueGame.invoke(botGame);
+    }
+
+    @Test
+    public void makeTurn(){
+        //Arrange
+        Card card = Card.PAPER;
+        Set<Player> players = new HashSet<>();
+        players.add(player);
+        players.add(testBot);
+        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
+        //Act
+        BotGameImpl botGame = new BotGameImpl(gameInfo);
+        //Assert
+        botGame.makeTurn(card,player);
     }
 
 }
