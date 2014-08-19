@@ -12,7 +12,7 @@ public class SecondPlayerWaiter implements Runnable {
     private String gameName;
     private GameService gameService;
 
-    public SecondPlayerWaiter(String gameName, GameService gameService){
+    public SecondPlayerWaiter(String gameName, GameService gameService) {
         this.gameName = gameName;
         this.gameService = gameService;
     }
@@ -22,12 +22,12 @@ public class SecondPlayerWaiter implements Runnable {
         Integer gameId = null;
         try {
             gameId = gameService.getGameId(gameName);
-            while(gameId == null) {
+            while (gameId == null) {
                 gameId = gameService.getGameId(gameName);
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
-            LOG.error( "Failed to wait for game creation. " + e.getMessage());
+            LOG.error("Failed to wait for game creation. " + e.getMessage());
         }
     }
 }

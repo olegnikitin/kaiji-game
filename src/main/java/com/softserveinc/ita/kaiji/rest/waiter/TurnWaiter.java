@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.rest.waiter;
 
-
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.apache.log4j.Logger;
@@ -26,7 +25,12 @@ public class TurnWaiter implements Runnable {
     @Override
     public void run() {
         try {
-            while (!enemy.getCardCount().equals(player.getCardCount())) {
+            while (true) {
+                if (enemy == null || player == null) {
+                    break;
+                } else if (enemy.getCardCount().equals(player.getCardCount())) {
+                    break;
+                }
                 Thread.sleep(1000);
                 enemy = userService.getPlayerById(enemy.getId());
                 player = userService.getPlayerById(player.getId());
@@ -34,6 +38,5 @@ public class TurnWaiter implements Runnable {
         } catch (InterruptedException e) {
             LOG.error("Failed to check second player turn. " + e.getMessage());
         }
-
     }
 }

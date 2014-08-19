@@ -15,22 +15,18 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-/**
- * @author Boiko Eduard
- * @version 1.1
- * @since 05.04.14
- */
-
 @Path("/botgame/play")
 @Component
 public class RestPlayGameWithBotController {
-    private static final Logger LOG = Logger.getLogger(RestPlayGameWithBotController.class);
 
     @Autowired
-    ConvertToRestDto convertToRestDto;
+    private ConvertToRestDto convertToRestDto;
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private RestUtils restUtils;
 
     @GET
     @Produces("application/json")
@@ -42,18 +38,7 @@ public class RestPlayGameWithBotController {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(gameService.getAllGameInfos().size() == 0){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-        Integer currentGameId = null;
-
-        for(GameInfo gameInfo :gameService.getAllGameInfos()){
-            if (gameId.equals(gameInfo.getId())){
-                currentGameId = gameId;
-                break;
-            }
-        }
-        if(currentGameId == null){
+        if (restUtils.isGameFinished(gameService.getAllGameInfos(), gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
@@ -72,23 +57,6 @@ public class RestPlayGameWithBotController {
         }
 
         return Response.ok(convertToRestDto.currentGameInfoToDto(playerId,gameId,chosenCard,gameHistory)).build();
+
     }
-
-/*    @RequestMapping(value = "/rest/info/{gameName}", method = RequestMethod.GET)
-    public GameInfoDto getGame(@PathVariable String gameName) {
-        Set<GameInfo> infos = gameService.getAllGameInfos();
-        for (GameInfo gi : infos) {
-            if (gi.getGameName().equals(gameName)) {
-                GameInfoDto res = new GameInfoDto();
-                res.setGameName(gi.getGameName());
-                res.setPlayerName(gi.getPlayers().toString());
-                res.setNumberOfCards(gi.getNumberOfCards());
-                res.setGameId(gi.getId());
-                res.setGameType(gi.getGameType());
-                return res;
-            }
-        }
-
-        return null;
-    }*/
 }

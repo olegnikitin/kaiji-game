@@ -12,7 +12,7 @@ public class GameWaiter implements Runnable {
     private Integer gameId;
     private GameService gameService;
 
-    public GameWaiter(Integer gameId, GameService gameService){
+    public GameWaiter(Integer gameId, GameService gameService) {
         this.gameId = gameId;
         this.gameService = gameService;
     }
@@ -23,7 +23,7 @@ public class GameWaiter implements Runnable {
             GameInfo info = gameService.getGameInfo(gameId);
             while (info.getPlayers().size() < 2) {
                 info = gameService.getGameInfo(gameId);
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             LOG.error("Failed to wait for second player. " + e.getMessage());

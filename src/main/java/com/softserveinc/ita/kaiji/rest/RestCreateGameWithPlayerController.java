@@ -22,12 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Boiko Eduard
- * @version 1.1
- * @since 1.04.14
- */
-
 @Path("/playergame/create")
 @Component
 public class RestCreateGameWithPlayerController {
@@ -95,6 +89,7 @@ public class RestCreateGameWithPlayerController {
         gameInfoDto.setPlayerId(0);
         Integer gameId = gameService.setGameInfo(gameInfoDto);
         GameInfo info = gameService.getGameInfo(gameId);
+        info.setNumberOfPlayers(1);
         Long timeout = TimeUnit.MILLISECONDS.convert(
                 systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.SECONDS);
 
@@ -174,12 +169,14 @@ public class RestCreateGameWithPlayerController {
             secondPlayerWaiter.interrupt();
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
+        Integer numberOfPlayers = info.getNumberOfPlayers();
+        info.setNumberOfPlayers(++numberOfPlayers);
         GameInfoDto infoDto = null;
         try {
             infoDto = (GameInfoDto) gameInfoDto.clone();
         } catch (CloneNotSupportedException e) {
             LOG.error("Can't clone GameInfoDto object " + e.getMessage());
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         infoDto.setPlayerId(playerId);
         infoDto.setPlayerName(nickname);
