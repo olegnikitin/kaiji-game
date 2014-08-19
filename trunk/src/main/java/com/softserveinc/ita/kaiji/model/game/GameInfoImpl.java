@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.model.game;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.log4j.Logger;
 
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -30,6 +29,8 @@ public class GameInfoImpl implements GameInfo {
     private Integer numberOfCards = 0;
 
     private Integer numberOfStars;
+
+    private Integer numberOfPlayers;
 
     private Game.Type gameType;
 
@@ -82,6 +83,16 @@ public class GameInfoImpl implements GameInfo {
     @Override
     public Integer getNumberOfStars() {
         return numberOfStars;
+    }
+
+    @Override
+    public Integer getNumberOfPlayers(){
+        return numberOfPlayers;
+    }
+
+    @Override
+    public void setNumberOfPlayers(Integer numberOfPlayers){
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public void setNumberOfCards(int numberOfCards) {

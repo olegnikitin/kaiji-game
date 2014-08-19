@@ -17,26 +17,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-/**
- * @author Boiko Eduard
- * @version 1.1
- * @since 1.04.14
- */
-
 @Path("/botgame/create")
 @Component
 public class RestCreateGameWithBotController {
-
-    private static final Logger LOG = Logger.getLogger(RestCreateGameWithBotController.class);
 
     @Autowired
     private GameService gameService;
 
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     @Autowired
-    SystemConfigurationService systemConfigurationService;
+    private SystemConfigurationService systemConfigurationService;
 
     /*
      *  Example of JSON client will receive:

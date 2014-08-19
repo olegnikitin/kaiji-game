@@ -28,10 +28,10 @@ import java.util.regex.Pattern;
 public class RestUserManagementController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     @Autowired
     private GameInfoEntityDAO gameInfoEntityDAO;
@@ -41,10 +41,10 @@ public class RestUserManagementController {
 
 
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    ConvertToRestDto convertToRestDto;
+    private ConvertToRestDto convertToRestDto;
 
     private static final Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
 

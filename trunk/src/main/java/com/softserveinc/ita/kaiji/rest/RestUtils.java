@@ -22,6 +22,7 @@ public class RestUtils {
                 break;
             }
         }
+
         return  currentGameId == null;
     }
 }

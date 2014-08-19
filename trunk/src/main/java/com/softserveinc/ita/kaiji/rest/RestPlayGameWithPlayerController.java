@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.rest;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.rest.dto.ConvertToRestDto;
 import com.softserveinc.ita.kaiji.rest.waiter.TurnWaiter;
@@ -50,25 +49,13 @@ public class RestPlayGameWithPlayerController {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-     /*   Integer currentGameId = null;
-        for (GameInfo gameInfo : gameService.getAllGameInfos()) {
-
-            if (gameId.equals(gameInfo.getId())) {
-                currentGameId = gameId;
-                break;
-            }
-        }
-        if (currentGameId == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }*/
-
-        if (restUtils.isGameFinished(gameService.getAllGameInfos(),gameId)){
+        if (restUtils.isGameFinished(gameService.getAllGameInfos(), gameId)) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        for (Player player :gameService.getGameInfo(gameId).getPlayers()){
-            if(player.getId().equals(playerId)){
-                if(player.getDeck().getCardTypeCount(chosenCard) == 0){
+        for (Player player : gameService.getGameInfo(gameId).getPlayers()) {
+            if (player.getId().equals(playerId)) {
+                if (player.getDeck().getCardTypeCount(chosenCard) == 0) {
                     throw new WebApplicationException(Response.Status.BAD_REQUEST);
                 }
             }
@@ -96,24 +83,19 @@ public class RestPlayGameWithPlayerController {
         }
         if (turnWaiter.isAlive()) {
             turnWaiter.interrupt();
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
-    /*    for (GameInfo gameInfo : gameService.getAllGameInfos()) {
-            if (gameId.equals(gameInfo.getId())) {
-                currentGameId = gameId;
-                break;
-            }
-        }*/
-
-        if (restUtils.isGameFinished(gameService.getAllGameInfos(),gameId)){
+            gameService.clearGameInfo(gameId);
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
         GameHistory gameHistory = gameService.getGameHistory(gameId);
-        if (gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
-
-            gameService.finishGame(gameId);
+        synchronized (this) {
+            if (gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
+                Integer numberOfPlayers = gameService.getGameInfo(gameId).getNumberOfPlayers();
+                gameService.getGameInfo(gameId).setNumberOfPlayers(--numberOfPlayers);
+                if (gameService.getGameInfo(gameId).getNumberOfPlayers() == 0) {
+                    gameService.finishGame(gameId);
+                }
+            }
         }
 
         return Response.ok(convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory)).build();
