@@ -11,12 +11,12 @@ import com.softserveinc.ita.kaiji.model.User;
  * @since 20.08.2014
  */
 public interface UserDAOCustom {
-	
-    /**
-     * Returns global statistics for user
-     * @param user user entity
-     * @return StatisticsDTO with statistics
-     */
+
+	/**
+	 * Returns global statistics for user
+	 * @param user user entity
+	 * @return StatisticsDTO with statistics
+	 */
 	public StatisticsDTO findStatistics(User user);
-	
+
 }

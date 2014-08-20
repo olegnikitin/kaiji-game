@@ -14,12 +14,12 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface GameInfoEntityDAO extends JpaRepository<GameInfoEntity, Integer> {
 
-    /**
-     * Returns a list of games in which user took part
-     * @param user whose games are to be found
-     * @return list of games in which user took part
-     */
+	/**
+	 * Returns a list of games in which user took part
+	 * @param user whose games are to be found
+	 * @return list of games in which user took part
+	 */
 	@Query("from GameInfoEntity as g where ?1 in elements(g.users)")
-    List<GameInfoEntity> findByUser(Integer userId);
-    
+	List<GameInfoEntity> findByUser(Integer userId);
+
 }
