@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/playergame/play")
+@RequestMapping("rest/playergame/play")
 public class RestPlayGameWithPlayerController {
 
     private static final Logger LOG = Logger.getLogger(RestPlayGameWithPlayerController.class);
@@ -43,15 +43,11 @@ public class RestPlayGameWithPlayerController {
     @Autowired
     private RestUtils restUtils;
 
-    //http://localhost:8080/rest/botgame/play?playerId=0&gameId=1&chosenCard=ROCK
+    // http://localhost:8080/rest/playergame/create?name=petya&gamename=GAME&cards=2&stars=3
     @RequestMapping(produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@RequestParam("playerId") Integer playerId,
                                                            @RequestParam("gameId") Integer gameId,
                                                            @RequestParam("chosenCard") Card chosenCard) {
-
-        if (playerId == null || gameId == null || chosenCard == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
 
         if (restUtils.isGameFinished(gameService.getAllGameInfos(), gameId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -92,6 +88,8 @@ public class RestPlayGameWithPlayerController {
         }
 
         GameHistory gameHistory = gameService.getGameHistory(gameId);
+        CurrentGameRestInfoDto currentGameRestInfoDto = convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory);
+
         synchronized (this) {
             if (gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
                 Integer numberOfPlayers = gameService.getGameInfo(gameId).getNumberOfPlayers();
@@ -104,6 +102,6 @@ public class RestPlayGameWithPlayerController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        return new ResponseEntity<CurrentGameRestInfoDto>(convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory), headers, HttpStatus.OK);
+        return new ResponseEntity<CurrentGameRestInfoDto>(currentGameRestInfoDto, headers, HttpStatus.OK);
     }
 }

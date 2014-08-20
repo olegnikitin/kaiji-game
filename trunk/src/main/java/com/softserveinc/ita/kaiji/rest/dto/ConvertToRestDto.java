@@ -123,7 +123,6 @@ public class ConvertToRestDto {
         currentGameRestInfoDto.setEnemyChosenCard(enemyCard);
         currentGameRestInfoDto.setGameId(gameId);
         currentGameRestInfoDto.setGameName(gameService.getGameInfo(gameId).getGameName());
-
         return  currentGameRestInfoDto;
     }
 

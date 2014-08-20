@@ -59,12 +59,7 @@ public class RestUserManagementController {
     @RequestMapping(value = "/statistic/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<StatisticsDTO> getPlayerStats(@PathVariable("nickname") String nickname) {
 
-        if (nickname == null || "".equals(nickname)) {
-            System.err.println("EMPTY");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
         if (userDAO.getByNickname(nickname) == null) {
-            System.err.println("NOT FOUND");
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -90,9 +85,7 @@ public class RestUserManagementController {
     //http://localhost:8080/rest/management/user/petya
     @RequestMapping(value = "/user/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<UserRestDto> getUser(@PathVariable("nickname") String nickname) {
-        if (nickname == null || "".equals(nickname)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
+
         if (userDAO.getByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -101,7 +94,6 @@ public class RestUserManagementController {
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.getByNickname(nickname)), headers, HttpStatus.OK);
     }
-
 
     //http://localhost:8080/rest/management/user/add?name=sasha&nickname=ssh&email=1345@gmail.com&password=123
     @RequestMapping(value = "/user/add", produces = "application/json", method = RequestMethod.POST)
@@ -148,9 +140,6 @@ public class RestUserManagementController {
     @RequestMapping(value = "/user/delete/{nickname}", method = RequestMethod.DELETE)
     public ResponseEntity removeUser(@PathVariable("nickname") String nickname) {
 
-        if (nickname == null || "".equals(nickname)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
         User user = userDAO.getByNickname(nickname);
         if (userDAO.getByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -178,9 +167,6 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gameinfo/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<GameInfoRestDto> getGameInfoByUser(@PathVariable("nickname") String nickname) {
 
-        if (nickname == null || "".equals(nickname)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -200,9 +186,6 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gameinfo/delete/{gameId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteGameInfo(@PathVariable("gameId") Integer gameId) {
 
-        if (gameId == null || "".equals(gameId)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
         GameInfoEntity gameInfo = gameInfoEntityDAO.get(gameId);
         if (gameInfo == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -228,9 +211,6 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gamehistory/delete/{gameId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteGameHistory(@PathVariable("gameId") Integer gameId) {
 
-        if (gameId == null || "".equals(gameId)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
         GameHistoryEntity gameHistory = gameHistoryEntityDAO.get(gameId);
         if (gameHistory == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -241,12 +221,8 @@ public class RestUserManagementController {
     }
 
     //http://localhost:8080/rest/management/gameHistory/vasya
-    @RequestMapping(value = "/gamehistory/{nickname}", produces = "application/json",method = RequestMethod.GET)
+    @RequestMapping(value = "/gamehistory/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<List<GameHistoryRestDto>> getGameHistoryByUser(@PathVariable("nickname") String nickname) {
-
-        if (nickname == null || "".equals(nickname)) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
 
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
@@ -259,6 +235,6 @@ public class RestUserManagementController {
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        return new ResponseEntity<List<GameHistoryRestDto>>(gameHistories,headers,HttpStatus.OK);
+        return new ResponseEntity<List<GameHistoryRestDto>>(gameHistories, headers, HttpStatus.OK);
     }
 }

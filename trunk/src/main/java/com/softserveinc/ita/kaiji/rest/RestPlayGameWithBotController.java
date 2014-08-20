@@ -30,14 +30,10 @@ public class RestPlayGameWithBotController {
     @Autowired
     private RestUtils restUtils;
 
-    //
+    //http://localhost:8080/rest/botgame/play/0/ROCK
     @RequestMapping(value = "/{gameId}/{chosenCard}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@PathVariable("gameId") Integer gameId,
                                                            @PathVariable("chosenCard") Card chosenCard) {
-
-        if (gameId == null || chosenCard == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
 
         if (restUtils.isGameFinished(gameService.getAllGameInfos(), gameId)) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -52,15 +48,15 @@ public class RestPlayGameWithBotController {
             }
         }
         gameService.makeTurn(gameId, playerId, chosenCard);
-        GameHistory gameHistory = gameService.getGameHistory(gameId);
+        GameHistory gameHistory = (gameService.getGameHistory(gameId));
+        CurrentGameRestInfoDto currentGameRestInfoDto = convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory);
         if (gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
             gameService.finishGame(gameId);
         }
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-
-        return new ResponseEntity(convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory), headers, HttpStatus.OK);
+        return new ResponseEntity(currentGameRestInfoDto, headers, HttpStatus.OK);
 
     }
 }
