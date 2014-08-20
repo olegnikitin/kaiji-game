@@ -5,6 +5,7 @@ import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.rest.dto.ConvertToRestDto;
 import com.softserveinc.ita.kaiji.rest.dto.GameJoinRestDto;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/playergame/create")
+@RequestMapping("/rest/playergame/create")
 public class RestCreateGameWithPlayerController {
 
     private static final Logger LOG = Logger.getLogger(RestCreateGameWithPlayerController.class);
@@ -56,10 +57,10 @@ public class RestCreateGameWithPlayerController {
      */
 
     @RequestMapping(produces = "application/json", method = RequestMethod.POST)
-    public ResponseEntity<GameInfoDto> createRestGameWithPlayer(@RequestParam("name") String name,
-                                                                @RequestParam("gamename") String gameName,
-                                                                @RequestParam("cards") Integer cards,
-                                                                @RequestParam("stars") Integer stars) {
+    public ResponseEntity createRestGameWithPlayer(@RequestParam("name") String name,
+                                                   @RequestParam("gamename") String gameName,
+                                                   @RequestParam("cards") Integer cards,
+                                                   @RequestParam("stars") Integer stars) {
 
 
         if (name == null || gameName == null || cards == null || stars == null) {
@@ -124,7 +125,7 @@ public class RestCreateGameWithPlayerController {
     //http://localhost:8080/rest/playergame/create/joingames
 
     @RequestMapping(value = "/joingames", produces = "application/json", method = RequestMethod.GET)
-    public ResponseEntity<GameJoinRestDto> getOpenedGames() {
+    public ResponseEntity getOpenedGames() {
 
         List<GameJoinRestDto> joinGameInfos = new ArrayList<>();
         for (GameInfo gameInfo : gameService.getAllGameInfos()) {
@@ -136,9 +137,11 @@ public class RestCreateGameWithPlayerController {
         return new ResponseEntity(joinGameInfos, headers, HttpStatus.OK);
     }
 
+
+    //http://localhost:8080/rest/playergame/create/joingame?nickname=petya&gamename=GAME
     @RequestMapping(value = "/joingame", produces = "application/json", method = RequestMethod.POST)
-    public ResponseEntity<GameInfoDto> joinOpenGame(@RequestParam("nickname") String nickname,
-                                                    @RequestParam("gamename") String gameName) {
+    public ResponseEntity joinOpenGame(@RequestParam("nickname") String nickname,
+                                       @RequestParam("gamename") String gameName) {
 
         if (gameName == null || nickname == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -151,15 +154,22 @@ public class RestCreateGameWithPlayerController {
         if (userDAO.getByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
+
         String currentGameName = null;
         GameInfo info = null;
         for (GameInfo gameInfo : gameService.getAllGameInfos()) {
             if (gameName.equals(gameInfo.getGameName())) {
                 currentGameName = gameName;
                 info = gameInfo;
+                for(Player player : gameInfo.getPlayers()){
+                    if (player.getName().equals(nickname)) {
+                        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                    }
+                }
                 break;
             }
         }
+        
         if (currentGameName == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -181,7 +191,7 @@ public class RestCreateGameWithPlayerController {
         }
         Integer numberOfPlayers = info.getNumberOfPlayers();
         info.setNumberOfPlayers(++numberOfPlayers);
-        GameInfoDto infoDto = null;
+        GameInfoDto infoDto;
         try {
             infoDto = (GameInfoDto) gameInfoDto.clone();
         } catch (CloneNotSupportedException e) {
@@ -193,6 +203,6 @@ public class RestCreateGameWithPlayerController {
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        return new ResponseEntity<GameInfoDto>(infoDto,headers,HttpStatus.OK);
+        return new ResponseEntity<>(infoDto, headers, HttpStatus.OK);
     }
 }

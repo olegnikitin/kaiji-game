@@ -78,8 +78,11 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void addUser() throws Exception {
 
-        mockMvc.perform(post("/rest/management/user/add?name=sasha&nickname=ssh" +
-                "&email=1345@gmail.com&password=$2a$10$b1zfl0hlzgLdH6G3mFgA9eJVh492pfJBAKOUys.90INubpb76VqZy"))
+        mockMvc.perform(post("/rest/management/user/add")
+                .param("name","sasha")
+                .param("nickname","ssh")
+                .param("email","1345@gmail.com")
+                .param("password","$2a$10$b1zfl0hlzgLdH6G3mFgA9eJVh492pfJBAKOUys.90INubpb76VqZy"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.name", is("sasha")))
@@ -98,7 +101,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void getAllGameInfo() throws Exception {
 
-        mockMvc.perform(get("http://localhost:8080/rest/management/gameinfos"))
+        mockMvc.perform(get("/rest/management/gameinfos"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id", is(16)))
@@ -122,7 +125,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void getGameInfoByUserNickName() throws Exception {
 
-        mockMvc.perform(get("http://localhost:8080/rest/management/gameinfo/vas"))
+        mockMvc.perform(get("/rest/management/gameinfo/vas"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id", is(16)))
@@ -138,7 +141,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void deleteGameInfoById() throws Exception {
 
-        mockMvc.perform(delete("http://localhost:8080/rest/management/gameinfo/delete/16"))
+        mockMvc.perform(delete("/rest/management/gameinfo/delete/16"))
                 .andExpect(status().isOk());
 
     }
@@ -146,7 +149,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void getAllGameHistories() throws Exception {
 
-        mockMvc.perform(get("http://localhost:8080/rest/management/gamehistories"))
+        mockMvc.perform(get("/rest/management/gamehistories"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id", is(16)))
@@ -178,7 +181,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void getGameHistoriesByNickname() throws Exception {
 
-        mockMvc.perform(get("http://localhost:8080/rest/management/gamehistory/vas"))
+        mockMvc.perform(get("/rest/management/gamehistory/vas"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0].id", is(16)))
@@ -197,7 +200,7 @@ public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringCon
     @Test
     public void deleteGameHistoryById() throws Exception {
 
-        mockMvc.perform(delete("http://localhost:8080/rest/management/gamehistory/delete/16"))
+        mockMvc.perform(delete("/rest/management/gamehistory/delete/16"))
                 .andExpect(status().isOk());
 
     }

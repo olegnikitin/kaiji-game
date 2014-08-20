@@ -40,7 +40,11 @@ public class RestPlayBotGameTest extends AbstractTransactionalJUnit4SpringContex
     @Test
     public void makeTurnBotGame() throws Exception {
 
-        mockMvc.perform(post("/rest/botgame/create?name=petya&gamename=MyGame&cards=2&bot=EASY"))
+        mockMvc.perform(post("/rest/botgame/create")
+                .param("name","petya")
+                .param("gamename","MyGame")
+                .param("cards","2")
+                .param("bot","EASY"))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/rest/botgame/play/" + gameService.getGameId("MyGame") + "/PAPER"))
@@ -59,5 +63,19 @@ public class RestPlayBotGameTest extends AbstractTransactionalJUnit4SpringContex
                 .andExpect(jsonPath("$.enemyWin", is(0)))
                 .andExpect(jsonPath("$.draws", is(1)))
                 .andExpect(jsonPath("$.roundWinner", is("DRAW")));
+    }
+
+    @Test
+    public void makeTurnBotGameWithWrongParameters() throws Exception {
+
+        mockMvc.perform(post("/rest/botgame/create")
+                .param("name","petya")
+                .param("gamename","MyGameTest")
+                .param("cards","2")
+                .param("bot","MEDIUM"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/rest/botgame/play/" + gameService.getGameId("MyGameTest") + "/PAPIR"))
+                .andExpect(status().isBadRequest());
     }
 }
