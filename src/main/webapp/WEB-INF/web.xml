@@ -81,7 +81,7 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/spring/mvc-context.xml</param-value>
         </init-param>
-       <load-on-startup>2</load-on-startup>
+       <load-on-startup>1</load-on-startup>
         <async-supported>true</async-supported>
 
     </servlet>
@@ -92,7 +92,7 @@
 
 
     <!--Jersey Servlet-->
-
+<!--
        <servlet>
         <servlet-name>jersey-serlvet</servlet-name>
         <servlet-class>
@@ -118,7 +118,7 @@
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
     
 	<!-- Spring Security -->
 

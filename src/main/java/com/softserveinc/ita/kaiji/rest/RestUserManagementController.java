@@ -5,6 +5,7 @@ import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
+import com.softserveinc.ita.kaiji.dto.game.StatisticsDTO;
 import com.softserveinc.ita.kaiji.rest.dto.ConvertToRestDto;
 import com.softserveinc.ita.kaiji.rest.dto.GameInfoRestDto;
 import com.softserveinc.ita.kaiji.rest.dto.UserRestDto;
@@ -13,8 +14,12 @@ import com.softserveinc.ita.kaiji.model.UserRole;
 import com.softserveinc.ita.kaiji.rest.dto.GameHistoryRestDto;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -23,8 +28,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@Path("/management")
-@Component
+@RestController
+@RequestMapping("rest/management")
 public class RestUserManagementController {
 
     @Autowired
@@ -46,84 +51,83 @@ public class RestUserManagementController {
     @Autowired
     private ConvertToRestDto convertToRestDto;
 
+    private HttpHeaders headers;
+
     private static final Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
 
     //http://localhost:8080/rest/management/statistic/user/petya
-    @GET
-    @Path("/statistic/{nickname}")
-    @Produces("application/json")
-    public Response getPlayerStats(@PathParam("nickname") String nickname) {
+    @RequestMapping(value = "/statistic/{nickname}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<StatisticsDTO> getPlayerStats(@PathVariable("nickname") String nickname) {
+
         if (nickname == null || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            System.err.println("EMPTY");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            System.err.println("NOT FOUND");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        return Response.ok(userService.getStatsForUser(nickname)).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<>(userService.getStatsForUser(nickname), headers, HttpStatus.OK);//Response.ok(userService.getStatsForUser(nickname)).build();
     }
 
     //http://localhost:8080/rest/management/users
-    @GET
-    @Path("/users")
-    @Produces("application/json")
-    public Response getUsers() {
+
+    @RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<UserRestDto>> getUsers() {
         List<UserRestDto> users = new ArrayList<>();
         for (User user : userDAO.getAll()) {
             users.add(convertToRestDto.userToDto(user));
         }
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
 
-        return Response.ok(users).build();
+        return new ResponseEntity<List<UserRestDto>>(users, headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/user/petya
-    @GET
-    @Path("/user/{nickname}")
-    @Produces("application/json")
-    public Response getUser(@PathParam("nickname") String nickname) {
+    @RequestMapping(value = "/user/{nickname}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<UserRestDto> getUser(@PathVariable("nickname") String nickname) {
         if (nickname == null || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        return Response.ok(convertToRestDto.userToDto(userDAO.getByNickname(nickname))).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.getByNickname(nickname)), headers, HttpStatus.OK);
     }
 
 
     //http://localhost:8080/rest/management/user/add?name=sasha&nickname=ssh&email=1345@gmail.com&password=123
-    @POST
-    @Path("/user/add")
-    @Produces("application/json")
-    public Response AddUser(@QueryParam("name") String name,
-                            @QueryParam("nickname") String nickname,
-                            @QueryParam("email") String email,
-                            @QueryParam("password") String password) {
+    @RequestMapping(value = "/user/add", produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity<UserRestDto> AddUser(@RequestParam("name") String name,
+                                               @RequestParam("nickname") String nickname,
+                                               @RequestParam("email") String email,
+                                               @RequestParam("password") String password) {
 
         if (name == null || nickname == null || email == null || password == null) {
-            System.err.println("NULL");
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if ("".equals(name) || "".equals(nickname) || "".equals(email) || "".equals(password)) {
-            System.err.println("EMPTY");
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (!pattern.matcher(email).matches()) {
-            System.err.println("WRONG EMAIL");
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (userDAO.getByNickname(nickname) != null) {
-            System.err.println("NICKNAME");
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (userDAO.getByEmail(email) != null) {
-            System.err.println("EMAIL EXIST");
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
@@ -134,125 +138,127 @@ public class RestUserManagementController {
         user.setRegistrationDate(new Date());
         user.getRoles().add(UserRole.USER_ROLE);
         userDAO.save(user);
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
 
-        return Response.ok(convertToRestDto.userToDto(user)).build();
+        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.getByNickname(nickname)), headers, HttpStatus.OK);
     }
 
-    //http://localhost:8080/rest/management/user/delete/ssh
-    @DELETE
-    @Path("/user/delete/{nickname}")
-    public Response removeUser(@PathParam("nickname") String nickname) {
+    //http://localhost:8080/rest/management/user/delete/vas
+    @RequestMapping(value = "/user/delete/{nickname}", method = RequestMethod.DELETE)
+    public ResponseEntity removeUser(@PathVariable("nickname") String nickname) {
 
         if (nickname == null || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         userDAO.delete(user);
-        return Response.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/gameinfos
-    @GET
-    @Path("/gameinfos")
-    @Produces("application/json")
-    public Response getAllGameInfo() {
+    @RequestMapping(value = "/gameinfos", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<GameInfoRestDto>> getAllGameInfo() {
 
         List<GameInfoRestDto> gameInfos = new ArrayList<>();
         for (GameInfoEntity gameInfo : gameInfoEntityDAO.getAll()) {
             gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
-        return Response.ok(gameInfos).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        return new ResponseEntity<>(gameInfos, headers, HttpStatus.OK);
     }
 
-    //http://localhost:8080/rest/management/gameinfo/=petya
-    @GET
-    @Path("/gameinfo/{nickname}")
-    @Produces("application/json")
-    public Response getGameInfoByUser(@PathParam("nickname") String nickname) {
+    //http://localhost:8080/rest/management/gameinfo/petya
+
+    @RequestMapping(value = "/gameinfo/{nickname}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<GameInfoRestDto> getGameInfoByUser(@PathVariable("nickname") String nickname) {
 
         if (nickname == null || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         List<GameInfoRestDto> gameInfos = new ArrayList<>();
         for (GameInfoEntity gameInfo : gameInfoEntityDAO.getGameInfoFor(user.getId())) {
             gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
-        return Response.ok(gameInfos).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity(gameInfos, headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/gameinfo/delete/13
-    @DELETE
-    @Path("/gameinfo/delete/{gameId}")
-    public Response deleteGameInfo(@PathParam("gameId") Integer gameId) {
+
+    @RequestMapping(value = "/gameinfo/delete/{gameId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteGameInfo(@PathVariable("gameId") Integer gameId) {
 
         if (gameId == null || "".equals(gameId)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         GameInfoEntity gameInfo = gameInfoEntityDAO.get(gameId);
         if (gameInfo == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         gameInfoEntityDAO.delete(gameInfo);
-        return Response.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/gamehistories
-    @GET
-    @Path("/gamehistories")
-    @Produces("application/json")
-    public Response getAllGameHistory() {
+    @RequestMapping(value = "/gamehistories", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<GameHistoryRestDto>> getAllGameHistory() {
 
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
         for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getAll()) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
-        return Response.ok(gameHistories).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<List<GameHistoryRestDto>>(gameHistories, headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/gamehistory/delete/12
-    @DELETE
-    @Path("/gamehistory/delete/{gameId}")
-    public Response deleteGameHistory(@PathParam("gameId") Integer gameId) {
+    @RequestMapping(value = "/gamehistory/delete/{gameId}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteGameHistory(@PathVariable("gameId") Integer gameId) {
 
         if (gameId == null || "".equals(gameId)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         GameHistoryEntity gameHistory = gameHistoryEntityDAO.get(gameId);
         if (gameHistory == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         gameHistoryEntityDAO.delete(gameHistory);
 
-        return Response.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/gameHistory/vasya
-    @GET
-    @Path("/gamehistory/{nickname}")
-    @Produces("application/json")
-    public Response getGameHistoryByUser(@PathParam("nickname") String nickname) {
+    @RequestMapping(value = "/gamehistory/{nickname}", produces = "application/json",method = RequestMethod.GET)
+    public ResponseEntity<List<GameHistoryRestDto>> getGameHistoryByUser(@PathVariable("nickname") String nickname) {
 
         if (nickname == null || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         User user = userDAO.getByNickname(nickname);
         if (user == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
         for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getGameHistoryByWinner(user.getId())) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
 
-        return Response.ok(gameHistories).build();
+        return new ResponseEntity<List<GameHistoryRestDto>>(gameHistories,headers,HttpStatus.OK);
     }
 }

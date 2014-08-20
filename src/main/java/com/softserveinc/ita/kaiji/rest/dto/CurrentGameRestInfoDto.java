@@ -15,6 +15,7 @@ public class CurrentGameRestInfoDto {
 
     private Integer gameId;
     private String playerName;
+    private String gameName;
     private String enemyName;
     private Game.State gameState;
     private Integer cardPaperLeft;
@@ -138,5 +139,13 @@ public class CurrentGameRestInfoDto {
 
     public void setDraws(Integer draws) {
         this.draws = draws;
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 }
