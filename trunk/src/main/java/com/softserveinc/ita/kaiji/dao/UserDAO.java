@@ -1,30 +1,23 @@
 package com.softserveinc.ita.kaiji.dao;
 
-import com.softserveinc.ita.kaiji.dto.game.StatisticsDTO;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.softserveinc.ita.kaiji.model.User;
 
 /**
- * DAO API for user
- * @see com.softserveinc.ita.kaiji.model.User
- * @author Paziy Evgeniy
- * @version 1.1
- * @since 08.04.14
+ * @author Alexander Vorobyov
+ * @version 1.0
+ * @since 20.08.2014
  */
-public interface UserDAO extends GenericDAO<User> {
+public interface UserDAO extends JpaRepository<User, Integer>, UserDAOCustom {
 
     /**
      * Returns user from repository by nickname
      * @param nickname nickname of user
      * @return user from repository by nickname
      */
-    public User getByNickname(String nickname);
+    public User findByNickname(String nickname);
 
-    public User getByEmail(String email);
-
-    /**
-     * Returns some global stats for current user
-     * @param user - user entity
-     * @return StatisticsDTO with stats
-     */
-    public StatisticsDTO getStatistics(User user);
+    public User findByEmail(String email);
+    
 }

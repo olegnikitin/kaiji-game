@@ -18,11 +18,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +56,7 @@ public class RestUserManagementController {
     @RequestMapping(value = "/statistic/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<StatisticsDTO> getPlayerStats(@PathVariable("nickname") String nickname) {
 
-        if (userDAO.getByNickname(nickname) == null) {
+        if (userDAO.findByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -73,7 +70,7 @@ public class RestUserManagementController {
     @RequestMapping(value = "/users", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<List<UserRestDto>> getUsers() {
         List<UserRestDto> users = new ArrayList<>();
-        for (User user : userDAO.getAll()) {
+        for (User user : userDAO.findAll()) {
             users.add(convertToRestDto.userToDto(user));
         }
         headers = new HttpHeaders();
@@ -86,13 +83,13 @@ public class RestUserManagementController {
     @RequestMapping(value = "/user/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<UserRestDto> getUser(@PathVariable("nickname") String nickname) {
 
-        if (userDAO.getByNickname(nickname) == null) {
+        if (userDAO.findByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.getByNickname(nickname)), headers, HttpStatus.OK);
+        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.findByNickname(nickname)), headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/user/add?name=sasha&nickname=ssh&email=1345@gmail.com&password=123
@@ -114,11 +111,11 @@ public class RestUserManagementController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        if (userDAO.getByNickname(nickname) != null) {
+        if (userDAO.findByNickname(nickname) != null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        if (userDAO.getByEmail(email) != null) {
+        if (userDAO.findByEmail(email) != null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -133,15 +130,15 @@ public class RestUserManagementController {
         headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.getByNickname(nickname)), headers, HttpStatus.OK);
+        return new ResponseEntity<>(convertToRestDto.userToDto(userDAO.findByNickname(nickname)), headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/management/user/delete/vas
     @RequestMapping(value = "/user/delete/{nickname}", method = RequestMethod.DELETE)
     public ResponseEntity removeUser(@PathVariable("nickname") String nickname) {
 
-        User user = userDAO.getByNickname(nickname);
-        if (userDAO.getByNickname(nickname) == null) {
+        User user = userDAO.findByNickname(nickname);
+        if (userDAO.findByNickname(nickname) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         userDAO.delete(user);
@@ -153,7 +150,7 @@ public class RestUserManagementController {
     public ResponseEntity<List<GameInfoRestDto>> getAllGameInfo() {
 
         List<GameInfoRestDto> gameInfos = new ArrayList<>();
-        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getAll()) {
+        for (GameInfoEntity gameInfo : gameInfoEntityDAO.findAll()) {
             gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
         headers = new HttpHeaders();
@@ -167,13 +164,13 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gameinfo/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<GameInfoRestDto> getGameInfoByUser(@PathVariable("nickname") String nickname) {
 
-        User user = userDAO.getByNickname(nickname);
+        User user = userDAO.findByNickname(nickname);
         if (user == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         List<GameInfoRestDto> gameInfos = new ArrayList<>();
-        for (GameInfoEntity gameInfo : gameInfoEntityDAO.getGameInfoFor(user.getId())) {
+        for (GameInfoEntity gameInfo : gameInfoEntityDAO.findByUser(user.getId())) {
             gameInfos.add(convertToRestDto.gameInfoToDto(gameInfo));
         }
         headers = new HttpHeaders();
@@ -186,7 +183,7 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gameinfo/delete/{gameId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteGameInfo(@PathVariable("gameId") Integer gameId) {
 
-        GameInfoEntity gameInfo = gameInfoEntityDAO.get(gameId);
+        GameInfoEntity gameInfo = gameInfoEntityDAO.findOne(gameId);
         if (gameInfo == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -199,7 +196,7 @@ public class RestUserManagementController {
     public ResponseEntity<List<GameHistoryRestDto>> getAllGameHistory() {
 
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
-        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getAll()) {
+        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.findAll()) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
         headers = new HttpHeaders();
@@ -211,7 +208,7 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gamehistory/delete/{gameId}", method = RequestMethod.DELETE)
     public ResponseEntity deleteGameHistory(@PathVariable("gameId") Integer gameId) {
 
-        GameHistoryEntity gameHistory = gameHistoryEntityDAO.get(gameId);
+        GameHistoryEntity gameHistory = gameHistoryEntityDAO.findOne(gameId);
         if (gameHistory == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -224,12 +221,12 @@ public class RestUserManagementController {
     @RequestMapping(value = "/gamehistory/{nickname}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<List<GameHistoryRestDto>> getGameHistoryByUser(@PathVariable("nickname") String nickname) {
 
-        User user = userDAO.getByNickname(nickname);
+        User user = userDAO.findByNickname(nickname);
         if (user == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         List<GameHistoryRestDto> gameHistories = new ArrayList<>();
-        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.getGameHistoryByWinner(user.getId())) {
+        for (GameHistoryEntity gameHistory : gameHistoryEntityDAO.findByWinner(user.getId())) {
             gameHistories.add(convertToRestDto.gameHistoryToDto(gameHistory));
         }
         headers = new HttpHeaders();

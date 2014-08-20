@@ -3,13 +3,8 @@ package com.softserveinc.ita.kaiji.web.controller;
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
-import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
-import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.model.User;
-import com.softserveinc.ita.kaiji.model.game.Game;
-import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +43,7 @@ public class TestDAOController {
     @RequestMapping("/users")
     public String userPage(Model model) {
         model.addAttribute("newUser", new User());
-        model.addAttribute("usersList", userDAO.getAll());
+        model.addAttribute("usersList", userDAO.findAll());
         return "admin-user";
     }
 
@@ -64,13 +59,13 @@ public class TestDAOController {
                           RedirectAttributes redirectAttributes) {
         User user = null;
         if (!nickname.equals("") && !email.equals("")) {
-            if (userDAO.getByEmail(email).getId().equals(userDAO.getByNickname(nickname).getId())) {
-                user = userDAO.getByEmail(email);
+            if (userDAO.findByEmail(email).getId().equals(userDAO.findByNickname(nickname).getId())) {
+                user = userDAO.findByEmail(email);
             }
         } else if (!nickname.equals("")) {
-            user = userDAO.getByNickname(nickname);
+            user = userDAO.findByNickname(nickname);
         } else if (!email.equals("")) {
-            user = userDAO.getByEmail(email);
+            user = userDAO.findByEmail(email);
         } else {
             return "redirect:/dao/users";
         }
@@ -80,14 +75,14 @@ public class TestDAOController {
 
     @RequestMapping(value = "/users/remove")
     public String removeUser(@RequestParam("id") Integer id) {
-        userDAO.delete(userDAO.get(id));
+        userDAO.delete(userDAO.findOne(id));
         return "redirect:/dao/users";
     }
 
     @RequestMapping("/gameinfo")
     public String gameInfoPage(Model model) {
-        model.addAttribute("usersList", userDAO.getAll());
-        model.addAttribute("gamesList", gameInfoEntityDAO.getAll());
+        model.addAttribute("usersList", userDAO.findAll());
+        model.addAttribute("gamesList", gameInfoEntityDAO.findAll());
         return "admin-gameinfo";
     }
 
@@ -122,21 +117,21 @@ public class TestDAOController {
     @RequestMapping(value = "/gameinfo", method = RequestMethod.POST)
     public String getGameInfoEntity(@RequestParam("userId") String userId, RedirectAttributes redirectAttributes) {
         if (!userId.equals("default")) {
-            redirectAttributes.addFlashAttribute("userGames", gameInfoEntityDAO.getGameInfoFor(Integer.valueOf(userId)));
+            redirectAttributes.addFlashAttribute("userGames", gameInfoEntityDAO.findByUser(Integer.valueOf(userId)));
         }
         return "redirect:/dao/gameinfo";
     }
 
     @RequestMapping(value = "/gameinfo/remove")
     public String removeGameInfoEntity(@RequestParam("id") Integer id) {
-        gameInfoEntityDAO.delete(gameInfoEntityDAO.get(id));
+        gameInfoEntityDAO.delete(gameInfoEntityDAO.findOne(id));
         return "redirect:/dao/gameinfo";
     }
 
     @RequestMapping(value = "/gamehistory")
     public String getGameHistoryPage(Model model) {
-        model.addAttribute("usersList", userDAO.getAll());
-        model.addAttribute("gameHistoryList", gameHistoryEntityDAO.getAll());
+        model.addAttribute("usersList", userDAO.findAll());
+        model.addAttribute("gameHistoryList", gameHistoryEntityDAO.findAll());
         return "admin-gamehistory";
     }
 
@@ -173,12 +168,12 @@ public class TestDAOController {
                                        @RequestParam(value = "userId") String userId, RedirectAttributes redirectAttributes) {
         List<GameHistoryEntity> result = new ArrayList<>();
         if (id != null) {
-            GameHistoryEntity gameHistoryEntity = gameHistoryEntityDAO.get(id);
+            GameHistoryEntity gameHistoryEntity = gameHistoryEntityDAO.findOne(id);
             if (gameHistoryEntity != null) {
                 result.add(gameHistoryEntity);
             }
         } else if (!userId.equals("default")) {
-            result.addAll(gameHistoryEntityDAO.getGameHistoryByWinner(Integer.valueOf(userId)));
+            result.addAll(gameHistoryEntityDAO.findByWinner(Integer.valueOf(userId)));
         }
 
         redirectAttributes.addFlashAttribute("searchGameHistory", result);
@@ -187,7 +182,7 @@ public class TestDAOController {
 
     @RequestMapping(value = "/gamehistory/remove")
     public String removeGameHistoryEntity(@RequestParam("id") Integer id) {
-        gameHistoryEntityDAO.delete(gameHistoryEntityDAO.get(id));
+        gameHistoryEntityDAO.delete(gameHistoryEntityDAO.findOne(id));
         return "redirect:/dao/gamehistory";
     }
 

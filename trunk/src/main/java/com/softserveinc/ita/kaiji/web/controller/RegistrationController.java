@@ -58,8 +58,8 @@ public class RegistrationController {
             return "registration-form";
         }
 
-        if (userDAO.getByEmail(userDto.getEmail()) == null &&
-                userDAO.getByNickname(userDto.getNickname()) == null) {
+        if (userDAO.findByEmail(userDto.getEmail()) == null &&
+                userDAO.findByNickname(userDto.getNickname()) == null) {
 
             User user = new User();
             user.setName(userDto.getName());

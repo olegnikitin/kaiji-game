@@ -20,7 +20,7 @@ import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {
-        "file:src/main/webapp/WEB-INF/spring-tests/service-context.xml"})
+        "file:src/test/resources/application-context-test.xml"})
 public class GameServiceTest {
 
     @Autowired

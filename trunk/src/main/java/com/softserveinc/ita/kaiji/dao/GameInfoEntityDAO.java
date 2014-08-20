@@ -1,21 +1,25 @@
 package com.softserveinc.ita.kaiji.dao;
 
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
-import com.softserveinc.ita.kaiji.model.User;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 /**
- * @author Paziy Evgeniy
- * @version 1.1
- * @since 09.04.14
+ * @author Alexander Vorobyov
+ * @version 1.0
+ * @since 20.08.2014
  */
-public interface GameInfoEntityDAO extends GenericDAO<GameInfoEntity> {
+public interface GameInfoEntityDAO extends JpaRepository<GameInfoEntity, Integer> {
 
     /**
-     * Returns list of games in which user was playing
-     * @param user for whom looking games
-     * @return list of games in which user was playing
+     * Returns a list of games in which user took part
+     * @param user whose games are to be found
+     * @return list of games in which user took part
      */
-    List<GameInfoEntity> getGameInfoFor(Integer userId);
+	@Query("from GameInfoEntity as g where ?1 in elements(g.users)")
+    List<GameInfoEntity> findByUser(Integer userId);
+    
 }
