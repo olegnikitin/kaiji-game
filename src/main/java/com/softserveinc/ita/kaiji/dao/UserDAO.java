@@ -11,13 +11,13 @@ import com.softserveinc.ita.kaiji.model.User;
  */
 public interface UserDAO extends JpaRepository<User, Integer>, UserDAOCustom {
 
-    /**
-     * Returns user from repository by nickname
-     * @param nickname nickname of user
-     * @return user from repository by nickname
-     */
-    public User findByNickname(String nickname);
+	/**
+	 * Returns user from repository by nickname
+	 * @param nickname nickname of user
+	 * @return user from repository by nickname
+	 */
+	public User findByNickname(String nickname);
 
-    public User findByEmail(String email);
-    
+	public User findByEmail(String email);
+
 }
