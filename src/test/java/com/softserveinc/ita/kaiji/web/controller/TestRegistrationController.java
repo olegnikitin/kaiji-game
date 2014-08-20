@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 24.04.14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring-tests/web-context.xml" })
+@ContextConfiguration(locations = { "file:src/test/resources/application-context-test.xml" })
 @WebAppConfiguration
 public class TestRegistrationController {
 

@@ -4,7 +4,6 @@ import com.softserveinc.ita.kaiji.chat.ChatClientUpdateEndpoint;
 import com.softserveinc.ita.kaiji.chat.ChatUtils;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.model.User;
-import com.softserveinc.ita.kaiji.model.util.email.MailSender;
 import com.softserveinc.ita.kaiji.session.SessionData;
 import com.softserveinc.ita.kaiji.session.SessionTimer;
 import com.softserveinc.ita.kaiji.session.SessionUtils;
@@ -60,7 +59,7 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
             System.out.println(e.getMessage() + " " + URI.create(uri));
         }
 
-        User user = userDAO.getByNickname(name);
+        User user = userDAO.findByNickname(name);
         if (user != null) {
             Cookie userCookie = new Cookie("personId", user.getId().toString());
             userCookie.setMaxAge(60 * 60 * 24 * 30);

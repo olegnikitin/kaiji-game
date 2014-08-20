@@ -52,7 +52,7 @@ public class RestCreateGameWithBotController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        if (userDAO.getByNickname(name) == null) {
+        if (userDAO.findByNickname(name) == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 

@@ -39,22 +39,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Integer id) {
-        return userRepository.get(id);
+        return userRepository.findOne(id);
     }
 
     @Override
     public User findUser(String nickname) {
-        return userRepository.getByNickname(nickname);
+        return userRepository.findByNickname(nickname);
     }
 
     @Override
     public void updateUser(User user) {
-        userRepository.update(user);
+        userRepository.save(user);
     }
 
     @Override
     public Integer saveUser(User user) {
-        return userRepository.save(user);
+        return userRepository.save(user).getId();
     }
 
     @Override
@@ -112,8 +112,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public StatisticsDTO getStatsForUser(String nickname) {
-        User user = userRepository.getByNickname(nickname);
-        return userRepository.getStatistics(user);
+        User user = userRepository.findByNickname(nickname);
+        return userRepository.findStatistics(user);
     }
 
 
