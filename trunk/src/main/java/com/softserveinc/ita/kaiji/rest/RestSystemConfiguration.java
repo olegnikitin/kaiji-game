@@ -3,22 +3,23 @@ package com.softserveinc.ita.kaiji.rest;
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
-
-@Component
-@Path("/system-configuration")
+@RequestMapping("/rest/system-configuration")
+@RestController
 public class RestSystemConfiguration {
 
     @Autowired
     SystemConfigurationService systemConfigurationService;
 
-    @GET
-    @Produces("application/json")
-    public Response getSystemConfiguration() {
-        return Response.ok(systemConfigurationService.getSystemConfiguration()).build();
+    @RequestMapping(produces = "application/json",method = RequestMethod.GET)
+    public ResponseEntity<SystemConfiguration>  getSystemConfiguration() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<>(systemConfigurationService.getSystemConfiguration(), headers, HttpStatus.OK);
     }
 
     /*
@@ -30,10 +31,10 @@ public class RestSystemConfiguration {
               "gameConnectionTimeout": 20,
               "roundTimeout": 15}"
      */
-    @POST
-    @Consumes("application/json")
-    public Response setSystemConfiguration(SystemConfiguration systemConfiguration) {
+
+    @RequestMapping(consumes = "application/json",method = RequestMethod.POST)
+    public ResponseEntity setSystemConfiguration(@RequestBody SystemConfiguration systemConfiguration) {
         systemConfigurationService.saveSystemConfiguration(systemConfiguration);
-        return Response.ok().build();
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

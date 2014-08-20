@@ -14,16 +14,20 @@ import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Path("/playergame/create")
-@Component
+@RestController
+@RequestMapping("/playergame/create")
 public class RestCreateGameWithPlayerController {
 
     private static final Logger LOG = Logger.getLogger(RestCreateGameWithPlayerController.class);
@@ -42,40 +46,42 @@ public class RestCreateGameWithPlayerController {
 
     private GameInfoDto gameInfoDto;
 
+    private HttpHeaders headers;
+
     /*
      *  Example of JSON client will receive:
      *  {"gameName":"Duel","playerName":"user1","botGame":true,
      *  "numberOfCards":4, "numberOfStars":2,"botType":"EASY","gameType":"BOT_GAME","gameId":?}
      * http://localhost:8080/rest/playergame/create?name=petya&gamename=GAME&cards=2&stars=3
      */
-    @POST
-    @Produces("application/json")
-    public Response createRestGameWithPlayer(@QueryParam("name") String name,
-                                             @QueryParam("gamename") String gameName,
-                                             @QueryParam("cards") Integer cards,
-                                             @QueryParam("stars") Integer stars) {
+
+    @RequestMapping(produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity<GameInfoDto> createRestGameWithPlayer(@RequestParam("name") String name,
+                                                                @RequestParam("gamename") String gameName,
+                                                                @RequestParam("cards") Integer cards,
+                                                                @RequestParam("stars") Integer stars) {
 
 
         if (name == null || gameName == null || cards == null || stars == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if ("".equals(name) || "".equals(gameName)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (userDAO.getByNickname(name) == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         SystemConfiguration systemConfiguration = systemConfigurationService.getSystemConfiguration();
 
         if (cards < 0 || cards > systemConfiguration.getNumberOfCards()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (stars < 0 || stars > systemConfiguration.getNumberOfCards()) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         gameInfoDto = new GameInfoDto();
@@ -103,43 +109,47 @@ public class RestCreateGameWithPlayerController {
 
         if (gameWaiter.isAlive()) {
             gameWaiter.interrupt();
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         gameId = gameService.createGame(info);
         gameInfoDto.setGameId(gameId);
-        return Response.ok(gameInfoDto).build();
+
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        return new ResponseEntity(gameInfoDto, headers, HttpStatus.OK);
     }
 
     //http://localhost:8080/rest/playergame/create/joingames
-    @GET
-    @Produces("application/json")
-    @Path("/joingames")
-    public Response getOpenedGames() {
+
+    @RequestMapping(value = "/joingames", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<GameJoinRestDto> getOpenedGames() {
 
         List<GameJoinRestDto> joinGameInfos = new ArrayList<>();
         for (GameInfo gameInfo : gameService.getAllGameInfos()) {
             joinGameInfos.add(convertToRestDto.joinGameInfoToDto(gameInfo));
         }
-        return Response.ok(joinGameInfos).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        return new ResponseEntity(joinGameInfos, headers, HttpStatus.OK);
     }
 
-    @POST
-    @Produces("application/json")
-    @Path("/joingame")
-    public Response joinOpenGame(@QueryParam("nickname") String nickname,
-                                 @QueryParam("gamename") String gameName) {
+    @RequestMapping(value = "/joingame", produces = "application/json", method = RequestMethod.POST)
+    public ResponseEntity<GameInfoDto> joinOpenGame(@RequestParam("nickname") String nickname,
+                                                    @RequestParam("gamename") String gameName) {
 
         if (gameName == null || nickname == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if ("".equals(gameName) || "".equals(nickname)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (userDAO.getByNickname(nickname) == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         String currentGameName = null;
         GameInfo info = null;
@@ -151,7 +161,7 @@ public class RestCreateGameWithPlayerController {
             }
         }
         if (currentGameName == null) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         Integer playerId = gameService.addPlayer(nickname, gameName);
@@ -167,7 +177,7 @@ public class RestCreateGameWithPlayerController {
         }
         if (secondPlayerWaiter.isAlive()) {
             secondPlayerWaiter.interrupt();
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Integer numberOfPlayers = info.getNumberOfPlayers();
         info.setNumberOfPlayers(++numberOfPlayers);
@@ -180,6 +190,9 @@ public class RestCreateGameWithPlayerController {
         }
         infoDto.setPlayerId(playerId);
         infoDto.setPlayerName(nickname);
-        return Response.ok(infoDto).build();
+        headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        return new ResponseEntity<GameInfoDto>(infoDto,headers,HttpStatus.OK);
     }
 }

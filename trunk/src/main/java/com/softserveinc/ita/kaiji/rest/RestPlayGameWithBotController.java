@@ -3,20 +3,22 @@ package com.softserveinc.ita.kaiji.rest;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
-import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.rest.dto.ConvertToRestDto;
+import com.softserveinc.ita.kaiji.rest.dto.CurrentGameRestInfoDto;
 import com.softserveinc.ita.kaiji.service.GameService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.*;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-@Path("/botgame/play")
-@Component
+@RequestMapping("rest/botgame/play")
+@RestController
 public class RestPlayGameWithBotController {
 
     @Autowired
@@ -28,35 +30,37 @@ public class RestPlayGameWithBotController {
     @Autowired
     private RestUtils restUtils;
 
-    @GET
-    @Produces("application/json")
-    @Path("/{gameId}/{chosenCard}")
-    public Response makeTurn(@PathParam("gameId") Integer gameId,
-                             @PathParam("chosenCard") Card chosenCard) {
+    //
+    @RequestMapping(value = "/{gameId}/{chosenCard}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@PathVariable("gameId") Integer gameId,
+                                                           @PathVariable("chosenCard") Card chosenCard) {
 
-        if(gameId ==null || chosenCard == null){
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        if (gameId == null || chosenCard == null) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         if (restUtils.isGameFinished(gameService.getAllGameInfos(), gameId)) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         Integer playerId = gameService.getPlayerIdFromGame(gameId);
-        for (Player player :gameService.getGameInfo(gameId).getPlayers()){
-               if(player.getId().equals(playerId)){
-                   if(player.getDeck().getCardTypeCount(chosenCard) == 0){
-                       throw new WebApplicationException(Response.Status.BAD_REQUEST);
-                   }
-               }
+        for (Player player : gameService.getGameInfo(gameId).getPlayers()) {
+            if (player.getId().equals(playerId)) {
+                if (player.getDeck().getCardTypeCount(chosenCard) == 0) {
+                    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+                }
+            }
         }
-        gameService.makeTurn(gameId, playerId,chosenCard);
+        gameService.makeTurn(gameId, playerId, chosenCard);
         GameHistory gameHistory = gameService.getGameHistory(gameId);
-        if(gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
+        if (gameHistory.getGameStatus().equals(Game.State.GAME_FINISHED)) {
             gameService.finishGame(gameId);
         }
 
-        return Response.ok(convertToRestDto.currentGameInfoToDto(playerId,gameId,chosenCard,gameHistory)).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+
+        return new ResponseEntity(convertToRestDto.currentGameInfoToDto(playerId, gameId, chosenCard, gameHistory), headers, HttpStatus.OK);
 
     }
 }
