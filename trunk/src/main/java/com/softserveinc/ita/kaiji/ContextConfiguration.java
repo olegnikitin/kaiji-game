@@ -1,9 +1,6 @@
 package com.softserveinc.ita.kaiji;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -26,6 +23,7 @@ import java.util.Locale;
 @Configuration
 @Import({DBConfiguration.class, SecurityConfiguration.class})
 @EnableWebMvc
+@PropertySource("classpath:email.properties")
 @ComponentScan({"com.softserveinc.ita.kaiji.web", "com.softserveinc.ita.kaiji.rest",
         "com.softserveinc.ita.kaiji.service", "com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto"})
 public class ContextConfiguration extends WebMvcConfigurerAdapter {

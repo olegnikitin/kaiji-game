@@ -2,6 +2,8 @@ package com.softserveinc.ita.kaiji.model.util.email;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -16,40 +18,33 @@ public class MailSender {
     private static final Logger LOG = Logger.getLogger(MailSender.class);
 
     @Autowired
-    private PropertyFileReader propertyFileReader;
-
-    private String filePath;
+    Environment env;
 
     /**
      * Sends message with specified subject and text to recipient
      *
      * @param recipientMail  email of recipient person
-     * @param messageSubject email subject
-     * @param messageText   email text
+     * @param messageSubject   email subject
+     * @param userNickName   user nickname
+     * @param userPassword   user password
      * @return  true if message was successfully send, otherwise - false
      */
-    public boolean send(String recipientMail, String messageSubject, String messageText) {
+    public boolean send(String recipientMail, String messageSubject, String userNickName, String userPassword) {
 
         if ("".equals(recipientMail)) {
             LOG.error("Empty recipient email address ");
             return false;
         }
 
-        Properties mailProperties = propertyFileReader.readMailProperty(filePath);
-        if(mailProperties == null){
-            LOG.error("Error while reading email properties");
-            return false;
-        }
-
-        String from = mailProperties.getProperty("email.address");
-        final String username = mailProperties.getProperty("email.address");
-        final String password = mailProperties.getProperty("email.password");
+        String from = env.getProperty("email.address");
+        final String username = env.getProperty("email.address");
+        final String password = env.getProperty("email.password");
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", mailProperties.getProperty("mail.smtp.host"));
-        props.put("mail.smtp.port", mailProperties.getProperty("mail.smtp.port"));
+        props.put("mail.smtp.host", env.getProperty("mail.smtp.host"));
+        props.put("mail.smtp.port", env.getProperty("mail.smtp.port"));
 
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
@@ -64,7 +59,7 @@ public class MailSender {
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientMail));
             message.setSubject(messageSubject);
-            message.setText(messageText);
+            message.setText(env.getProperty("message.body")+ "Nickname: "+userNickName+"\nPassword: "+userPassword);
             Transport.send(message, message.getAllRecipients());
             LOG.trace("Sent message successfully....");
 
@@ -75,11 +70,4 @@ public class MailSender {
         return true;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
 }
