@@ -20,8 +20,7 @@ import static org.junit.Assert.*;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = {
-        "file:src/main/webapp/WEB-INF/spring-tests/model-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 public class HumanPlayerTest {
 
     private Player testPlayer;

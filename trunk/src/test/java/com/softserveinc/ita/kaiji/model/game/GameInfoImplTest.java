@@ -21,8 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = {
-        "file:src/main/webapp/WEB-INF/spring-tests/model-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 public class GameInfoImplTest {
 
     @Autowired

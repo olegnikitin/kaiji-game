@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,8 +34,7 @@ import static org.mockito.Mockito.mock;
  * @since 23.03.14
  */
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(value = {
-        "file:src/main/webapp/WEB-INF/spring-tests/model-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 public class BotTest {
 
     Bot testBot;
@@ -161,20 +158,6 @@ public class BotTest {
         GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
         //Act //Assert
         BotGameImpl botGame = new BotGameImpl(gameInfo);
-    }
-    @Test
-    public void canContinueGame() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        //Arrange
-        Set<Player> players = new HashSet<>();
-        players.add(player);
-        players.add(testBot);
-        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
-        //Act
-        BotGameImpl botGame = new BotGameImpl(gameInfo);
-        Method canContinueGame = botGame.getClass().getDeclaredMethod("canContinueGame");
-        canContinueGame.setAccessible(true);
-        //Assert
-        canContinueGame.invoke(botGame);
     }
 
     @Test

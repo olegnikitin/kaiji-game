@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.web.controller;
 import com.softserveinc.ita.kaiji.dto.UserRegistrationDto;
 import org.apache.log4j.Logger;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 24.04.14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/test/resources/application-context-test.xml" })
+@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 @WebAppConfiguration
 public class TestRegistrationController {
 
@@ -58,22 +57,58 @@ public class TestRegistrationController {
         }
     }
 
-    @Test
-    public void receiveModelTest() {
-
+    @Test()
+    public void mustOutputThatUserWithThisNicknameHasAlreadyExisted() throws Exception {
         UserRegistrationDto userDto = new UserRegistrationDto();
         userDto.setName("user");
         userDto.setEmail("user@gmail.com");
-        userDto.setNickname("userNickname");
+        userDto.setNickname("k");
         userDto.setPassword("12345");
+        mockMvc.perform(post("/registration")
+                .param("name", "user")
+                .param("email", "user@gmail.com")
+                .param("nickname", "k")
+                .param("password", "12345")
+                .param("confirmPassword", "12345"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"))
+                .andExpect(model().attribute("notification", is("You have successfully registered, now log in")));
+        mockMvc.perform(post("/registration")
+                .param("name", "user")
+                .param("email", "user@gmail.com")
+                .param("nickname", "k")
+                .param("password", "12345")
+                .param("confirmPassword", "12345"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("registration-form"))
+                .andExpect(model().attribute("notification", is("User with such nickname or email already exists.")));
+    }
 
-        try {
-            mockMvc.perform(post("/registration", userDto))
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("login"))
-                    .andExpect(model().attribute("notification", is("You have successfully registered, now log in")));
-        } catch (Exception e) {
-            LOG.error("Can't perform Receive Model Test. " + e.getMessage());
-        }
+    @Test
+    public void mustOutputThatUserEnteredInvalidData() throws Exception {
+
+        mockMvc.perform(post("/registration")
+                .param("name", "user")
+                .param("email", "123")
+                .param("password", "123")
+                .param("nickname", "asdf")
+                .param("confirmPassword", "123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("registration-form"))
+                .andExpect(model().hasErrors());
+    }
+
+    @Test
+    public void mustOutputThatUserEnteredValidData() throws Exception {
+
+        mockMvc.perform(post("/registration")
+                .param("name", "user")
+                .param("email", "123@gmail.ru")
+                .param("password", "123")
+                .param("nickname", "asdf")
+                .param("confirmPassword", "123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"))
+                .andExpect(model().hasNoErrors());
     }
 }

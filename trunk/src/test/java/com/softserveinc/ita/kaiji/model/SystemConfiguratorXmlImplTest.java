@@ -2,7 +2,10 @@ package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,7 +24,6 @@ import static org.junit.Assert.assertEquals;
  * @since 30.03.14.
  */
 public class SystemConfiguratorXmlImplTest {
-
     private static final String CONFIGURATION_FILE = "system-configuration-test.xml";
     private static SystemConfigurator systemConfigurator;
     private static Path filePath;
@@ -87,14 +89,15 @@ public class SystemConfiguratorXmlImplTest {
     }
 
     @Test
-    public void saveSystemConfigurationTest() {
+    public void saveSystemConfiguration() {
 
         try {
 
             systemConfigurator.saveSystemConfiguration(systemConfiguration);
             JAXBContext jaxbContext = JAXBContext.newInstance(SystemConfiguration.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            SystemConfiguration savedSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller.unmarshal(filePath.toFile());
+            SystemConfiguration savedSystemConfiguration = (SystemConfiguration) jaxbUnmarshaller
+                    .unmarshal(filePath.toFile());
             assertEquals(systemConfiguration, savedSystemConfiguration);
         } catch (JAXBException e) {
             throw new RuntimeException(e);
