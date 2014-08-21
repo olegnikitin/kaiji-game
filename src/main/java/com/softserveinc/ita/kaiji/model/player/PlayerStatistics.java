@@ -19,7 +19,7 @@ public class PlayerStatistics {
 
     private Map<DuelResult, Integer> allStats;
 
-    PlayerStatistics() {
+    public PlayerStatistics() {
 
         this.allStats = new HashMap<>();
         allStats.put(DuelResult.WIN, 0);
