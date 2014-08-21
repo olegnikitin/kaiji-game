@@ -17,10 +17,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(value = {
         "file:src/test/resources/application-context-test.xml"})
+@WebAppConfiguration
 public class GameServiceTest {
 
     @Autowired

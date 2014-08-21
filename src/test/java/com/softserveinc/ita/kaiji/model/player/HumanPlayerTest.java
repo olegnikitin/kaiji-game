@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.softserveinc.ita.kaiji.model.player.Player.PlayerStatus;
 import static org.hamcrest.CoreMatchers.*;
@@ -21,6 +22,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@WebAppConfiguration
 public class HumanPlayerTest {
 
     private Player testPlayer;

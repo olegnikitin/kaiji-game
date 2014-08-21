@@ -44,7 +44,7 @@
         src="<spring:url value="/resources/js/statistics.js" htmlEscape="true"/>"></script>
 
 <script type="text/javascript">
-var url = '/rest/statistic/user/${pageContext.request.userPrincipal.name}'
+var url = '/rest/management/statistic/${pageContext.request.userPrincipal.name}'
  charts('roundsChart', 'gamesChart', url);
 </script>
 
