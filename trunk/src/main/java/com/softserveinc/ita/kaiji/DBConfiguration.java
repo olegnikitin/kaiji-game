@@ -52,7 +52,7 @@ public class DBConfiguration {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource());
         factory.setPackagesToScan("com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto");
-
+        factory.setPersistenceUnitName("myPersistenceUnit");
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setJpaProperties(additionalProperties());
 
