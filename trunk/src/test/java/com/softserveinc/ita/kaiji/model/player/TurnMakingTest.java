@@ -8,6 +8,7 @@ import junitparams.Parameters;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import static org.hamcrest.CoreMatchers.*;
  * @version 1.2
  */
 @RunWith(JUnitParamsRunner.class)
+@WebAppConfiguration
 public class TurnMakingTest {
 
     private Player testPlayer;

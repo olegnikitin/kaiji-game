@@ -6,11 +6,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * @author Vladyslav Shelest
  * @since 18.03.14.
  */
+@WebAppConfiguration
 public class DeckImplTest {
 
     private Deck deck;

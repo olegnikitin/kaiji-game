@@ -9,6 +9,8 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.context.web.WebAppConfiguration;
+
 import static org.junit.Assert.*;
 
 /**
@@ -16,6 +18,7 @@ import static org.junit.Assert.*;
  * @version 1.0
  * @since 23.03.14
  */
+@WebAppConfiguration
 public class RoundResultTest {
 
     private Player first = null;

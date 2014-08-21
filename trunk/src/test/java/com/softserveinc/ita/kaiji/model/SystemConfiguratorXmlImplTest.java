@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertEquals;
  * @version 1.0
  * @since 30.03.14.
  */
+@WebAppConfiguration
 public class SystemConfiguratorXmlImplTest {
     private static final String CONFIGURATION_FILE = "system-configuration-test.xml";
     private static SystemConfigurator systemConfigurator;

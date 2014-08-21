@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.mock;
  */
 @RunWith(JUnitParamsRunner.class)
 @ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@WebAppConfiguration
 public class BotTest {
 
     Bot testBot;

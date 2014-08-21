@@ -4,6 +4,7 @@ import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
 import com.softserveinc.ita.kaiji.model.player.Player;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Set;
  * @version 2.2
  * @since 01.04.14
  */
+@WebAppConfiguration
 public class TwoPlayersGameRunner {
 
     static GameInfo makeGameInfo() {
