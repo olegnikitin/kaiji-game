@@ -14,6 +14,7 @@
                 var="numberOfStarsLabel"/>
 <spring:message code="create-game.botTypeLabel" var="botTypeLabel"/>
 <spring:message code="create-game.createButton" var="createButton"/>
+<spring:message code="create-game.isBotGame" var="isBotGame"/>
 
 <html>
 <head>
@@ -81,7 +82,7 @@
 
                     <tr>
                         <td>
-                            <div style="display:inline-block;width:150px">Check to play with bot</div>
+                            <div style="display:inline-block;width:150px">${isBotGame}</div>
                         </td>
                         <td><form:checkbox onclick="showBots('bots', this); showStars('stars',this)"
                                            path="botGame"/></td>

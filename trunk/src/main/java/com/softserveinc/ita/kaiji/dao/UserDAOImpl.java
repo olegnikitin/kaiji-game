@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,7 +10,7 @@ import com.softserveinc.ita.kaiji.model.User;
 
 public class UserDAOImpl implements UserDAOCustom {
 
-	@Autowired
+    @PersistenceContext
 	EntityManager entityManager;
 
 	@Override

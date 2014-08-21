@@ -12,9 +12,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/spring/root-context.xml,
-            /WEB-INF/spring/db/*.xml, 
-            /WEB-INF/spring/security-context.xml
+            com.softserveinc.ita.kaiji.ContextConfiguration
         </param-value>
     </context-param>
 
@@ -23,8 +21,13 @@
         <param-name>spring.profiles.default</param-name>
         <param-value>production</param-value>
     </context-param>
-    
 
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>
+            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        </param-value>
+    </context-param>
 
     <!--     Context loader. Creates Spring container    -->
     <listener>
@@ -72,70 +75,39 @@
         <url-pattern>*</url-pattern>
     </filter-mapping>
 
-    <!--     Dispatcher servlet. Maps URL to Sprint MVC controllers -->
     <servlet>
         <servlet-name>spring-servlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+        </init-param>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/spring/mvc-context.xml</param-value>
+            <param-value>com.softserveinc.ita.kaiji.ContextConfiguration</param-value>
         </init-param>
-       <load-on-startup>1</load-on-startup>
+        <load-on-startup>2</load-on-startup>
         <async-supported>true</async-supported>
-
     </servlet>
     <servlet-mapping>
         <servlet-name>spring-servlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-
-    <!--Jersey Servlet-->
-<!--
-       <servlet>
-        <servlet-name>jersey-serlvet</servlet-name>
-        <servlet-class>
-            com.sun.jersey.spi.spring.container.servlet.SpringServlet
-        </servlet-class>
-           <init-param>
-               <param-name>contextConfigLocation</param-name>
-               <param-value>
-                   /WEB-INF/spring/mvc-context.xml
-               </param-value>
-           </init-param>
-           <init-param>
-               <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
-               <param-value>true</param-value>
-           </init-param>
-           <init-param>
-            <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>com.softserveinc.ita.kaiji.rest</param-value>
-        </init-param>
-          <load-on-startup>1</load-on-startup>
-       </servlet>
-
-    <servlet-mapping>
-        <servlet-name>jersey-serlvet</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>-->
-    
-	<!-- Spring Security -->
-
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy
-		</filter-class>
+    <!-- Spring Security -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
         <async-supported>true</async-supported>
-
     </filter>
 
     <!--http://docs.spring.io/spring-security/site/docs/3.2.0.CI-SNAPSHOT/reference/html/servletapi.html -->
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ASYNC</dispatcher>
-	</filter-mapping>
+    </filter-mapping>
 
 </web-app>
