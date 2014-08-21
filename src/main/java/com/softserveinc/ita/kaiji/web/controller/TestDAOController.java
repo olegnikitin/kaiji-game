@@ -55,7 +55,7 @@ public class TestDAOController {
     @RequestMapping(value = "/users/save")
     public String saveUser(@ModelAttribute("newUser") User user) {
         user.setPassword(RandomStringUtils.randomAlphanumeric(7));
-        mailSender.send("sashkasidorenko@gmail.com","Welcome to Kaiji",user.getNickname(), user.getPassword());
+        mailSender.send(user.getEmail(),"Welcome to Kaiji",user.getNickname(), user.getPassword());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.save(user);
 
