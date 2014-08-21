@@ -31,8 +31,7 @@ import static org.junit.Assert.assertTrue;
  * @since 23.03.14
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = {
-        "file:src/main/webapp/WEB-INF/spring-tests/model-context.xml"})
+@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 public class HardBotTest {
     Bot testBot;
     Player testPlayer;
