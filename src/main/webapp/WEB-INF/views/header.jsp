@@ -119,7 +119,7 @@
                     ${headerWelcome} : ${pageContext.request.userPrincipal.name} |
                     <a href="<c:url value="/statistic/user" />"> ${headerStatistic} <span
                             class="glyphicon glyphicon-stats"></span> </a>
-                    | <a href="<c:url value="/j_spring_security_logout" />"> ${headerLogout} <span
+                    | <a href="<c:url value="/logout" />"> ${headerLogout} <span
                         class="glyphicon glyphicon-share"></span></a>
                 </c:when>
                 <c:otherwise>

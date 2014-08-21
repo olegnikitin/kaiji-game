@@ -124,7 +124,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Data base connectors -->
+       <!-- Data base connectors -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -143,6 +143,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.entitymanager.version}</version>
+            <scope>runtime</scope>
 		</dependency>
 
 		<!-- Hibernate Validation -->
