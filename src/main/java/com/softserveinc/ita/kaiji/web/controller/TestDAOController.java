@@ -5,8 +5,10 @@ import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.model.User;
-import com.softserveinc.ita.kaiji.service.GameService;
+import com.softserveinc.ita.kaiji.model.util.email.MailSender;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +35,10 @@ public class TestDAOController {
     private GameHistoryEntityDAO gameHistoryEntityDAO;
 
     @Autowired
-    private GameService gameService;
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MailSender mailSender;
 
     @RequestMapping
     public String daoAPI() {
@@ -49,8 +54,11 @@ public class TestDAOController {
 
     @RequestMapping(value = "/users/save")
     public String saveUser(@ModelAttribute("newUser") User user) {
-        user.setPassword("12345");
+        user.setPassword(RandomStringUtils.randomAlphanumeric(7));
+        mailSender.send("sashkasidorenko@gmail.com","Welcome to Kaiji",user.getNickname(), user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.save(user);
+
         return "redirect:/dao/users";
     }
 

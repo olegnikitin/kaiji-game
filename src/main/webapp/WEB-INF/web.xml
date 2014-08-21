@@ -34,19 +34,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-
-    <!--Servlet Context Listener -->
-    <listener>
-        <listener-class>
-            com.softserveinc.ita.kaiji.web.listener.MyAppServletContextListener
-        </listener-class>
-    </listener>
-
-    <context-param>
-        <param-name>email</param-name>
-        <param-value>/WEB-INF/email.properties</param-value>
-    </context-param>
-
     <!-- Http Session Listener -->
 
     <listener>
