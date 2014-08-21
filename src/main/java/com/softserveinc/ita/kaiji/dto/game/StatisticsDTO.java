@@ -1,6 +1,8 @@
 package com.softserveinc.ita.kaiji.dto.game;
 
+import javax.persistence.Column;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * @author Ievgen Sukhov
@@ -9,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 public class StatisticsDTO {
+
     private Long win;
     private Long lose;
     private Long draw;
