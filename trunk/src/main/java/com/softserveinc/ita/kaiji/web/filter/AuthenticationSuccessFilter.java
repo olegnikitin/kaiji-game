@@ -7,6 +7,7 @@ import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.session.SessionData;
 import com.softserveinc.ita.kaiji.session.SessionTimer;
 import com.softserveinc.ita.kaiji.session.SessionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -22,9 +23,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 @Component("authenticationSuccessFilter")
 public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessHandler {
+
+    // server requests session data each 5 second
+    private static final Long serverRequest = 5L;
 
     @Autowired
     private UserDAO userDAO;
@@ -42,7 +47,7 @@ public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessH
         TimerTask timerTask = new SessionTimer(name);
         Timer timer = new Timer(true);
         SessionUtils.getUserSession().put(name, new SessionData(System.currentTimeMillis(),timer,request.getSession()));
-        timer.scheduleAtFixedRate(timerTask, 0, 3*1000);
+        timer.scheduleAtFixedRate(timerTask, 0, TimeUnit.MILLISECONDS.convert(serverRequest,TimeUnit.SECONDS));
 
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         String url = request.getRequestURL().toString();

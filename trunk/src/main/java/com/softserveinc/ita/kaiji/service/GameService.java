@@ -114,5 +114,19 @@ public interface GameService {
      */
     Integer addPlayer(String nickname, String gameName);
 
+    /**
+     * Return game entity by given id
+     *
+     * @param gameId game id
+     * @return  game by specified id
+     */
+    Game getGameById(Integer gameId);
+
+    /**
+     *
+     * @param gameId game id
+     * @return  game by specified id
+     */
+    void releaseGameById(Integer gameId);
 
 }
