@@ -43,8 +43,14 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private GameHistoryEntityDAO gameHistoryEntityDAO;
 
-    private Game getGameById(Integer gameId) throws IllegalArgumentException {
+    @Override
+    public Game getGameById(Integer gameId) throws IllegalArgumentException {
         return GAMES_SYNC.allocate(gameId);
+    }
+
+    @Override
+    public void releaseGameById(Integer gameId) {
+        GAMES_SYNC.release(gameId);
     }
 
     @Override
@@ -81,9 +87,9 @@ public class GameServiceImpl implements GameService {
         if (LOG.isTraceEnabled()) {
             LOG.trace("finishGame: started");
         }
+
         Game game = getGameById(gameId);
         if (game != null && game.getState().equals(Game.State.GAME_FINISHED)) {
-
             Player playerBot = null;
 
             Iterator<Player> playerIterator = game.getGameHistory().getGameInfo().getPlayers().iterator();
@@ -133,6 +139,7 @@ public class GameServiceImpl implements GameService {
             for (Player p : game.getGameInfo().getPlayers()) {
                 userService.removePlayer(p.getId());
             }
+
             GAME_INFOS.remove(game.getGameInfo().getId());
             GAMES_SYNC.remove(gameId);
         }
@@ -226,7 +233,6 @@ public class GameServiceImpl implements GameService {
         }
         game.makeTurn(card, activePlayer);
         GAMES_SYNC.release(gameId);
-
     }
 
     @Override

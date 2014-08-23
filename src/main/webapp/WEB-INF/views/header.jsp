@@ -1,6 +1,4 @@
 <%@ page import="com.softserveinc.ita.kaiji.chat.ChatUtils" %>
-<%@ page import="com.softserveinc.ita.kaiji.session.SessionUtils" %>
-<%@ page import="java.util.Date" %>
 <%@ page language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -63,7 +61,7 @@
             var element;
             $(document).ready(function () {
                 connectToSessionServerHeader()
-                setInterval(sessionActivity, 2000);
+                setInterval(sessionActivity, 3000);
                 element = document.getElementById("notificationMessage");
                 element.innerHTML = ''
                 if ('${param.socketActive}' != 'false') {
