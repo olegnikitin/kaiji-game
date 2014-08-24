@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.web.filter.AuthenticationSuccessFilter;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by kbardtc on 8/22/2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class TestLoginController extends AbstractTransactionalJUnit4SpringContextTests {
     private MockMvc mockMvc;

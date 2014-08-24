@@ -1,28 +1,27 @@
 package com.softserveinc.ita.kaiji.model.game;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.HashSet;
-import java.util.Set;
-
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.model.User;
+import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
+import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.PlayerFactory;
-
+import com.softserveinc.ita.kaiji.model.player.bot.Bot.Types;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
-import com.softserveinc.ita.kaiji.model.player.Player;
-import com.softserveinc.ita.kaiji.model.player.bot.Bot.Types;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.assertNotNull;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes=TestConfiguration.class)
 @WebAppConfiguration
 public class GameInfoImplTest {
 

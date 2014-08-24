@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.rest;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class RestUserManagementTest extends AbstractTransactionalJUnit4SpringContextTests {
 

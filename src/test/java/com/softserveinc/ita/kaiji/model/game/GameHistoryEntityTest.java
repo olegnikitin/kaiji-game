@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.model.game;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
@@ -26,7 +27,7 @@ import java.util.Set;
  * Created by Kyryll on 20.08.2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes=TestConfiguration.class)
 @WebAppConfiguration
 public class GameHistoryEntityTest {
     @Autowired

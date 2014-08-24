@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.service;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.exception.game.NoSuchPlayerInGameException;
 import com.softserveinc.ita.kaiji.model.Card;
@@ -18,8 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(value = {
-        "file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class GameServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 

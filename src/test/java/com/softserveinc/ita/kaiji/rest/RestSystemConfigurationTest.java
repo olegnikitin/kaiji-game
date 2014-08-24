@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.rest;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class RestSystemConfigurationTest {
 

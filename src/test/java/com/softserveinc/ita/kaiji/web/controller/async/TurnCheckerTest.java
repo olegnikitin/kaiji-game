@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.junit.Before;
@@ -24,7 +25,7 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(TurnChecker.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class TurnCheckerTest {
     @Mock
