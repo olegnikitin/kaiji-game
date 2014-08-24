@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.dto.UserRegistrationDto;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -24,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 24.04.14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
 @WebAppConfiguration
+@ContextConfiguration(classes = TestConfiguration.class)
 public class TestRegistrationController {
 
     private static final Logger LOG = Logger.getLogger(TestRegistrationController.class);

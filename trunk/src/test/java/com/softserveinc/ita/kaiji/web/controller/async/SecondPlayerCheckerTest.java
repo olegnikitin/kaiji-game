@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.model.game.GameInfoImpl;
 import com.softserveinc.ita.kaiji.service.GameServiceImpl;
 import org.junit.Before;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
  * Created by Kyryll on 23.08.2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class SecondPlayerCheckerTest {
     @Mock

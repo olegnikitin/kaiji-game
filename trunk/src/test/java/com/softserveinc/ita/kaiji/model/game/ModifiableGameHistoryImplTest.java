@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.model.game;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -26,7 +27,7 @@ import static org.mockito.Mockito.times;
  * Created by kbardtc on 8/21/2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes=TestConfiguration.class)
 @WebAppConfiguration
 public class ModifiableGameHistoryImplTest {
     @Autowired

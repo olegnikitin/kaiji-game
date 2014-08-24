@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
+import com.softserveinc.ita.kaiji.TestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.*;
  * Created by Kyryll on 23.08.2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/test/resources/application-context-test.xml"})
+@ContextConfiguration(classes = TestConfiguration.class)
 @WebAppConfiguration
 public class TimeoutListenerTest {
     @Mock (answer = Answers.RETURNS_DEEP_STUBS)
