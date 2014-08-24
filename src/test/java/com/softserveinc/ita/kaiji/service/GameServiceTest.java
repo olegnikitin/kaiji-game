@@ -7,10 +7,7 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -79,6 +76,7 @@ public class GameServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     public void createGameTest() {
         GameInfo gameInfo = service.getGameInfo(service.setGameInfo(dto));
         gameId = service.createGame(gameInfo);
+
         assertNotNull(gameId);
     }
 
@@ -94,38 +92,53 @@ public class GameServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertEquals(expected, actual);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void getPlayerIdFromGameThrowExceptionTest() {
-        service.getPlayerIdFromGame(null);
+        Integer infoId = service.setGameInfo(dto);
+        gameId = service.createGame(service.getGameInfo(infoId));
+        Integer playerId = service.getPlayerIdFromGame(gameId);
+
+        assertNotNull(playerId);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void finishGameThrowExceptionTest() {
-        service.finishGame(null);
+        service.finishGame(-1);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void getGameInfoThrowExceptionTest() {
-        service.getGameInfo(null);
+
+        Integer infoId = service.setGameInfo(dto);
+        gameId = service.createGame(service.getGameInfo(infoId));
+
+        assertTrue(service.getAllGameInfos().contains(service.getGameInfo(infoId)));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void getGameStatusThrowExceptionTest() {
-        service.getGameStatus(null);
+        Integer infoId = service.setGameInfo(dto);
+        gameId = service.createGame(service.getGameInfo(infoId));
+
+        assertEquals(service.getGameStatus(gameId), Game.State.GAME_STARTED);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void getGameHistoryThrowExceptionTest() {
-        service.getGameHistory(null);
-    }
+        Integer infoId = service.setGameInfo(dto);
+        gameId = service.createGame(service.getGameInfo(infoId));
 
+        assertNotNull(service.getGameHistory(gameId));
+    }
 
     @Test(expected = NoSuchPlayerInGameException.class)
     public void makeTurnThrowExceptionTest() {
+
         Integer infoId = service.setGameInfo(dto);
         gameId = service.createGame(service.getGameInfo(infoId));
         Integer playerId = service.getPlayerIdFromGame(gameId);
         service.releaseGameById(gameId);
+
         service.makeTurn(gameId, playerId - 1, Card.PAPER);
     }
 

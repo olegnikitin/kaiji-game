@@ -89,6 +89,10 @@ public class GameServiceImpl implements GameService {
         }
 
         Game game = getGameById(gameId);
+        if(game ==null){
+            throw new IllegalArgumentException("Wrong game id");
+        }
+
         if (game != null && game.getState().equals(Game.State.GAME_FINISHED)) {
             Player playerBot = null;
 
@@ -278,7 +282,6 @@ public class GameServiceImpl implements GameService {
                     }
                 }
             }
-
         }
         return null;
     }
@@ -319,6 +322,7 @@ public class GameServiceImpl implements GameService {
             }
 
         }
+
         return null;
     }
 
