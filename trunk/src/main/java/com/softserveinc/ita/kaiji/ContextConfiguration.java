@@ -25,7 +25,8 @@ import java.util.Locale;
 @EnableWebMvc
 @PropertySource("classpath:email.properties")
 @ComponentScan({"com.softserveinc.ita.kaiji.web", "com.softserveinc.ita.kaiji.rest",
-        "com.softserveinc.ita.kaiji.service", "com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto"})
+        "com.softserveinc.ita.kaiji.service", "com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto",
+        "com.softserveinc.ita.kaiji.ajax"})
 public class ContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
