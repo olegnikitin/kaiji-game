@@ -46,7 +46,7 @@ public class GameInfoEntity implements Identifiable {
     @Column(name="finish_time")
     private Date gameFinishTime;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(
             name = "link_game_to_user",
             joinColumns = { @JoinColumn(name = "game_id") },
