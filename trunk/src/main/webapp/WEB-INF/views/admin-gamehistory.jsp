@@ -9,9 +9,9 @@
 </head>
 <body>
 <jsp:include page="header.jsp"/>
-<a href="${pageContext.servletContext.contextPath}/dao" class="btn btn-success btn-large active">Back</a>
+<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">Back</a>
 <br>
-<form action="${pageContext.servletContext.contextPath}/dao/gamehistory" method="POST" class="navbar-form navbar-left">
+<form action="${pageContext.servletContext.contextPath}/admin/gamehistory" method="POST" class="navbar-form navbar-left">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Id" name="id"/>
     </div>
@@ -139,7 +139,7 @@
             </td>
             <td>${history.gameState}</td>
             <td>
-                <form action="${pageContext.servletContext.contextPath}/dao/gamehistory/remove" method="POST">
+                <form action="${pageContext.servletContext.contextPath}/admin/gamehistory/remove" method="POST">
                     <input type="submit" class="btn btn-default" value="Delete" style="background:#E1E1E1">
                     <input type="hidden" name="id" value="${history.id}">
                 </form>
