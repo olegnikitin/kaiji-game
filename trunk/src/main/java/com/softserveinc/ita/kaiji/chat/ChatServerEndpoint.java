@@ -15,7 +15,7 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint(value = "/chat/{group}", encoders = ChatMessageEncoder.class, decoders = ChatMessageDecoder.class)
 public class ChatServerEndpoint {
 
-    private final Logger LOG = Logger.getLogger(ChatServerEndpoint.class);
+    private static final Logger LOG = Logger.getLogger(ChatServerEndpoint.class);
 
     private static final Integer CHAT_MESSAGE_NUMBER = 5;
 
@@ -44,7 +44,6 @@ public class ChatServerEndpoint {
             ChatUtils.getMessages().add(JSONMessage);
             String sender = Json.createReader(new StringReader(JSONMessage))
                     .readObject().getString("sender");
-            System.out.println(JSONMessage);
             for (String user : ChatUtils.getActiveUsers()) {
                 if (!user.equals(sender)) {
                     ChatUtils.getUnReadMessages().put(user, true);
