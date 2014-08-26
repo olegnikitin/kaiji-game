@@ -32,7 +32,7 @@
 <body>
 
 <spring:url value="/game/new/join" var="url"/>
-<jsp:include page="header.jsp"/>
+<%--<jsp:include page="header.jsp"/>--%>
 
 
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>

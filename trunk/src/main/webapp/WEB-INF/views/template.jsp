@@ -18,8 +18,8 @@
 	href="${pageContext.servletContext.contextPath}/resources/css/styles.css"
 	rel="stylesheet">
 <sec:authorize access="hasRole('USER_ROLE')">
-	<script type="text/javascript"
-		src="<tiles:getAsString name="header_script" />"></script>
+<%--	<script type="text/javascript"
+		src="<tiles:getAsString name="header_script" />"></script>--%>
 </sec:authorize>
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>

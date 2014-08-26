@@ -20,7 +20,6 @@
 </head>
 <body>
 
-<jsp:include page="header.jsp"/>
 <br>
 <br>
 <div class="container">

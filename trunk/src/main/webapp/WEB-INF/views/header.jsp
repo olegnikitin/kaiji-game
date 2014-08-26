@@ -30,11 +30,10 @@
             rel="stylesheet">
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-
+    <script src="${pageContext.servletContext.contextPath}/resources/js/sessionchecker.js"></script>
    <sec:authorize access="hasRole('USER_ROLE')">
         <script>
             var wsocketHeader;
-            var wsocketSession;
             var serviceLocationHeader = "ws://" + document.location.host + "/chat/";
             var serviceLocationSession = "ws://" + document.location.host + "/session";
             var groupHeader = 'DP-059';
@@ -44,10 +43,6 @@
                 wsocketHeader.onmessage = onMessageReceivedHeader;
             }
 
-            function connectToSessionServerHeader() {
-                wsocketSession = new WebSocket(serviceLocationSession);
-            }
-
             function onMessageReceivedHeader(evt) {
                 document.getElementById("notificationMessage").innerHTML = 'New messages'
                 setInterval(blinker, 1000);
@@ -55,13 +50,15 @@
 
             window.onbeforeunload = function (evt) {
                 wsocketHeader.close();
-                wsocketSession.close();
+                closeSessionWebSocket();
+                resetInterval();
             }
 
             var element;
             $(document).ready(function () {
-                connectToSessionServerHeader()
-                setInterval(sessionActivity, 3000);
+
+                connectToSessionServer(serviceLocationSession)
+                startSessionActivity('{"nickname":"${pageContext.getAttribute("userName")}"}',3000)
                 element = document.getElementById("notificationMessage");
                 element.innerHTML = ''
                 if ('${param.socketActive}' != 'false') {
@@ -85,11 +82,6 @@
                     element.style.color = 'blue'
                     shown = true;
                 }
-            }
-
-            function sessionActivity() {
-                var message = '{"nickname":"${pageContext.getAttribute("userName")}"}';
-                wsocketSession.send(message);
             }
 
         </script>
