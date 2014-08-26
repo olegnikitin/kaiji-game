@@ -34,14 +34,13 @@
 <spring:url value="/game/new/join" var="url"/>
 <jsp:include page="header.jsp"/>
 
-<%--<script src="//code.jquery.com/jquery-1.10.2.js"></script>--%>
+
 <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="/resources/js/autocompleter.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-
+<script src="/resources/js/eventsource.min.js"></script>
 
 <br> <br> <br>
-
 
 <div class="container">
     <form class="form-inline" role="form">
@@ -56,7 +55,51 @@
 
     </br>
     </br>
-    <table class="table table-striped">
+
+    <script>
+        $(document).ready(function () {
+            updateGames();
+        })
+
+        function updateGames() {
+            var eventSource = new EventSource("/joingame/update");
+            eventSource.onmessage = function (event) {
+                $('#games').empty();
+                var removeUrl = '';
+                var url = '';
+                var $createdGames = $('<tr><th>' + '${number_label}'
+                        + '</th><th>' + '${title_label}'
+                        + '</th><th>' + '${host_label}'
+                        + '</th><th>' + '${cards_label}'
+                        + '</th></tr>');
+                $('#games').append($createdGames);
+                var msg = JSON.parse(event.data);
+                msg.forEach(
+                        function fillTable(game) {
+                            url = '<a class =\"btn btn-primary btn-xs\" href="new/join?gameName='
+                                    + game.gameName + '&infoId=' + game.id + '\">Join</a>';
+                            <sec:authorize access="hasRole('ADMIN_ROLE')">
+                            removeUrl = '<a class=\"label label-danger\" href ="/game/cleanup/' + game.id
+                                    + '\">Remove</a>'
+                                    </sec:authorize>
+                            console.log(url);
+                            console.log(removeUrl);
+                            $('#games').append(
+                                            '<tr><td>' + game.number
+                                            + '</td><td>' + game.gameName
+                                            + '</td><td>' + game.players
+                                            + '</td><td>' + game.numberOfCards
+                                            + '</td><td>' + url
+                                            + '</td><td>' + removeUrl +'</td></tr>')
+
+                        })
+            };
+        }
+        ;
+    </script>
+
+
+    <table class="table table-striped" id="games">
 
         <tr>
             <th>${number_label}</th>
@@ -106,9 +149,8 @@
         var spinner = new Spinner(joinOpts).spin(target);
     }
 
-
     $('#search').click(function () {
-        document.getElementById("json").style.display = 'block';
+        $('#json').hide();
         var query = $('#gameName').val();
         var url = "/rest/info/" + query;
         var id;
