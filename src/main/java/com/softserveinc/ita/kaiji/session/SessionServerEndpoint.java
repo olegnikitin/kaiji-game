@@ -28,7 +28,6 @@ public class SessionServerEndpoint {
 
     @OnMessage
     public void onMessage(Session session, String sessionMessage) {
-        //LOG.trace("ChatServerEndpoint Message " + sessionMessage);
         JsonObject obj = Json.createReader(new StringReader(sessionMessage))
                 .readObject();
         SessionData sessionData = SessionUtils.getUserSession().get(obj.getString("nickname"));

@@ -7,7 +7,6 @@
     <title></title>
 </head>
 <body>
-<jsp:include page="header.jsp"/>
 <a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">Back</a>
 <br>
 <form:form action="${pageContext.servletContext.contextPath}/admin/users/save" commandName="newUser" class="navbar-form">

@@ -23,8 +23,6 @@
 </head>
 <body>
 
-<jsp:include page="header.jsp"/>
-
 <br> <br> <br>
 
 <div class="container">
@@ -120,6 +118,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
         var elements = document.getElementsByName("stars");
         for (var i = 0; i < elements.length; ++i) {
             elements[i].style.display = 'none';
@@ -127,9 +126,15 @@
     })
 
     function WaitDiv() {
+        setTimeout(activity,5000)
         document.getElementById('wait').style.display = 'block';
         var target = document.getElementById('wait');
         var spinner = new Spinner(createOpts).spin(target);
+    }
+
+    function activity(){
+        connectToSessionServer("ws://" + document.location.host + "/session")
+        startSessionActivity('{"nickname":"${pageContext.request.userPrincipal.name}"}',3000)
     }
 
     function showStars(it, box) {

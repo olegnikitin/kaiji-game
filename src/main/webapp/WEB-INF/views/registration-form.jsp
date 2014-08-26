@@ -38,7 +38,7 @@
 </head>
 <body>
 
-	<jsp:include page="header.jsp" />
+<%--	<jsp:include page="header.jsp" />--%>
 	<div class="container">
 		<div class=".row-fluid">
 			<div class="span4">set image here</div>
