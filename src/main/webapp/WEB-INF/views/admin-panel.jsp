@@ -3,14 +3,14 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
-    <title>DAO testing</title>
+    <title>Admin page</title>
 </head>
 <body>
 <jsp:include page="header.jsp"/>
 <ul class="nav nav-pills nav-stacked">
-    <li><a href="/dao/users">Users</a></li>
-    <li><a href="/dao/gameinfo">Game info</a></li>
-    <li><a href="/dao/gamehistory">Game history info</a></li>
+    <li><a href="/admin/users">Users</a></li>
+    <li><a href="/admin/gameinfo">Game info</a></li>
+    <li><a href="/admin/gamehistory">Game history info</a></li>
 </ul>
 </body>
 </html>
