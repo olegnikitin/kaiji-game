@@ -9,6 +9,10 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesView;
 
 import java.util.Locale;
 
@@ -26,7 +30,7 @@ import java.util.Locale;
 @PropertySource("classpath:email.properties")
 @ComponentScan({"com.softserveinc.ita.kaiji.web", "com.softserveinc.ita.kaiji.rest",
         "com.softserveinc.ita.kaiji.service", "com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto",
-        "com.softserveinc.ita.kaiji.ajax","com.softserveinc.ita.kaiji.sse"})
+        "com.softserveinc.ita.kaiji.ajax", "com.softserveinc.ita.kaiji.sse"})
 public class ContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -34,6 +38,8 @@ public class ContextConfiguration extends WebMvcConfigurerAdapter {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/WEB-INF/views/");
         resolver.setSuffix(".jsp");
+        resolver.setViewClass(JstlView.class);
+        resolver.setOrder(1);
         return resolver;
     }
 
@@ -83,5 +89,20 @@ public class ContextConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Bean
+    public TilesConfigurer tilesConfigurer() {
+        TilesConfigurer tilesConfigurer = new TilesConfigurer();
+        tilesConfigurer.setDefinitions("/WEB-INF/defs/definitions.xml");
+        return tilesConfigurer;
+    }
+
+    @Bean
+    public UrlBasedViewResolver tilesViewResolver() {
+        UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
+        viewResolver.setViewClass(TilesView.class);
+        viewResolver.setOrder(0);
+        return viewResolver;
     }
 }

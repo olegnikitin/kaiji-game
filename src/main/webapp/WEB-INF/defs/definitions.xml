@@ -4,7 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 	<definition name="general" template="/WEB-INF/views/template.jsp">
-		<put-attribute name="titles" value="titles.jsp" />
+		<put-attribute name="titles" value="/WEB-INF/views/titles.jsp" />
 		<put-attribute name="title" value="" />
 		<put-attribute name="header" value="/WEB-INF/views/header.jsp" />
 		<put-attribute name="header_script"
@@ -15,50 +15,50 @@
 
 	<definition name="registration-form" extends="general">
 		<put-attribute name="title" value="${regtitle}" />
-		<put-attribute name="content" value="registration-form.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/registration-form.jsp" />
 	</definition>	
 	<definition name="admin-gamehistory" extends="general">
 		<put-attribute name="title" value="admin-gamehistory" />
-		<put-attribute name="content" value="admin-gamehistory.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/admin-gamehistory.jsp" />
 	</definition>	
 	<definition name="admin-gameinfo" extends="general">
 		<put-attribute name="title" value="admin-gameinfo" />
-		<put-attribute name="content" value="admin-gameinfo.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/admin-gameinfo.jsp" />
 	</definition>	
 	<definition name="admin-user" extends="general">
 		<put-attribute name="title" value="admin-user" />
-		<put-attribute name="content" value="admin-user.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/admin-user.jsp" />
 	</definition>
 	<definition name="chat" extends="general">
 		<put-attribute name="title" value="Websocket Chat" />
-		<put-attribute name="content" value="chat.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/chat.jsp" />
 	</definition>
 	<definition name="create-game" extends="general">
 		<put-attribute name="title" value="Create game" />
-		<put-attribute name="content" value="create-game.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/create-game.jsp" />
 	</definition>
-	<definition name="dao-test" extends="general">
+	<definition name="admin-panel" extends="general">
 		<put-attribute name="title" value="DAO testing" />
-		<put-attribute name="content" value="dao-test.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/admin-panel.jsp" />
 	</definition>
 	<definition name="join-game" extends="general">
 		<put-attribute name="title" value="${head_title}" />
-		<put-attribute name="content" value="join-game.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/join-game.jsp" />
 	</definition>
 	<definition name="login" extends="general">
 		<put-attribute name="title" value="${login_head_title}" />
-		<put-attribute name="content" value="login.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/login.jsp" />
 	</definition>
 	<definition name="start-page" extends="general">
 		<put-attribute name="title" value="${start-page_head_title}" />
-		<put-attribute name="content" value="start-page.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/start-page.jsp" />
 	</definition>
 	<definition name="statistics" extends="general">
 		<put-attribute name="title" value="${head_title} ${pageContext.request.userPrincipal.name}" />
-		<put-attribute name="content" value="statistics.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/statistics.jsp" />
 	</definition>
-	<definition name="statistics" extends="general">
+	<definition name="system-configuration" extends="general">
 		<put-attribute name="title" value="${system_configuration_head_title}" />
-		<put-attribute name="content" value="system-configuration.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/system-configuration.jsp" />
 	</definition>
 </tiles-definitions>
