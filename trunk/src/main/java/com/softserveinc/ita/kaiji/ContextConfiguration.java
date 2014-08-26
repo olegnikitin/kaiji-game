@@ -1,7 +1,10 @@
 package com.softserveinc.ita.kaiji;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles3.TilesView;
 
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * Root configuration
@@ -32,6 +36,9 @@ import java.util.Locale;
         "com.softserveinc.ita.kaiji.service", "com.softserveinc.ita.kaiji.model", "com.softserveinc.ita.kaiji.dto",
         "com.softserveinc.ita.kaiji.ajax", "com.softserveinc.ita.kaiji.sse"})
 public class ContextConfiguration extends WebMvcConfigurerAdapter {
+
+    @Autowired
+    Environment env;
 
     @Bean
     public ViewResolver viewResolver() {
@@ -104,5 +111,25 @@ public class ContextConfiguration extends WebMvcConfigurerAdapter {
         viewResolver.setViewClass(TilesView.class);
         viewResolver.setOrder(0);
         return viewResolver;
+    }
+
+    @Bean
+    public JavaMailSenderImpl javaMailSender(){
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(env.getProperty("mail.smtp.host"));
+        mailSender.setPort(Integer.valueOf(env.getProperty("mail.smtp.port")));
+        mailSender.setUsername(env.getProperty("email.address"));
+        mailSender.setPassword(env.getProperty("email.password"));
+
+        mailSender.setJavaMailProperties(mailProperties());
+        return  mailSender;
+    }
+
+    private Properties mailProperties() {
+        Properties properties = new Properties();
+        properties.put("mail.transport.protocol","smtp");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        return properties;
     }
 }
