@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="general" template="/WEB-INF/views/template.jsp">
+		<put-attribute name="titles" value="titles.jsp" />
+		<put-attribute name="title" value="" />
+		<put-attribute name="header" value="/WEB-INF/views/header.jsp" />
+		<put-attribute name="header_script"
+			value="${pageContext.servletContext.contextPath}/resources/js/header_script.js" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/footer.jsp" />
+	</definition>
+
+	<definition name="registration-form" extends="general">
+		<put-attribute name="title" value="${regtitle}" />
+		<put-attribute name="content" value="registration-form.jsp" />
+	</definition>	
+	<definition name="admin-gamehistory" extends="general">
+		<put-attribute name="title" value="admin-gamehistory" />
+		<put-attribute name="content" value="admin-gamehistory.jsp" />
+	</definition>	
+	<definition name="admin-gameinfo" extends="general">
+		<put-attribute name="title" value="admin-gameinfo" />
+		<put-attribute name="content" value="admin-gameinfo.jsp" />
+	</definition>	
+	<definition name="admin-user" extends="general">
+		<put-attribute name="title" value="admin-user" />
+		<put-attribute name="content" value="admin-user.jsp" />
+	</definition>
+	<definition name="chat" extends="general">
+		<put-attribute name="title" value="Websocket Chat" />
+		<put-attribute name="content" value="chat.jsp" />
+	</definition>
+	<definition name="create-game" extends="general">
+		<put-attribute name="title" value="Create game" />
+		<put-attribute name="content" value="create-game.jsp" />
+	</definition>
+	<definition name="dao-test" extends="general">
+		<put-attribute name="title" value="DAO testing" />
+		<put-attribute name="content" value="dao-test.jsp" />
+	</definition>
+	<definition name="join-game" extends="general">
+		<put-attribute name="title" value="${head_title}" />
+		<put-attribute name="content" value="join-game.jsp" />
+	</definition>
+	<definition name="login" extends="general">
+		<put-attribute name="title" value="${login_head_title}" />
+		<put-attribute name="content" value="login.jsp" />
+	</definition>
+	<definition name="start-page" extends="general">
+		<put-attribute name="title" value="${start-page_head_title}" />
+		<put-attribute name="content" value="start-page.jsp" />
+	</definition>
+	<definition name="statistics" extends="general">
+		<put-attribute name="title" value="${head_title} ${pageContext.request.userPrincipal.name}" />
+		<put-attribute name="content" value="statistics.jsp" />
+	</definition>
+	<definition name="statistics" extends="general">
+		<put-attribute name="title" value="${system_configuration_head_title}" />
+		<put-attribute name="content" value="system-configuration.jsp" />
+	</definition>
+</tiles-definitions>
