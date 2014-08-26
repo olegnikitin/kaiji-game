@@ -23,7 +23,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping(value = "/admin")
-public class TestDAOController {
+public class AdminPageController {
 
     @Autowired
     private UserDAO userDAO;
