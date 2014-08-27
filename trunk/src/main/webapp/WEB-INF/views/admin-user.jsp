@@ -1,6 +1,6 @@
-<a href="${pageContext.servletContext.contextPath}/dao" class="btn btn-success btn-large active">Back</a>
+<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">Back</a>
 <br>
-<form:form action="${pageContext.servletContext.contextPath}/dao/users/save" commandName="newUser" class="navbar-form">
+<form:form action="${pageContext.servletContext.contextPath}/admin/users/save" commandName="newUser" class="navbar-form">
     <div class="input-group">
         <form:input path="name" class="form-control" placeholder="Name"/>
     </div>
@@ -15,7 +15,7 @@
     <button type="submit" class="btn btn-default" style="background:#EAEFFA">Create user</button>
 </form:form>
 
-<form action="${pageContext.servletContext.contextPath}/dao/users" method="POST" class="navbar-form navbar-left">
+<form action="${pageContext.servletContext.contextPath}/admin/users" method="POST" class="navbar-form navbar-left">
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Nickname" name="nickname">
     </div>
@@ -43,7 +43,7 @@
                 <td>${user.email}</td>
                 <td>${user.roles}</td>
                 <td>
-                    <form action="${pageContext.servletContext.contextPath}/dao/users/remove" method="POST">
+                    <form action="${pageContext.servletContext.contextPath}/admin/users/remove" method="POST">
                         <input type="submit" class="btn btn-default" value="Delete" style="background:#E1E1E1">
                         <input type="hidden" name="id" value="${user.id}">
                     </form>
@@ -59,7 +59,7 @@
                     <td>${user.email}</td>
                     <td>${user.roles}</td>
                     <td>
-                        <form action="${pageContext.servletContext.contextPath}/dao/users/remove" method="POST">
+                        <form action="${pageContext.servletContext.contextPath}/admin/users/remove" method="POST">
                             <input type="submit" class="btn btn-default" value="Delete" style="background:#E1E1E1">
                             <input type="hidden" name="id" value="${user.id}">
                         </form>
