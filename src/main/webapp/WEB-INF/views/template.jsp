@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	<div class="footer">
-		<a id="about" href="/about">About us</a>
+        <tiles:insertAttribute name="footer" />
 	</div>
 </body>
 </html>

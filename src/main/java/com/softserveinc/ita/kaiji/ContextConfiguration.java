@@ -63,7 +63,7 @@ public class ContextConfiguration extends WebMvcConfigurerAdapter {
         messageSource.setBasenames("classpath:i18n/common", "classpath:i18n/errors", "classpath:i18n/pages/registration-form",
                 "classpath:i18n/pages/start-page", "classpath:i18n/pages/header", "classpath:i18n/pages/create-game",
                 "classpath:i18n/pages/system-configuration", "classpath:i18n/pages/play-game", "classpath:i18n/pages/join-game",
-                "classpath:i18n/pages/statistics", "classpath:i18n/pages/login");
+                "classpath:i18n/pages/statistics", "classpath:i18n/pages/login","classpath:i18n/pages/footer");
         messageSource.setFallbackToSystemLocale(false);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
