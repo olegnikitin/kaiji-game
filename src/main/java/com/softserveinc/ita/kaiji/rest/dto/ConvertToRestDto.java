@@ -36,6 +36,7 @@ public class ConvertToRestDto {
     }
 
     public GameInfoRestDto gameInfoToDto(GameInfoEntity gameInfo) {
+
         GameInfoRestDto gameInfoRestDto = new GameInfoRestDto();
         gameInfoRestDto.setId(gameInfo.getId());
         gameInfoRestDto.setGameName(gameInfo.getGameName());
@@ -48,10 +49,12 @@ public class ConvertToRestDto {
         gameInfoRestDto.setGameStartTime(date.substring(0, date.length() - 2));
         date = gameInfo.getGameFinishTime().toString();
         gameInfoRestDto.setGameFinishTime(date.substring(0, date.length() - 2));
+
         return gameInfoRestDto;
     }
 
     public GameHistoryRestDto gameHistoryToDto(GameHistoryEntity gameHistory) {
+
         GameHistoryRestDto gameHistoryRest = new GameHistoryRestDto();
         gameHistoryRest.setId(gameHistory.getId());
         gameHistoryRest.setGameState(gameHistory.getGameState());
@@ -63,6 +66,7 @@ public class ConvertToRestDto {
             gameHistoryRest.getWinners().add(winner.getNickname());
         }
         gameHistoryRest.setGameInfoRest(gameInfoToDto(gameHistory.getGameInfo()));
+
         return gameHistoryRest;
     }
 
@@ -76,6 +80,7 @@ public class ConvertToRestDto {
                     entry.getValue().getDuelResult());
             roundResultRestDto.getEntries().add(roundEntry);
         }
+
         return roundResultRestDto;
     }
 
@@ -123,6 +128,7 @@ public class ConvertToRestDto {
         currentGameRestInfoDto.setEnemyChosenCard(enemyCard);
         currentGameRestInfoDto.setGameId(gameId);
         currentGameRestInfoDto.setGameName(gameService.getGameInfo(gameId).getGameName());
+
         return  currentGameRestInfoDto;
     }
 
