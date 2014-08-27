@@ -15,11 +15,30 @@
 	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
 <link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-responsive.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-responsive.min.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-theme.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-theme.min.css"
+	rel="stylesheet">
+	<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.css"
+	rel="stylesheet">
+<link
 	href="${pageContext.servletContext.contextPath}/resources/css/styles.css"
 	rel="stylesheet">
+
 <sec:authorize access="hasRole('USER_ROLE')">
-<%--	<script type="text/javascript"
-		src="<tiles:getAsString name="header_script" />"></script>--%>
+	<script type="text/javascript"
+		src="<tiles:getAsString name="header_script" />"></script>
 </sec:authorize>
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
@@ -34,19 +53,19 @@
 	</div>
 	<div class="container_main">
 		<div class="left_column">
-			<img src="http://static.zerochan.net/Itou.Kaiji.full.665898.jpg"
-				width="100%" alt="left column" />
+			<img src="http://s17.postimg.org/4mqd425qn/image.jpg" width="100%"
+				alt="left column" />
 		</div>
 		<div class="main_div">
 			<tiles:insertAttribute name="content" />
 		</div>
 		<div class="right_column">
-			<img src="http://static.zerochan.net/Itou.Kaiji.full.665898.jpg"
-				width="100%" alt="left column" />
+			<img src="http://s8.postimg.org/4au96l4r9/image.jpg" width="100%"
+				alt="left column" />
 		</div>
 	</div>
 	<div class="footer">
-        <tiles:insertAttribute name="footer" />
+		<tiles:insertAttribute name="footer" />
 	</div>
 </body>
 </html>
