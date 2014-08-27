@@ -5,7 +5,7 @@
 <tiles-definitions>
 	<definition name="general" template="/WEB-INF/views/template.jsp">
 		<put-attribute name="titles" value="/WEB-INF/views/titles.jsp" />
-		<put-attribute name="title" value="" />
+		<put-attribute name="title" value="default" />
 		<put-attribute name="header" value="/WEB-INF/views/header.jsp" />
 		<put-attribute name="header_script"
 			value="${pageContext.servletContext.contextPath}/resources/js/header_script.js" />
@@ -17,6 +17,10 @@
 		<put-attribute name="title" value="${regtitle}" />
 		<put-attribute name="content" value="/WEB-INF/views/registration-form.jsp" />
 	</definition>	
+	<definition name="admin-panel" extends="general">
+		<put-attribute name="title" value="admin-panel" />
+		<put-attribute name="content" value="/WEB-INF/views/admin-panel.jsp" />
+	</definition>
 	<definition name="admin-gamehistory" extends="general">
 		<put-attribute name="title" value="admin-gamehistory" />
 		<put-attribute name="content" value="/WEB-INF/views/admin-gamehistory.jsp" />

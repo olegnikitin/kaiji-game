@@ -1,11 +1,3 @@
-<%--
-  Created by Eduard Boiko
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
 <spring:message code="create-game.gameNameLabel" var="gameNameLabel"/>
 <spring:message code="create-game.ownerNameLabel" var="ownerNameLabel"/>
 <spring:message code="create-game.numberOfCardsLabel"
@@ -15,15 +7,6 @@
 <spring:message code="create-game.botTypeLabel" var="botTypeLabel"/>
 <spring:message code="create-game.createButton" var="createButton"/>
 <spring:message code="create-game.isBotGame" var="isBotGame"/>
-
-<html>
-<head>
-    <title>Create Game</title>
-
-</head>
-<body>
-
-<br> <br> <br>
 
 <div class="container">
 
@@ -118,7 +101,6 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-
         var elements = document.getElementsByName("stars");
         for (var i = 0; i < elements.length; ++i) {
             elements[i].style.display = 'none';
@@ -126,15 +108,9 @@
     })
 
     function WaitDiv() {
-        setTimeout(activity,5000)
         document.getElementById('wait').style.display = 'block';
         var target = document.getElementById('wait');
         var spinner = new Spinner(createOpts).spin(target);
-    }
-
-    function activity(){
-        connectToSessionServer("ws://" + document.location.host + "/session")
-        startSessionActivity('{"nickname":"${pageContext.request.userPrincipal.name}"}',3000)
     }
 
     function showStars(it, box) {
@@ -151,10 +127,8 @@
         var elements = document.getElementsByName("bots");
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = vis;
+            //document.getElementById(it).style.display = vis;
         }
     }
 
 </script>
-
-</body>
-</html>

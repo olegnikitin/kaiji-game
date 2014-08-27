@@ -1,15 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">Back</a>
+<a href="${pageContext.servletContext.contextPath}/dao" class="btn btn-success btn-large active">Back</a>
 <br>
-<form action="${pageContext.servletContext.contextPath}/admin/gameinfo" method="POST" class="navbar-form navbar-left">
+<form action="${pageContext.servletContext.contextPath}/dao/gameinfo" method="POST" class="navbar-form navbar-left">
     <div class="form-group">
         <select size="1" name="userId" class="form-control">
             <option value="default"></option>
@@ -56,7 +47,7 @@
                 </ul>
             </td>
             <td>
-                <form action="${pageContext.servletContext.contextPath}/admin/gameinfo/remove" method="POST">
+                <form action="${pageContext.servletContext.contextPath}/dao/gameinfo/remove" method="POST">
                     <input type="submit" class="btn btn-default" value="Delete" style="background:#E1E1E1">
                     <input type="hidden" name="id" value="${game.id}">
                 </form>
@@ -64,5 +55,3 @@
         </tr>
     </c:forEach>
 </table>
-</body>
-</html>

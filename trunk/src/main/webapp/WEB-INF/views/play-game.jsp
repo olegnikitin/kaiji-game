@@ -1,91 +1,69 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-<%@taglib prefix="pl" uri="/WEB-INF/tld/play-game.tld" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page import="com.softserveinc.ita.kaiji.model.Card" %>
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="pl" uri="/WEB-INF/tld/play-game.tld"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ page import="com.softserveinc.ita.kaiji.model.Card"%>
 
-<spring:message code="play-game.you" var="you"/>
-<spring:message code="play-game.enemy" var="enemy"/>
-<spring:message code="play-game.wins" var="wins"/>
-<spring:message code="play-game.ties" var="ties"/>
-<spring:message code="play-game.rock" var="rock"/>
-<spring:message code="play-game.paper" var="paper"/>
-<spring:message code="play-game.unknownCard" var="unknownCard"/>
-<spring:message code="play-game.scissors" var="scissors"/>
-<spring:message code="play-game.round" var="round"/>
-<spring:message code="play-game.winner" var="winner"/>
-<spring:message code="play-game.loser" var="loser"/>
-<spring:message code="play-game.draw" var="drawStatus"/>
-<spring:message code="play-game.gameOver" var="gameOver"/>
-<spring:message code="play-game.gameStart" var="gameStart"/>
-<spring:message code="play-game.newGame" var="newGame"/>
-<spring:message code="play-game.rules" var="rules"/>
-<spring:message code="play-game.stars" var="stars"/>
+<spring:message code="play-game.you" var="you" />
+<spring:message code="play-game.enemy" var="enemy" />
+<spring:message code="play-game.wins" var="wins" />
+<spring:message code="play-game.ties" var="ties" />
+<spring:message code="play-game.rock" var="rock" />
+<spring:message code="play-game.paper" var="paper" />
+<spring:message code="play-game.unknownCard" var="unknownCard" />
+<spring:message code="play-game.scissors" var="scissors" />
+<spring:message code="play-game.round" var="round" />
+<spring:message code="play-game.winner" var="winner" />
+<spring:message code="play-game.loser" var="loser" />
+<spring:message code="play-game.draw" var="drawStatus" />
+<spring:message code="play-game.gameOver" var="gameOver" />
+<spring:message code="play-game.gameStart" var="gameStart" />
+<spring:message code="play-game.newGame" var="newGame" />
+<spring:message code="play-game.rules" var="rules" />
+<spring:message code="play-game.stars" var="stars" />
 
-<c:set var="cardList" value="<%=Card.values()%>"/>
-<c:set var="roundsCount" value="${fn:length(gameHistory.getRoundResults()) }"/>
-<c:set var="isFinished" value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}"/>
-<c:set var="playerChosenCard" value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}"/>
-<c:set var="enemyChosenCard" value="${gameHistory.getLastRoundResultFor(enemyObject).getCard(enemyObject)}"/>
+<c:set var="cardList" value="<%=Card.values()%>" />
+<c:set var="roundsCount"
+	value="${fn:length(gameHistory.getRoundResults()) }" />
+<c:set var="isFinished"
+	value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}" />
+<c:set var="playerChosenCard"
+	value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}" />
+<c:set var="enemyChosenCard"
+	value="${gameHistory.getLastRoundResultFor(enemyObject).getCard(enemyObject)}" />
 
-<c:url var="urlMain" value="/"/>
-<c:url var="urlResources" value="/resources"/>
+<c:url var="urlMain" value="/" />
+<c:url var="urlResources" value="/resources" />
 
+<script>
+	window.location.hash = "no-back-button";
+	window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
+	window.onhashchange = function() {
+		window.location.hash = "no-back-button";
+	}
+</script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script>
-        window.location.hash = "no-back-button";
-        window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
-        window.onhashchange = function () {
-            window.location.hash = "no-back-button";
+<script type="text/javascript">
+
+    function WaitDiv() {
+
+        document.getElementById('wait').style.display = 'block';
+        var target = document.getElementById('wait');
+        var spinner = new Spinner(playOpts).spin(target);
+
+        document.getElementById('hide').style.display = 'none';
+
+        var inputs = document.getElementsByTagName("a")
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].id === 'cardBtn') {
+                inputs[i].setAttribute("disabled", "disabled");
+            }
         }
-    </script>
+    }
+</script>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>Kaiji</title>
-
-    <style>
-        .card-count {
-            background-color: #faebcc;
-            width: 1em;
-            padding: 4px;
-            font-size: 1.5em;
-            display: inline-table;
-            -moz-border-radius: 1em;
-            -webkit-border-radius: 1em;
-            border-radius: 1em;
-        }
-    </style>
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]>
-    <script src="${urlResources}/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-
-<body>
-<jsp:include page="header.jsp" />
-
-<br>
-<br>
-<br>
-<br>
-
-<div class="container">
 <div class="row">
 <div class="col-md-4" style="height: 600px">
     <c:if test="${playerObject.isGameWithStars()}">
@@ -381,27 +359,3 @@
         </div>
     </div>
 </div>
-
-</div>
-
-<script type="text/javascript">
-
-    function WaitDiv() {
-
-        document.getElementById('wait').style.display = 'block';
-        var target = document.getElementById('wait');
-        var spinner = new Spinner(playOpts).spin(target);
-
-        document.getElementById('hide').style.display = 'none';
-
-        var inputs = document.getElementsByTagName("a")
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].id === 'cardBtn') {
-                inputs[i].setAttribute("disabled", "disabled");
-            }
-        }
-    }
-</script>
-
-</body>
-</html>
