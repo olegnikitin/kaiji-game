@@ -117,3 +117,6 @@
 				});
 			});
 </script>
+
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="/resources/js/autocompleter.js"></script>
