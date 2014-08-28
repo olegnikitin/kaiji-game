@@ -84,7 +84,6 @@
 
 <br>
 <br>
-<br>
 <c:if test="${notification ne null}">
     <div class="container">
         <div class="alert alert-warning alert-dismissable">

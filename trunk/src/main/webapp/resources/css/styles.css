@@ -1,63 +1,49 @@
 /* main styles */
-#about {
-	text-decoration: none;
-	color: black;
-}
 
 .header {
 	display: block;
 	float: left; /* for setting all div's in line*/
-	width: 95%;
-	padding: 20px;
+	width: 100%;
 	background: #fff;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
-	text-align: center;
 }
 
 .container_main {
 	display: block;
 	float: left; /* for setting all div's in line*/
-	width: 95%;
+	width: 100%;
 	background: #fff;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
-	text-align: center;
 }
 
 .left_column, .right_column {
 	display: block;
 	float: left; /* for setting all div's in line*/
-	width: 25%;
+	width: 20%;
 	background: #fff;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
-	text-align: center;
 }
 
 .main_div {
 	display: block;
 	float: left; /* for setting all div's in line*/
-	width: 43%;
+	width: 56.5%;
 	padding: 20px;
 	background: #fff;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
-	text-align: center;
 }
 
 .footer {
 	display: block;
 	float: down;
-	width: 95%;
+	width: 100%;
 	background: #fff;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
-	border: 1px solid #000;
 	text-align: center;
 }
 

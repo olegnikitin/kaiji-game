@@ -50,7 +50,7 @@
 </div>
 <div class="container_main">
     <div class="left_column">
-        <img src="http://s17.postimg.org/4mqd425qn/image.jpg" width="100%"
+        <img src="http://s17.postimg.org/p0yjk3bcv/image.jpg" width="100%"
              alt="left column"/>
     </div>
     <div class="main_div">
