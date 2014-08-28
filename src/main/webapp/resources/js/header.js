@@ -26,7 +26,6 @@ function closeChatWebSocket() {
 
 function startSessionActivity(nickname, interval) {
     userMessage = JSON.stringify({ "nickname": nickname });
-    console.log(userMessage)
     activityInterval = setInterval(function () {
         wsocketSession.send(userMessage)
     }, interval)
