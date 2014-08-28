@@ -33,7 +33,7 @@
 <br>
 <br>
 
-<table class="table table-striped">
+<table class="table table-striped" id = "games">
 
 	<tr>
 		<th>${number_label}</th>
@@ -75,8 +75,50 @@
 	</c:forEach>
 </table>
 
+<script src="/resources/js/eventsource.min.js"></script>
+
 <script type="text/javascript">
-	function WaitDiv(it, spin) {
+
+    $(document).ready(function () {
+        updateGames();
+    })
+
+    function updateGames() {
+        var eventSource = new EventSource("/joingame/update");
+        eventSource.onmessage = function (event) {
+            $('#games').empty();
+            var removeUrl = '';
+            var url = '';
+            var $createdGames = $('<tr><th>' + '${number_label}'
+                    + '</th><th>' + '${title_label}'
+                    + '</th><th>' + '${host_label}'
+                    + '</th><th>' + '${cards_label}'
+                    + '</th></tr>');
+            $('#games').append($createdGames);
+            var msg = JSON.parse(event.data);
+            msg.forEach(
+                    function fillTable(game) {
+                        url = '<a class =\"btn btn-primary btn-xs\" href="new/join?gameName='+
+                                game.gameName + '&infoId=' + game.id + '\">Join</a>';
+                        <sec:authorize access="hasRole('ADMIN_ROLE')">
+                        removeUrl = '<a class=\"label label-danger\" href ="/game/cleanup/' + game.id
+                                + '\">Remove</a>'
+                        </sec:authorize>
+                        console.log(url);
+                        console.log(removeUrl);
+                        $('#games').append(
+                                        '<tr><td>' + game.number
+                                        + '</td><td>' + game.gameName
+                                        + '</td><td>' + game.players
+                                        + '</td><td>' + game.numberOfCards
+                                        + '</td><td>' + url
+                                        + '</td><td>' + removeUrl + '</td></tr>')
+
+                    })
+        };
+    };
+
+    function WaitDiv(it, spin) {
 		document.getElementById(it).style.display = 'block';
 		var target = document.getElementById(spin);
 		var spinner = new Spinner(joinOpts).spin(target);
