@@ -39,9 +39,8 @@ public class SearchCreatedGames extends HttpServlet {
         try {
             String gameName = request.getParameter("joinGameName");
             List<String> foundGames = new ArrayList<>();
-            System.err.println(gameName);
+
             for (GameInfo gameInfo : gameService.getAllGameInfos()) {
-                System.err.println(gameInfo.getGameName());
                 if (gameInfo.getGameName().startsWith(gameName)) {
                     foundGames.add(gameInfo.getGameName());
                 }

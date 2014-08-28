@@ -51,6 +51,7 @@ public class CreateGameEvent {
             gamesInfo.add(sseUtils.ToGameInfoDto(info, ++number));
         }
 
+        System.err.println("data:" + new Gson().toJson(gamesInfo) + "\n\n");
         return "data:" + new Gson().toJson(gamesInfo) + "\n\n";
     }
 }

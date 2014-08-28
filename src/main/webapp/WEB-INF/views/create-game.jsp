@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <spring:message code="create-game.gameNameLabel" var="gameNameLabel"/>
 <spring:message code="create-game.ownerNameLabel" var="ownerNameLabel"/>
@@ -13,6 +13,8 @@
 <spring:message code="create-game.botTypeLabel" var="botTypeLabel"/>
 <spring:message code="create-game.createButton" var="createButton"/>
 <spring:message code="create-game.isBotGame" var="isBotGame"/>
+
+<c:set var="userName" value="${pageContext.request.userPrincipal.name}"/>
 
 <div class="container">
 
@@ -69,14 +71,6 @@
 
                     <tr>
                         <td>
-                            <div style="display:inline-block;width:150px">${isBotGame}</div>
-                        </td>
-                        <td><form:checkbox onclick="showBots('bots', this); showStars('stars',this)"
-                                           path="botGame"/></td>
-                    </tr>
-
-                    <tr>
-                        <td>
                             <div name="bots" style="display:inline-block;width:150px">${botTypeLabel}</div>
                         </td>
                         <td>
@@ -88,6 +82,14 @@
                                 </form:select>
                             </div>
                         <td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div style="display:inline-block;width:150px">${isBotGame}</div>
+                        </td>
+                        <td><form:checkbox onclick="showBots('bots', this); showStars('stars',this)"
+                                           path="botGame"/></td>
                     </tr>
 
                 </table>
@@ -114,6 +116,11 @@
     })
 
     function WaitDiv() {
+        setTimeout(function () {
+            connectToSessionServer()
+            startSessionActivity('${userName}', 1000)
+        }, 500)
+
         document.getElementById('wait').style.display = 'block';
         var target = document.getElementById('wait');
         var spinner = new Spinner(createOpts).spin(target);
@@ -133,7 +140,6 @@
         var elements = document.getElementsByName("bots");
         for (var i = 0; i < elements.length; i++) {
             elements[i].style.display = vis;
-            //document.getElementById(it).style.display = vis;
         }
     }
 
