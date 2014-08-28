@@ -14,7 +14,7 @@
         var element = document.getElementById("notificationMessage");
         element.innerHTML = ''
         connectToSessionServer()
-        startSessionActivity('${userName}', 3000)
+        startSessionActivity('${userName}', 1000)
         if ('${param.socketActive}' != 'false') {
             connectToChatServerHeader()
         }
