@@ -4,9 +4,11 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<%@ taglib prefix="sec"
+           uri="http://www.springframework.org/security/tags"%>
 
-<tiles:insertAttribute name="titles" />
 
+<tiles:importAttribute name="title" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -36,14 +38,13 @@
 	href="${pageContext.servletContext.contextPath}/resources/css/styles.css"
 	rel="stylesheet">
 
-<sec:authorize access="hasRole('USER_ROLE')">
-	<script type="text/javascript"
-		src="<tiles:getAsString name="header_script" />"></script>
-</sec:authorize>
+<%--<sec:authorize access="hasRole('USER_ROLE')">
+  <tiles:insertAttribute name="header_js"/>
+</sec:authorize>--%>
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 
-<title><tiles:getAsString name="title" /></title>
+<title><spring:message code="${title}"/></title>
 </head>
 
 
