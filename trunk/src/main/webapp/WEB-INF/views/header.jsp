@@ -16,6 +16,7 @@
 <spring:message code="header.welcome" var="headerWelcome"/>
 <spring:message code="header.statistic" var="headerStatistic"/>
 <spring:message code="header.register" var="headerRegister"/>
+<spring:message code="header.chat" var="headerChat"/>
 <c:set var="userName" value="${pageContext.request.userPrincipal.name}"></c:set>
 
 
@@ -85,7 +86,7 @@
             <sec:authorize access="hasRole('USER_ROLE')">
                 <li><a
                         href="<spring:url value="/gamechat/${pageContext.request.userPrincipal.name}" htmlEscape="true"/>"><b
-                        class="glyphicon glyphicon-user"> </b>Chat</a></li>
+                        class="glyphicon glyphicon-user"> </b>${headerChat}</a></li>
             </sec:authorize>
 
         </ul>

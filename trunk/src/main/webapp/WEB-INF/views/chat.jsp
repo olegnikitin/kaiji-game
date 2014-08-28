@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+         pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<jsp:param name="socketActive" value="false"/>
-<jsp:include page="chat_addons.jsp" />
+<jsp:include page="chat_addons.jsp">
+    <jsp:param name="socketActive" value="false"/>
+</jsp:include>
 <div class="container chat-wrapper">
     <form id="do-chat">
         <h2 class="alert alert-success"></h2>
