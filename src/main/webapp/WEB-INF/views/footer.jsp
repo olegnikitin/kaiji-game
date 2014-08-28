@@ -18,11 +18,11 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="background-image: url(http://s14.postimg.org/tv2nbq8sh/kaiji_05_op_rock_paper_scissors_cards.jpg)">
                     <button type="button" class="close" data-dismiss="modal"><span
                             aria-hidden="true">&times;</span><span class="sr-only">${footerClose}</span></button>
                 </div>
-                <div class="modal-body" align="left" style="background-image: url(http://s14.postimg.org/tv2nbq8sh/kaiji_05_op_rock_paper_scissors_cards.jpg);color: whitesmoke">
+                <div class="modal-body" align="left">
                     <b>${footerGoalTitle}</b><br>
                     ${footerGoal}<br><br>
                     <b>${footerWhoWeAreTitle}</b><br>
@@ -40,7 +40,7 @@
                     Kyrylo Bardachov
                     Oleksandra Sydorenko
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="background-image: url(http://s14.postimg.org/tv2nbq8sh/kaiji_05_op_rock_paper_scissors_cards.jpg)">
                     <button type="button" class="btn btn-default" data-dismiss="modal">${footerClose}</button>
                 </div>
             </div>
