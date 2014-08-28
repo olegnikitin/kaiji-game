@@ -4,8 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 	<definition name="general" template="/WEB-INF/views/template.jsp">
-		<put-attribute name="titles" value="/WEB-INF/views/titles.jsp" />
-		<put-attribute name="title" value="default" />
+		<put-attribute name="title" value="" />
         <!--<put-attribute name="header_js" value="/WEB-INF/views/header_js.jsp" />-->
 		<put-attribute name="header" value="/WEB-INF/views/header.jsp" />
 		<put-attribute name="content" value="" />
@@ -65,5 +64,3 @@
 		<put-attribute name="content" value="/WEB-INF/views/system-configuration.jsp" />
 	</definition>
 </tiles-definitions>
-
-        <!--${pageContext.request.userPrincipal.name}-->
