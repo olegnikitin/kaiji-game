@@ -71,7 +71,7 @@
                                 <button type="button" class="close" data-dismiss="modal"><span
                                         aria-hidden="true">&times;</span><span class="sr-only">${closeButton}</span></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" align="left">
                                 <table class="table table-striped">
                                     <tr>
                                         <th>#</th>
@@ -117,7 +117,7 @@
                                 <button type="button" class="close" data-dismiss="modal"><span
                                         aria-hidden="true">&times;</span><span class="sr-only">${closeButton}</span></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" align="left">
                                 <table class="table table-striped">
                                     <tr>
                                         <th>#</th>

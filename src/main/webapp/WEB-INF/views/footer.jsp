@@ -16,13 +16,13 @@
     <div class="modal fade" id="about" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span
                             aria-hidden="true">&times;</span><span class="sr-only">${footerClose}</span></button>
                 </div>
-                <div class="modal-body" align="left">
+                <div class="modal-body" align="left" style="background-image: url(http://s14.postimg.org/tv2nbq8sh/kaiji_05_op_rock_paper_scissors_cards.jpg);color: whitesmoke">
                     <b>${footerGoalTitle}</b><br>
                     ${footerGoal}<br><br>
                     <b>${footerWhoWeAreTitle}</b><br>
