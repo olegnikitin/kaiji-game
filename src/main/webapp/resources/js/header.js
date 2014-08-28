@@ -1,6 +1,7 @@
-var wsocketSession;
-var userMessage;
-var activityInterval;
+var wsocketSession
+var wsocketHeader
+var userMessage
+var activityInterval
 var closed;
 
 var serviceLocationHeader = "ws://" + document.location.host + "/chat/";
@@ -36,14 +37,15 @@ function resetInterval() {
 }
 
 function onMessageReceivedHeader(evt) {
-    document.getElementById("notificationMessage").innerHTML = 'New messages'
+
+    document.getElementById("notificationMessage").innerHTML = 'New message'
     var shown = true;
     setInterval(function(){
         if (shown) {
-            element.style.color = 'red'
+            $("#notificationMessage").css("color", "red" )
             shown = false;
         } else {
-            element.style.color = 'blue'
+            $("#notificationMessage").css("color", "blue" )
             shown = true;
         }
     }, 1000);
