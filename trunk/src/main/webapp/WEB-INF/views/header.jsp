@@ -19,18 +19,7 @@
 <spring:message code="header.chat" var="headerChat"/>
 <c:set var="userName" value="${pageContext.request.userPrincipal.name}"></c:set>
 
-
-<script src="/resources/js/header.js">
-
-    <sec:authorize access="hasRole('USER_ROLE')">
-    sessionActivity(${userName})
-/*        if (<%=ChatUtils.getUnReadMessages().get((String)pageContext.getAttribute("userName")).equals(true)%>) {
-
-        element.innerHTML = 'New message'
-        setInterval(blinker, 1000)
-    }*/
-    </sec:authorize>
-</script>
+<jsp:include page="header_addons.jsp" />
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">

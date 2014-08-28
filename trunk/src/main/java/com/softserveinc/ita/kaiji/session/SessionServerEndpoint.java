@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.session;
 
-import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import org.apache.log4j.Logger;
 
 import javax.json.Json;
@@ -28,7 +27,6 @@ public class SessionServerEndpoint {
 
     @OnMessage
     public void onMessage(Session session, String sessionMessage) {
-        System.err.println("------------- " + sessionMessage);
         JsonObject obj = Json.createReader(new StringReader(sessionMessage))
                 .readObject();
         SessionData sessionData = SessionUtils.getUserSession().get(obj.getString("nickname"));
