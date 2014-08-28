@@ -4,12 +4,11 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <link
-	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css"
-	rel="stylesheet">
+        href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css"
+        rel="stylesheet">
 
-<jsp:include page="chat_addons.jsp">
-    <jsp:param name="socketActive" value="false"/>
-</jsp:include>
+<jsp:include page="chat_addons.jsp"/>
+
 <div class="container chat-wrapper">
     <form id="do-chat">
         <h2 class="alert alert-success"></h2>
@@ -27,3 +26,9 @@
         </fieldset>
     </form>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+                closeChatWebSocket()
+            }
+    )
+</script>

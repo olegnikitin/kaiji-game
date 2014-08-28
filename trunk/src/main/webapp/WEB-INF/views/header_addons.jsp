@@ -15,16 +15,12 @@
         element.innerHTML = ''
         connectToSessionServer()
         startSessionActivity('${userName}', 1000)
-        if ('${param.socketActive}' != 'false') {
-            connectToChatServerHeader()
-        }
+        connectToChatServerHeader()
     })
     window.onbeforeunload = function (evt) {
         closeSessionWebSocket()
         resetInterval()
-        if ('${param.socketActive}' != 'false') {
-            closeChatWebSocket()
-        }
+        closeChatWebSocket()
     }
     </sec:authorize>
 </script>

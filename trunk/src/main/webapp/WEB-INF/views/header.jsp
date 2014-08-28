@@ -19,7 +19,7 @@
 <spring:message code="header.chat" var="headerChat"/>
 <c:set var="userName" value="${pageContext.request.userPrincipal.name}"></c:set>
 
-<jsp:include page="header_addons.jsp" />
+<jsp:include page="header_addons.jsp"/>
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">

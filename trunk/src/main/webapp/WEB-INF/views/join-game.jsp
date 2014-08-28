@@ -79,12 +79,19 @@
 
 <script type="text/javascript">
 
+    var eventSource;
+
     $(document).ready(function () {
         updateGames();
     })
 
+    window.onbeforeunload = function (evt) {
+        eventSource.close()
+    }
+
     function updateGames() {
-        var eventSource = new EventSource("/joingame/update");
+        eventSource = new EventSource("/joingame/update");
+
         eventSource.onmessage = function (event) {
             $('#games').empty();
             var removeUrl = '';
