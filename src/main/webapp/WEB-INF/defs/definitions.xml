@@ -17,35 +17,31 @@
 		<put-attribute name="content" value="/WEB-INF/views/registration-form.jsp" />
 	</definition>	
 	<definition name="admin-panel" extends="general">
-		<put-attribute name="title" value="admin-panel" />
+		<put-attribute name="title" value="admin-page.headerTitle" />
 		<put-attribute name="content" value="/WEB-INF/views/admin-panel.jsp" />
 	</definition>
 	<definition name="admin-gamehistory" extends="general">
-		<put-attribute name="title" value="admin-gamehistory" />
+		<put-attribute name="title" value="admin-page.panel.gameHistoryLink" />
 		<put-attribute name="content" value="/WEB-INF/views/admin-gamehistory.jsp" />
 	</definition>	
 	<definition name="admin-gameinfo" extends="general">
-		<put-attribute name="title" value="admin-gameinfo" />
+		<put-attribute name="title" value="admin-page.panel.gameInfoLink" />
 		<put-attribute name="content" value="/WEB-INF/views/admin-gameinfo.jsp" />
 	</definition>	
 	<definition name="admin-user" extends="general">
-		<put-attribute name="title" value="admin-user" />
+		<put-attribute name="title" value="admin-page.panel.usersLink" />
 		<put-attribute name="content" value="/WEB-INF/views/admin-user.jsp" />
 	</definition>
 	<definition name="chat" extends="general">
-		<put-attribute name="title" value="Websocket Chat" />
+		<put-attribute name="title" value="header.chat" />
 		<put-attribute name="content" value="/WEB-INF/views/chat.jsp" />
 	</definition>
 	<definition name="create-game" extends="general">
 		<put-attribute name="title" value="create-game.headerTitle" />
 		<put-attribute name="content" value="/WEB-INF/views/create-game.jsp" />
 	</definition>
-	<!--<definition name="admin-panel" extends="general">
-		<put-attribute name="title" value="DAO testing" />
-		<put-attribute name="content" value="/WEB-INF/views/admin-panel.jsp" />
-	</definition>-->
     <definition name="play-game" extends="general">
-        <put-attribute name="title" value="join-game.headTitle" />
+        <put-attribute name="title" value="play-game.headerTitle" />
         <put-attribute name="content" value="/WEB-INF/views/play-game.jsp" />
     </definition>
 	<definition name="join-game" extends="general">
@@ -61,7 +57,7 @@
 		<put-attribute name="content" value="/WEB-INF/views/start-page.jsp" />
 	</definition>
 	<definition name="statistics" extends="general">
-		<put-attribute name="title" value="statistics.headTitle ${pageContext.request.userPrincipal.name}" />
+		<put-attribute name="title" value="statistics.headTitle" />
 		<put-attribute name="content" value="/WEB-INF/views/statistics.jsp" />
 	</definition>
 	<definition name="system-configuration" extends="general">
@@ -69,3 +65,5 @@
 		<put-attribute name="content" value="/WEB-INF/views/system-configuration.jsp" />
 	</definition>
 </tiles-definitions>
+
+        <!--${pageContext.request.userPrincipal.name}-->

@@ -4,7 +4,18 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">Back</a>
+<spring:message code="admin-page.gameInfo.gameName" var="gameName"/>
+<spring:message code="admin-page.gameInfo.gameType" var="gameType"/>
+<spring:message code="admin-page.gameInfo.cardsNum" var="cardsNum"/>
+<spring:message code="admin-page.gameInfo.startTime" var="startTime"/>
+<spring:message code="admin-page.gameInfo.endTime" var="endTime"/>
+<spring:message code="admin-page.gameInfo.users" var="gameUsers"/>
+<spring:message code="admin-page.operationColumn" var="operationColumn"/>
+<spring:message code="admin-page.searchButton" var="searchButton"/>
+<spring:message code="admin-page.deleteButton" var="deleteButton"/>
+<spring:message code="admin-page.backButton" var="backButton"/>
+
+<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">${backButton}</a>
 <br>
 <form action="${pageContext.servletContext.contextPath}/admin/gameinfo" method="POST" class="navbar-form navbar-left">
     <div class="form-group">
@@ -15,19 +26,19 @@
             </c:forEach>
         </select>
     </div>
-    <button type="submit" class="btn btn-default" style="background:#E1E1E1">Search</button>
+    <button type="submit" class="btn btn-default" style="background:#E1E1E1">${searchButton}</button>
 </form>
 
 <table class="table table-striped">
     <tr>
         <th>#</th>
-        <th>Game name</th>
-        <th>Game type</th>
-        <th>Num of cards</th>
-        <th>Start time</th>
-        <th>End time</th>
-        <th>Users</th>
-        <th>Operations</th>
+        <th>${gameName}</th>
+        <th>${gameType}</th>
+        <th>${cardsNum}</th>
+        <th>${startTime}</th>
+        <th>${endTime}</th>
+        <th>${gameUsers}</th>
+        <th>${operationColumn}</th>
     </tr>
     <c:choose>
         <c:when test="${not empty userGames}">
@@ -54,7 +65,7 @@
             </td>
             <td>
                 <form action="${pageContext.servletContext.contextPath}/admin/gameinfo/remove" method="POST">
-                    <input type="submit" class="btn btn-default" value="Delete" style="background:#E1E1E1">
+                    <input type="submit" class="btn btn-default" value="${deleteButton}" style="background:#E1E1E1">
                     <input type="hidden" name="id" value="${game.id}">
                 </form>
             </td>
