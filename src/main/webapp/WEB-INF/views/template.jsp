@@ -38,9 +38,6 @@
 	href="${pageContext.servletContext.contextPath}/resources/css/styles.css"
 	rel="stylesheet">
 
-<%--<sec:authorize access="hasRole('USER_ROLE')">
-  <tiles:insertAttribute name="header_js"/>
-</sec:authorize>--%>
 <script type="text/javascript"
 	src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 
