@@ -17,9 +17,6 @@
 	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
 <link
-	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css"
-	rel="stylesheet">
-<link
 	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-responsive.css"
 	rel="stylesheet">
 <link
@@ -31,7 +28,7 @@
 <link
 	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap-theme.min.css"
 	rel="stylesheet">
-	<link
+<link
 	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.css"
 	rel="stylesheet">
 <link

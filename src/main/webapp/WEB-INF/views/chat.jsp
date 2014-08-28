@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<link
+	href="${pageContext.servletContext.contextPath}/resources/css/bootstrap_chat.css"
+	rel="stylesheet">
 
 <jsp:include page="chat_addons.jsp">
     <jsp:param name="socketActive" value="false"/>
