@@ -31,7 +31,6 @@ function startSessionActivity(nickname, interval) {
 
     userMessage = JSON.stringify({ "nickname": nickname });
     activityInterval = setInterval(function () {
-        console.log(wsocketSession.readyState)
         wsocketSession.send(userMessage)
     }, interval)
 }
