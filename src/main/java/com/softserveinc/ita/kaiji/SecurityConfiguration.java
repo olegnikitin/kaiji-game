@@ -52,15 +52,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/config/**").access("hasRole('ADMIN_ROLE')")
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .failureUrl("/login?error")
-                .usernameParameter("username")
-                .passwordParameter("password")
+                  .loginPage("/login")
+                  .defaultSuccessUrl("/")
+                  .failureUrl("/login?error")
+                  .usernameParameter("username")
+                  .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler())
                 .and()
                 .logout()
-                .logoutSuccessUrl("/");
+                  .logoutSuccessUrl("/");
     }
 
     @Bean
