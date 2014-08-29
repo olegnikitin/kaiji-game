@@ -2,15 +2,12 @@ package com.softserveinc.ita.kaiji.chat;
 
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
-import java.util.Map;
 import javax.json.Json;
-import javax.json.JsonObject;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
+import java.io.StringReader;
 
 @ServerEndpoint(value = "/chat/{group}", encoders = ChatMessageEncoder.class, decoders = ChatMessageDecoder.class)
 public class ChatServerEndpoint {
@@ -28,6 +25,11 @@ public class ChatServerEndpoint {
     @OnClose
     public void close() {
         LOG.trace("Close ChatServerEndpoint socket");
+    }
+
+    @OnError
+    public void onError(Session session, Throwable t) {
+        LOG.error("ChatServerEndpoint socket was broken. " + t.getMessage());
     }
 
     @OnMessage

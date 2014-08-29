@@ -20,6 +20,11 @@ public class ChatServerUpdateEndpoint {
         LOG.trace("Close ChatServerUpdateEndpoint socket");
     }
 
+    @OnError
+    public void onError(Session session, Throwable t) {
+        LOG.error("Chat ServerUpdateEndpoint socket was broken. " + t.getMessage());
+    }
+
     @OnMessage
 	public void onMessage(Session session, String chatMessage) {
         String users= (String) session.getUserProperties().get("users");

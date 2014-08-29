@@ -33,6 +33,7 @@
 	value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}" />
 <c:set var="enemyChosenCard"
 	value="${gameHistory.getLastRoundResultFor(enemyObject).getCard(enemyObject)}" />
+<c:set var="userName" value="${pageContext.request.userPrincipal.name}"/>
 
 <c:url var="urlMain" value="/" />
 <c:url var="urlResources" value="/resources" />
@@ -48,6 +49,11 @@
 <script type="text/javascript">
 
     function WaitDiv() {
+
+        setTimeout(function () {
+            connectToSessionServer()
+            startSessionActivity('${userName}', 1000)
+        }, 500)
 
         document.getElementById('wait').style.display = 'block';
         var target = document.getElementById('wait');
