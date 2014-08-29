@@ -10,11 +10,13 @@ var groupHeader = 'DP-059';
 
 function connectToSessionServer() {
     wsocketSession = new WebSocket(serviceLocationSession);
+    wsocketSession.onerror = sessionError
 }
 
 function connectToChatServerHeader() {
     wsocketHeader = new WebSocket(serviceLocationHeader + groupHeader);
     wsocketHeader.onmessage = onMessageReceivedHeader;
+    wsocketHeader.onerror = onMessageReceivedError;
 }
 
 function closeSessionWebSocket() {
@@ -26,10 +28,20 @@ function closeChatWebSocket() {
 }
 
 function startSessionActivity(nickname, interval) {
+
     userMessage = JSON.stringify({ "nickname": nickname });
     activityInterval = setInterval(function () {
+        console.log(wsocketSession.readyState)
         wsocketSession.send(userMessage)
     }, interval)
+}
+
+function sessionError() {
+    console.log('Session socket pipe broken')
+}
+
+function onMessageReceivedError() {
+    console.log('Chat notification socket pipe broken')
 }
 
 function resetInterval() {
@@ -40,12 +52,12 @@ function onMessageReceivedHeader(evt) {
 
     document.getElementById("notificationMessage").innerHTML = 'New message'
     var shown = true;
-    setInterval(function(){
+    setInterval(function () {
         if (shown) {
-            $("#notificationMessage").css("color", "red" )
+            $("#notificationMessage").css("color", "red")
             shown = false;
         } else {
-            $("#notificationMessage").css("color", "blue" )
+            $("#notificationMessage").css("color", "blue")
             shown = true;
         }
     }, 1000);

@@ -40,7 +40,7 @@ public class TurnChecker implements Runnable{
             try {
 
                 while(!enemy.getCardCount().equals(player.getCardCount()) ){
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                     enemy = userService.getPlayerById(enemy.getId());
                     player = userService.getPlayerById(player.getId());
                 }

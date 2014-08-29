@@ -1,14 +1,12 @@
 package com.softserveinc.ita.kaiji.session;
 
-
-import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class SessionTimer extends TimerTask {
 
-    // session timeout = 20 seconds
-    private static final Long timeout = 30L;
+    // session timeout = 30 seconds
+    private static final Long timeout = 300L;
 
     private String name;
 
