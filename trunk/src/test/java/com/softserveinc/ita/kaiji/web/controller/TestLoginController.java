@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.web.filter.AuthenticationSuccessFilter;
 import org.junit.Before;
 import org.junit.Test;

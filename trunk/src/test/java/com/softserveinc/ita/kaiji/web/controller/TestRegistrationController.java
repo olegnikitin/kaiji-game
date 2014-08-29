@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.dto.UserRegistrationDto;
 import org.apache.log4j.Logger;
 import org.junit.Before;

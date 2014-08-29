@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameFactory;
@@ -33,7 +34,7 @@ import static org.junit.Assert.assertTrue;
  * @since 23.03.14
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 @WebAppConfiguration
 public class HardBotTest {
     Bot testBot;

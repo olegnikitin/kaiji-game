@@ -1,6 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller.tags;
 
-import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.RoundResult;
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -24,12 +24,11 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
 
-
 /**
  * Created by Kyryll on 23.08.2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 @WebAppConfiguration
 public class PlayGameRoundsTagTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)

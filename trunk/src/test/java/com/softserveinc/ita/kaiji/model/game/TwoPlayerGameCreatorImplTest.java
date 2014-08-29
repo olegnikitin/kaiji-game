@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model.game;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.model.game.creator.TwoPlayerGameCreatorImpl;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.PlayerFactory;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.*;
  * Created by Kyryll on 22.08.2014.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=TestConfiguration.class)
+@ContextConfiguration(classes=TestServiceConfiguration.class)
 @WebAppConfiguration
 public class TwoPlayerGameCreatorImplTest {
     @Autowired

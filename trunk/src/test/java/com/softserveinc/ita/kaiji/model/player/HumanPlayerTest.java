@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.Deck;
 import com.softserveinc.ita.kaiji.model.DeckImpl;
@@ -25,7 +26,7 @@ import static org.junit.Assert.*;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 @WebAppConfiguration
 public class HumanPlayerTest {
 
