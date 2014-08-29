@@ -17,8 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.*;
 
 /**
- * @author Paziy Evgeniy
- * @version 1.0
+ * @author Paziy Evgeniy, Sydorenko Oleksandra
+ * @version 2.0
  * @since 08.04.14
  */
 @Controller
@@ -94,34 +94,6 @@ public class AdminPageController {
         return "admin-gameinfo";
     }
 
-   /* @RequestMapping(value = "/save/game-info/{game-runtime-id}")
-       public String saveGameInfoEntity(
-            Model model,
-            @PathVariable(value = "game-runtime-id") Integer gameId) {
-
-        GameInfo gameInfo = gameService.getGameInfo(gameId);
-        GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
-        gameInfoEntityDAO.save(gameInfoEntity);
-        model.addAttribute("data", gameInfoEntity);
-
-        return "dao-test";
-    }*/
-
-    /*@RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-info-id}")
-    public String updateGameInfoEntity(
-            Model model,
-            @PathVariable(value = "game-runtime-id") Integer gameId,
-            @PathVariable(value = "saved-game-info-id") Integer gameInfoEntityId) {
-
-        GameInfo gameInfo = gameService.getGameInfo(gameId);
-        GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
-        gameInfoEntity.setId(gameInfoEntityId);
-        gameInfoEntityDAO.update(gameInfoEntity);
-        model.addAttribute("data", gameInfoEntity);
-
-        return "dao-test";
-    }*/
-
     @RequestMapping(value = "/gameinfo", method = RequestMethod.POST)
     public String getGameInfoEntity(@RequestParam("userId") String userId, RedirectAttributes redirectAttributes) {
         if (!userId.equals("default")) {
@@ -142,34 +114,6 @@ public class AdminPageController {
         model.addAttribute("gameHistoryList", gameHistoryEntityDAO.findAll());
         return "admin-gamehistory";
     }
-
-   /* @RequestMapping(value = "/save/game-history/{game-runtime-id}")
-    public String saveGameHistoryEntity(
-            Model model,
-            @PathVariable(value = "game-runtime-id") Integer gameId) {
-
-        GameHistory gameHistory = gameService.getGameHistory(gameId);
-        GameHistoryEntity gameHistoryEntity = new GameHistoryEntity(gameHistory);
-        gameHistoryEntityDAO.save(gameHistoryEntity);
-        model.addAttribute("data", gameHistoryEntity);
-
-        return "dao-test";
-    }*/
-
-   /* @RequestMapping(value = "/update/game-info/{game-runtime-id}/{saved-game-history-id}")
-    public String updateGameHistoryEntity(
-            Model model,
-            @PathVariable(value = "game-runtime-id") Integer gameId,
-            @PathVariable(value = "saved-game-history-id") Integer gameHistoryEntityId) {
-
-        GameHistory gameHistory = gameService.getGameHistory(gameId);
-        GameHistoryEntity gameHistoryEntity = new GameHistoryEntity(gameHistory);
-        gameHistoryEntity.setId(gameHistoryEntityId);
-        gameHistoryEntityDAO.update(gameHistoryEntity);
-        model.addAttribute("data", gameHistoryEntity);
-
-        return "dao-test";
-    }*/
 
     @RequestMapping(value = "/gamehistory", method = RequestMethod.POST)
     public String getGameHistoryEntity(@RequestParam(value = "id") Integer id,
