@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model.player;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.exception.MakeTurnException;
 import com.softserveinc.ita.kaiji.exception.game.NoBotPlayerInGameException;
 import com.softserveinc.ita.kaiji.model.Card;
@@ -36,7 +37,7 @@ import static org.mockito.Mockito.mock;
  * @since 23.03.14
  */
 @RunWith(JUnitParamsRunner.class)
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 @WebAppConfiguration
 public class BotTest {
 

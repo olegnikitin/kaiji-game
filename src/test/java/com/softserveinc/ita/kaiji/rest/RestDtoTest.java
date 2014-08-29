@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.rest;
 
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(classes = TestConfiguration.class)
+@ContextConfiguration(classes = TestServiceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class RestDtoTest {
@@ -41,8 +42,6 @@ public class RestDtoTest {
     private ConvertToRestDto convertToRestDto;
 
     private static GameInfoEntity gameInfoEntity;
-
-    private static GameHistoryEntity gameHistory;
 
     private static  User user1;
 
@@ -61,7 +60,6 @@ public class RestDtoTest {
         user1 = new User();
         user2 = new User();
         gameInfoEntity = new GameInfoEntity();
-        gameHistory = new GameHistoryEntity();
         roundResult = new RoundResultEntity();
     }
 

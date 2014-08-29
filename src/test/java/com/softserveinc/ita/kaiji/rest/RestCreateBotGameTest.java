@@ -22,16 +22,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class RestCreateBotGameTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
 
     @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         executeSqlScript("file:src/test/resources/insert_h2.sql", false);
-    }
+    } @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    private MockMvc mockMvc;
+
 
     @Test
     public void createBotGame() throws Exception {

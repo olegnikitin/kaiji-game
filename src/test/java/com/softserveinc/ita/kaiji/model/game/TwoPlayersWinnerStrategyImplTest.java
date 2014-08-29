@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.model.game;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
+import com.softserveinc.ita.kaiji.TestServiceConfiguration;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.player.HumanPlayer;
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
  * Created by Kyryll on 21.08.2014.
  */
 @RunWith(Parameterized.class)
-@ContextConfiguration(classes=TestConfiguration.class)
+@ContextConfiguration(classes=TestServiceConfiguration.class)
 @WebAppConfiguration
 public class TwoPlayersWinnerStrategyImplTest {
     int player1Vicrories;
