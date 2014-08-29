@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 public class SessionTimer extends TimerTask {
 
     // session timeout = 30 seconds
-    private static final Long timeout = 300L;
+    private static final Long timeout = 30L;
 
     private String name;
 
