@@ -24,7 +24,7 @@
 	
 	function onMessageReceived(evt) {
 	    var msg = JSON.parse(evt.data); // native API
-	    var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
+        var $messageLine = $('<tr><td class="user label label-info">' + msg.sender
 	            + '</td><td class="message badge">' + msg.message
 	            + '<td class="received">' + msg.received
 	            + '</td></tr>');
