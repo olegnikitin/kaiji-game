@@ -51,5 +51,40 @@ public class CreatedGameInfoDto {
     public void setPlayers(Set<String> players) {
         this.players = players;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CreatedGameInfoDto that = (CreatedGameInfoDto) o;
+
+        if (!gameName.equals(that.gameName)) return false;
+        if (!id.equals(that.id)) return false;
+        if (!number.equals(that.number)) return false;
+        if (!numberOfCards.equals(that.numberOfCards)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + number.hashCode();
+        result = 31 * result + numberOfCards.hashCode();
+        result = 31 * result + gameName.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CreatedGameInfoDto{" +
+                "id=" + id +
+                ", number=" + number +
+                ", numberOfCards=" + numberOfCards +
+                ", gameName='" + gameName + '\'' +
+                ", players=" + players +
+                '}';
+    }
 }
 

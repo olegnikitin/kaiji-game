@@ -25,7 +25,6 @@ public class SearchCreatedGames {
     @ResponseBody
     List<String> allCreatedGames(@RequestParam("term") String gameName) {
 
-        System.err.println(gameName);
         List<String> foundGames = new ArrayList<>();
         for (GameInfo gameInfo : gameService.getAllGameInfos()) {
             if (gameInfo.getGameName().startsWith(gameName)) {
