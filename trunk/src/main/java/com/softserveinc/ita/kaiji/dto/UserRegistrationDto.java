@@ -14,7 +14,7 @@ import com.softserveinc.ita.kaiji.model.util.FieldEquals;
  * @since 04.08.14.
  */
 @Component
-@FieldEquals(field="password", equalsTo="confirmPassword" )
+@FieldEquals(message="{FieldEquals.userregistrationdto.checkpasserror}", field="password", equalsTo="confirmPassword")
 public class UserRegistrationDto {
     @NotEmpty(message = "{NotEmpty.userregistrationdto.name}")
     private String name;
