@@ -2,7 +2,6 @@ package com.softserveinc.ita.kaiji.web.controller;
 
 
 import com.softserveinc.ita.kaiji.model.Card;
-import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -26,8 +25,6 @@ import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -64,7 +61,7 @@ public class PlayGameController {
             method = {RequestMethod.GET, RequestMethod.POST})
     public String initGame(@PathVariable Integer gameId, HttpServletRequest request,
                            Model model) {
-
+        request.getSession().setAttribute("gameId",gameId);
         Integer playerId = (Integer) model.asMap().get("playerId");
 
         if (LOG.isTraceEnabled()) {
@@ -92,6 +89,7 @@ public class PlayGameController {
         model.addAttribute("gameHistory", gameHistory);
         model.addAttribute("playerObject", person);
         model.addAttribute("enemyObject", enemy);
+       // request.getSession().setAttribute("id", gameId);
 
         return "play-game";
 
@@ -123,6 +121,8 @@ public class PlayGameController {
         Player player = userService.getPlayerById(personId);
         Player enemy = (Player) model.asMap().get("enemyObject");
 
+        request.setAttribute("id",gameId);
+
         //starting async
         if (!enemy.isBot() & (enemy.getCardCount() != player.getCardCount())) {
             final AsyncContext asyncContext = request.startAsync(request, response);
@@ -150,7 +150,7 @@ public class PlayGameController {
 
     @RequestMapping(value = "join")
     public String getJoinForm(HttpServletRequest request, Model model, Locale locale) {
-        if ((Boolean) request.getAttribute("timeout") == Boolean.TRUE) {
+        if ("true".equals(request.getParameter("timeout"))) {
             String errorMessage = messageSource.getMessage("Timeout.error", null, locale);
             model.addAttribute("notification", errorMessage);
             return "start-page";
