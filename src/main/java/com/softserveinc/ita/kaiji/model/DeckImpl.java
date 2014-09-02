@@ -69,9 +69,6 @@ public class DeckImpl implements Deck {
 
     @Override
     public int getCardTypeCount(Card card) {
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("getCardsTypeCount");
-        }
         return Collections.frequency(cards, card);
     }
 

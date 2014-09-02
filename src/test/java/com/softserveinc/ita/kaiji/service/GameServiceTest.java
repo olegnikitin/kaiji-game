@@ -105,11 +105,6 @@ public class GameServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         assertNotNull(playerId);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void finishGameThrowExceptionTest() {
-        service.finishGame(-1);
-    }
-
     @Test
     public void getGameInfoThrowExceptionTest() {
 
