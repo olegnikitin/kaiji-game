@@ -54,6 +54,19 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Set<GameInfo> getRealPlayerGames() {
+
+        Set<GameInfo> playersGames = new HashSet<>();
+        for (GameInfo gameInfo : getAllGameInfos()) {
+            if (!Game.Type.BOT_GAME.equals(gameInfo.getGameType())) {
+                playersGames.add(gameInfo);
+            }
+        }
+
+        return playersGames;
+    }
+
+    @Override
     public synchronized Integer setGameInfo(GameInfoDto gameInfoDto) {
 
         if (LOG.isTraceEnabled()) {
@@ -89,7 +102,7 @@ public class GameServiceImpl implements GameService {
         }
 
         Game game = getGameById(gameId);
-        if(game ==null){
+        if (game == null) {
             throw new IllegalArgumentException("Wrong game id");
         }
 
@@ -116,7 +129,7 @@ public class GameServiceImpl implements GameService {
                 userIterator = roundResult.getRound().keySet().iterator();
                 while (userIterator.hasNext()) {
                     currentUser = userIterator.next();
-                    if (currentUser.getId() < 0){
+                    if (currentUser.getId() < 0) {
                         userIterator.remove();
                     }
                 }

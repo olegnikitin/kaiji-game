@@ -47,7 +47,7 @@ public class CreateGameEvent {
 
         List<CreatedGameInfoDto> gamesInfo = new ArrayList<>();
         Integer number = 0;
-        for (GameInfo info : gameService.getAllGameInfos()) {
+        for (GameInfo info : gameService.getRealPlayerGames()) {
             gamesInfo.add(sseUtils.ToGameInfoDto(info, ++number));
         }
 
