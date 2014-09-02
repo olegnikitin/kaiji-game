@@ -4,6 +4,7 @@ import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
+import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.util.email.MailSender;
 import org.apache.commons.lang.RandomStringUtils;
@@ -89,8 +90,17 @@ public class AdminPageController {
 
     @RequestMapping("/gameinfo")
     public String gameInfoPage(Model model) {
+
         model.addAttribute("usersList", userDAO.findAll());
         model.addAttribute("gamesList", gameInfoEntityDAO.findAll());
+        MultiplayerGameInfoDto multiplayerGameInfoDto = new MultiplayerGameInfoDto();
+        multiplayerGameInfoDto.setGameName("Zoro");
+        multiplayerGameInfoDto.setNumberOfStars(2);
+        multiplayerGameInfoDto.setNumberOfCards(2);
+        multiplayerGameInfoDto.setNumberOfPlayers(2);
+        multiplayerGameInfoDto.setGameTimeout(1000);
+        model.addAttribute("multiplayerGameInfo", multiplayerGameInfoDto);
+
         return "admin-gameinfo";
     }
 

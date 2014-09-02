@@ -6,6 +6,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec"
            uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="с" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ page import="com.softserveinc.ita.kaiji.model.game.*" %>
 
 <spring:message code="join-game.enterGameName" var="enter_game_name"/>
 <spring:message code="join-game.searchButton" var="search_button"/>
@@ -16,6 +19,7 @@
 <spring:message code="join-game.connecting" var="connecting"/>
 
 <spring:url value="/game/new/join" var="url"/>
+
 
 <form class="form-inline" role="form">
     <input type="text" class="form-control col-md-8" id="gameName"
@@ -45,18 +49,36 @@
 
     <c:forEach var="game" items="${openedGames}" varStatus="rowCounter">
 
+        <spring:url value="/game/multiplayer/new/join" var="urlMultiGame">
+            <spring:param name="gameName" value="${game.gameName}"/>
+            <spring:param name="infoId" value="${game.id}"/>
+        </spring:url>
+
         <spring:url value="/game/new/join" var="urlGame">
             <spring:param name="gameName" value="${game.gameName}"/>
             <spring:param name="infoId" value="${game.id}"/>
         </spring:url>
+
         <tr>
             <td>${rowCounter.count}</td>
             <td>${game.gameName}</td>
             <td>${game.players}</td>
             <td>${game.numberOfCards}</td>
-            <td><a href="${urlGame}"
-                   onclick="WaitDiv('wait-${rowCounter.count}', 'spin-${rowCounter.count}');"
-                   class="btn btn-primary btn-xs">Join</a></td>
+            <td>${game.gameType}</td>
+            <c:choose>
+                <c:when test="${game.gameType eq 'KAIJI_GAME'}">
+                    <td><a href="${urlMultiGame}"
+                           onclick="WaitDiv('wait-${rowCounter.count}', 'spin-${rowCounter.count}');"
+                           class="btn btn-primary btn-xs">Join Multi</a></td>
+                </c:when>
+                <c:otherwise>
+                    <td><a href="${urlGame}"
+                           onclick="WaitDiv('wait-${rowCounter.count}', 'spin-${rowCounter.count}');"
+                           class="btn btn-primary btn-xs">Join</a></td>
+
+                </c:otherwise>
+            </c:choose>
+
             <sec:authorize access="hasRole('ADMIN_ROLE')">
                 <td><a
                         href="<spring:url value="/game/cleanup/${game.id}" htmlEscape="true"/>"
@@ -96,7 +118,7 @@
     function updateGames() {
         eventSource = new EventSource("/joingame/update");
 
-        eventSource.onmessage = function (event) {
+        /*eventSource.onmessage = function (event) {
             $('#games').empty();
             var removeUrl = '';
             var url = '';
@@ -126,8 +148,9 @@
                                         + '</td><td>' + removeUrl + '</td></tr>')
 
                     })
-        };
-    };
+        };*/
+    }
+    ;
 
     function WaitDiv(it, spin) {
         document.getElementById(it).style.display = 'block';

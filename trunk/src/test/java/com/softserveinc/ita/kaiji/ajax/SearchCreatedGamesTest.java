@@ -3,6 +3,7 @@ package com.softserveinc.ita.kaiji.ajax;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
+import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.junit.Before;
@@ -46,6 +47,7 @@ public class SearchCreatedGamesTest extends AbstractTransactionalJUnit4SpringCon
         gameInfoDto.setPlayerName("petya");
         gameInfoDto.setNumberOfCards(5);
         gameInfoDto.setBotType(Bot.Types.EASY);
+        gameInfoDto.setGameType(Game.Type.BOT_GAME);
         Integer gameId = gameService.setGameInfo(gameInfoDto);
 
         mockMvc.perform(get("/game/createdgames")
