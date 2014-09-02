@@ -42,7 +42,7 @@ public class SseReceivedCreatedGames extends AbstractTransactionalJUnit4SpringCo
     private MockMvc mockMvc;
 
     @Test
-    public void sentAllCreatedGames() throws Exception {
+    public void sentNothingBecauseCreatedGameIsBotGame() throws Exception {
 
         GameInfoDto gameInfoDto = new GameInfoDto();
         gameInfoDto.setGameName("MyTestGame");
@@ -54,8 +54,7 @@ public class SseReceivedCreatedGames extends AbstractTransactionalJUnit4SpringCo
         Integer gameId = gameService.setGameInfo(gameInfoDto);
 
         mockMvc.perform(get("/joingame/update"))
-                .andExpect(content().string(containsString("\"id\":" + gameId)))
-                .andExpect(content().string(containsString("\"numberOfCards\":5,\"gameName\":\"MyTestGame\"")));
+                .andExpect(content().string("data:[]\n\n"));
 
         gameService.clearGameInfo(gameId);
     }

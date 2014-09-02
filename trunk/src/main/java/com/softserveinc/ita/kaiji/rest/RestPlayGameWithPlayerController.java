@@ -43,7 +43,7 @@ public class RestPlayGameWithPlayerController {
     @Autowired
     private RestUtils restUtils;
 
-    // http://localhost:8080/rest/playergame/create?name=petya&gamename=GAME&cards=2&stars=3
+    //
     @RequestMapping(produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@RequestParam("playerId") Integer playerId,
                                                            @RequestParam("gameId") Integer gameId,

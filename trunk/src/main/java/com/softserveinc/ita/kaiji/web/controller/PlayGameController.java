@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.web.controller;
 
 
 import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -146,7 +148,6 @@ public class PlayGameController {
         return "redirect:/game/join";
     }
 
-
     @RequestMapping(value = "join")
     public String getJoinForm(HttpServletRequest request, Model model, Locale locale) {
         if ((Boolean) request.getAttribute("timeout") == Boolean.TRUE) {
@@ -158,8 +159,8 @@ public class PlayGameController {
             model.addAttribute("notification", errorMessage);
 
         }
-        Set<GameInfo> games = gameService.getAllGameInfos();
-        model.addAttribute("openedGames", games);
+
+        model.addAttribute("openedGames", gameService.getRealPlayerGames());
 
         return "join-game";
     }

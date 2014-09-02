@@ -129,4 +129,11 @@ public interface GameService {
      */
     void releaseGameById(Integer gameId);
 
+
+    /**
+     *
+     * @return set of real player games
+     */
+    Set<GameInfo> getRealPlayerGames();
+
 }
