@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.web.controller;
 
-import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.game.Game.State;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
@@ -12,19 +11,13 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot.Types;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.ui.ExtendedModelMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -119,6 +112,9 @@ public class TestPlayGameController {
 
 		ExtendedModelMap uiModel = new ExtendedModelMap();
         HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpSession session = new MockHttpSession();
+        session.setAttribute("gameId",0);
+        when(request.getSession()).thenReturn(session);
         uiModel.addAttribute("playerId",0);
 		String result = playGameController.initGame(0,request, uiModel);
 		assertNotNull(result);

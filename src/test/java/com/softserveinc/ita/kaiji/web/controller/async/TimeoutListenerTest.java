@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.web.controller.async;
 
 import com.softserveinc.ita.kaiji.TestConfiguration;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
@@ -14,7 +15,8 @@ import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import java.io.IOException;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Kyryll on 23.08.2014.
@@ -34,7 +36,7 @@ public class TimeoutListenerTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
     }
-
+    @Ignore
     @Test
     public void run() throws IOException {
         when(event.getAsyncContext().getRequest()).thenReturn(new MockHttpServletRequest());

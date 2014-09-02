@@ -1,49 +1,49 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="pl" uri="/WEB-INF/tld/play-game.tld"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ page import="com.softserveinc.ita.kaiji.model.Card"%>
+         pageEncoding="UTF-8" %>
+<%@taglib prefix="pl" uri="/WEB-INF/tld/play-game.tld" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ page import="com.softserveinc.ita.kaiji.model.Card" %>
 
-<spring:message code="play-game.you" var="you" />
-<spring:message code="play-game.enemy" var="enemy" />
-<spring:message code="play-game.wins" var="wins" />
-<spring:message code="play-game.ties" var="ties" />
-<spring:message code="play-game.rock" var="rock" />
-<spring:message code="play-game.paper" var="paper" />
-<spring:message code="play-game.unknownCard" var="unknownCard" />
-<spring:message code="play-game.scissors" var="scissors" />
-<spring:message code="play-game.round" var="round" />
-<spring:message code="play-game.winner" var="winner" />
-<spring:message code="play-game.loser" var="loser" />
-<spring:message code="play-game.draw" var="drawStatus" />
-<spring:message code="play-game.gameOver" var="gameOver" />
-<spring:message code="play-game.gameStart" var="gameStart" />
-<spring:message code="play-game.newGame" var="newGame" />
-<spring:message code="play-game.rules" var="rules" />
-<spring:message code="play-game.stars" var="stars" />
+<spring:message code="play-game.you" var="you"/>
+<spring:message code="play-game.enemy" var="enemy"/>
+<spring:message code="play-game.wins" var="wins"/>
+<spring:message code="play-game.ties" var="ties"/>
+<spring:message code="play-game.rock" var="rock"/>
+<spring:message code="play-game.paper" var="paper"/>
+<spring:message code="play-game.unknownCard" var="unknownCard"/>
+<spring:message code="play-game.scissors" var="scissors"/>
+<spring:message code="play-game.round" var="round"/>
+<spring:message code="play-game.winner" var="winner"/>
+<spring:message code="play-game.loser" var="loser"/>
+<spring:message code="play-game.draw" var="drawStatus"/>
+<spring:message code="play-game.gameOver" var="gameOver"/>
+<spring:message code="play-game.gameStart" var="gameStart"/>
+<spring:message code="play-game.newGame" var="newGame"/>
+<spring:message code="play-game.rules" var="rules"/>
+<spring:message code="play-game.stars" var="stars"/>
 
-<c:set var="cardList" value="<%=Card.values()%>" />
+<c:set var="cardList" value="<%=Card.values()%>"/>
 <c:set var="roundsCount"
-	value="${fn:length(gameHistory.getRoundResults()) }" />
+       value="${fn:length(gameHistory.getRoundResults()) }"/>
 <c:set var="isFinished"
-	value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}" />
+       value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}"/>
 <c:set var="playerChosenCard"
-	value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}" />
+       value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}"/>
 <c:set var="enemyChosenCard"
-	value="${gameHistory.getLastRoundResultFor(enemyObject).getCard(enemyObject)}" />
+       value="${gameHistory.getLastRoundResultFor(enemyObject).getCard(enemyObject)}"/>
 <c:set var="userName" value="${pageContext.request.userPrincipal.name}"/>
 
-<c:url var="urlMain" value="/" />
-<c:url var="urlResources" value="/resources" />
+<c:url var="urlMain" value="/"/>
+<c:url var="urlResources" value="/resources"/>
 
 <script>
-	window.location.hash = "no-back-button";
-	window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
-	window.onhashchange = function() {
-		window.location.hash = "no-back-button";
-	}
+    window.location.hash = "no-back-button";
+    window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
+    window.onhashchange = function () {
+        window.location.hash = "no-back-button";
+    }
 </script>
 
 <script type="text/javascript">
@@ -68,6 +68,26 @@
             }
         }
     }
+
+    var locationWebSocket = "ws://" + document.location.host + "/timeout/"+<%=session.getAttribute("gameId")%>;
+    var socketRoundTimeout;
+    function connectToRoundTimeoutServer() {
+        socketRoundTimeout = new WebSocket(locationWebSocket);
+        socketRoundTimeout.onmessage = onMessageTimeout;
+    }
+
+    function onMessageTimeout(evt) {
+       window.location.href = '/game/join?timeout=true';
+    }
+
+    window.onbeforeunload = function (evt) {
+       // socketRoundTimeout.close();
+
+    }
+
+    $(document).ready(function () {
+        connectToRoundTimeoutServer();
+    })
 </script>
 
 <div class="row">
