@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.service;
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
-import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
@@ -72,9 +71,11 @@ public class GameServiceImpl implements GameService {
         if (LOG.isTraceEnabled()) {
             LOG.trace("setGameInfo: we are in");
         }
-        Set<Player> playersSet = new HashSet<Player>();
+        Set<Player> playersSet = new HashSet<>();
 
-        playersSet.addAll(userService.createPlayer(gameInfoDto));
+        if (!Game.Type.KAIJI_GAME.equals(gameInfoDto.getGameType())) {
+            playersSet.addAll(userService.createPlayer(gameInfoDto));
+        }
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("setGameInfo: bot added to the set of players");
@@ -84,11 +85,17 @@ public class GameServiceImpl implements GameService {
                 gameInfoDto.getPlayerName(), gameInfoDto.getNumberOfCards(),
                 gameInfoDto.getNumberOfStars(),
                 gameInfoDto.getBotType(), playersSet);
-        if (gameInfoDto.getBotGame()) {
-            newGameInfo.setGameType(Game.Type.BOT_GAME);
-        } else {
-            newGameInfo.setGameType(Game.Type.TWO_PLAYER_GAME);
+
+        if (!Game.Type.KAIJI_GAME.equals(gameInfoDto.getGameType())) {
+            if (gameInfoDto.getBotGame()) {
+                newGameInfo.setGameType(Game.Type.BOT_GAME);
+            } else {
+                newGameInfo.setGameType(Game.Type.TWO_PLAYER_GAME);
+            }
+        } else{
+            newGameInfo.setGameType(Game.Type.KAIJI_GAME);
         }
+
         newGameInfo.setId(GAME_INFOS.size());
         GAME_INFOS.put(newGameInfo);
 
@@ -102,9 +109,6 @@ public class GameServiceImpl implements GameService {
         }
 
         Game game = getGameById(gameId);
-       /* if (game == null) {
-            throw new IllegalArgumentException("Wrong game id");
-        }*/
 
         if (game != null && game.getState().equals(Game.State.GAME_FINISHED)) {
             Player playerBot = null;

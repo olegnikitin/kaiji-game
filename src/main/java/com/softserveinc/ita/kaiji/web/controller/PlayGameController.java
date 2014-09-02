@@ -159,7 +159,6 @@ public class PlayGameController {
             model.addAttribute("notification", errorMessage);
 
         }
-
         model.addAttribute("openedGames", gameService.getRealPlayerGames());
 
         return "join-game";

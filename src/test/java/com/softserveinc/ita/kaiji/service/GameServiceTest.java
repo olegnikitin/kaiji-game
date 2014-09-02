@@ -47,6 +47,7 @@ public class GameServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         dto.setNumberOfStars(3);
         dto.setPlayerName("petya");
         dto.setBotGame(true);
+        dto.setGameType(Game.Type.BOT_GAME);
     }
 
     @Before
