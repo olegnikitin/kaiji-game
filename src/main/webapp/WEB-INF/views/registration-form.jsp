@@ -82,7 +82,7 @@
 
 				<tr>
 					<td colspan='2'><input name="submit" type="submit"
-						class="btn btn-primary span4 offset4 text-center"
+						class="btn btn-primary"
 						value="${regbutton}" /></td>
 				</tr>
 			</table>
