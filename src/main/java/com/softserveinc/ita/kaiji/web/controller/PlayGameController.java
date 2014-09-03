@@ -8,6 +8,7 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.service.UserService;
+import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import com.softserveinc.ita.kaiji.web.controller.async.TurnChecker;
 import org.apache.log4j.Logger;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,11 +59,14 @@ public class PlayGameController {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private GameSyncro gameSyncro;
+
     @RequestMapping(value = "/{gameId}/",
             method = {RequestMethod.GET, RequestMethod.POST})
     public String initGame(@PathVariable Integer gameId, HttpServletRequest request,
                            Model model) {
-        request.getSession().setAttribute("gameId",gameId);
+        request.getSession().setAttribute("gameId", gameId);
         Integer playerId = (Integer) model.asMap().get("playerId");
 
         if (LOG.isTraceEnabled()) {
@@ -89,7 +94,7 @@ public class PlayGameController {
         model.addAttribute("gameHistory", gameHistory);
         model.addAttribute("playerObject", person);
         model.addAttribute("enemyObject", enemy);
-       // request.getSession().setAttribute("id", gameId);
+        // request.getSession().setAttribute("id", gameId);
 
         return "play-game";
 
@@ -121,20 +126,25 @@ public class PlayGameController {
         Player player = userService.getPlayerById(personId);
         Player enemy = (Player) model.asMap().get("enemyObject");
 
-        request.setAttribute("id",gameId);
+        request.setAttribute("id", gameId);
 
         //starting async
-        if (!enemy.isBot() & (enemy.getCardCount() != player.getCardCount())) {
-            final AsyncContext asyncContext = request.startAsync(request, response);
-            asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService.getSystemConfiguration().getRoundTimeout(), TimeUnit.SECONDS));
-            asyncContext.addListener(new TimeoutListener(), request, response);
-
-            asyncContext.start(new TurnChecker(asyncContext, gameId, userService, enemy.getId(), personId));
-        } else {
+        if (enemy.isBot()) {
             response.sendRedirect(request.getContextPath() + "/game/" + gameId + "/");
+        } else {
+            if (enemy.getCardCount() != player.getCardCount()) {
+                final AsyncContext asyncContext = request.startAsync(request, response);
+                asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService.getSystemConfiguration().getRoundTimeout(), TimeUnit.SECONDS));
+                asyncContext.addListener(new TimeoutListener(), request, response);
+                gameSyncro.getRoundWaiter().put(gameId, new CountDownLatch(1));
+                asyncContext.start(new TurnChecker(asyncContext, gameId, gameSyncro.getRoundWaiter().get(gameId),
+                        systemConfigurationService.getSystemConfiguration().getRoundTimeout()));
+            } else {
+                gameSyncro.getRoundWaiter().get(gameId).countDown();
+                response.sendRedirect(request.getContextPath() + "/game/" + gameId + "/");
+            }
         }
     }
-
 
     @RequestMapping(value = "finish/{gameId}")
     public String finishGame(@PathVariable Integer gameId) {
@@ -151,6 +161,11 @@ public class PlayGameController {
     @RequestMapping(value = "join")
     public String getJoinForm(HttpServletRequest request, Model model, Locale locale) {
         if ("true".equals(request.getParameter("timeout"))) {
+            Integer gameId = (Integer) request.getAttribute("id");
+            if (gameId != null) {
+                gameSyncro.getRoundWaiter().remove(gameId);
+                gameService.clearGameInfo(gameId);
+            }
             String errorMessage = messageSource.getMessage("Timeout.error", null, locale);
             model.addAttribute("notification", errorMessage);
             return "start-page";
