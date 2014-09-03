@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.web.controller.async;
 
 import org.apache.log4j.Logger;
 
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -21,6 +22,12 @@ public class ServerEndpointTimeoutRound {
     public void open(Session session, @PathParam("gameId") Integer id) {
         session.getUserProperties().put("gameId", id);
     }
+
+    @OnError
+    public void onError(Session session, Throwable t) {
+        LOG.error("Chat Server Endpoint Timeout Round socket was broken. " + t.getMessage());
+    }
+
 
     @OnMessage
     public void onMessage(Session session, String message) {
