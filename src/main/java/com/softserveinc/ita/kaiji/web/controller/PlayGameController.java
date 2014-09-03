@@ -163,7 +163,9 @@ public class PlayGameController {
         if ("true".equals(request.getParameter("timeout"))) {
             Integer gameId = (Integer) request.getAttribute("id");
             if (gameId != null) {
+                LOG.info("Remove all syncro objects due to timeout");
                 gameSyncro.getRoundWaiter().remove(gameId);
+                gameSyncro.getGameWaiter().remove(gameId);
                 gameService.clearGameInfo(gameId);
             }
             String errorMessage = messageSource.getMessage("Timeout.error", null, locale);
