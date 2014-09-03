@@ -9,7 +9,6 @@
 
 <jsp:include page="chat_addons.jsp"/>
 
-<div class="container chat-wrapper">
     <form id="do-chat">
         <h2 class="alert alert-success"></h2>
 
@@ -25,7 +24,7 @@
             </div>
         </fieldset>
     </form>
-</div>
+
 <script type="text/javascript">
     $(document).ready(function () {
                 closeChatWebSocket()
