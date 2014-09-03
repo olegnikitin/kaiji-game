@@ -2,10 +2,12 @@ package com.softserveinc.ita.kaiji.web.controller;
 
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
+import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
+import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.SecondPlayerChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import org.apache.log4j.Logger;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +49,9 @@ public class CreateGameController {
 
     @Autowired
     private SystemConfigurationService systemConfigurationService;
+
+    @Autowired
+    private GameSyncro gameSyncro;
 
     @RequestMapping(method = RequestMethod.GET)
     public String sendToForm(Model model, HttpServletResponse response) {
@@ -91,7 +97,7 @@ public class CreateGameController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         gameInfoDto.setPlayerName(auth.getName());
-        final AsyncContext asyncContext = request.startAsync(request,response);
+        final AsyncContext asyncContext = request.startAsync(request, response);
 
         asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(
                 systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.SECONDS));
@@ -104,7 +110,16 @@ public class CreateGameController {
         }
         Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameId);
         model.addAttribute("playerId", playerId);
-        asyncContext.start(new SecondPlayerChecker(asyncContext, gameId, gameService));
+        request.setAttribute("id", gameId);
+        CountDownLatch latch;
+        if (Game.Type.BOT_GAME.equals(gameService.getGameInfo(gameId).getGameType())) {
+            latch = new CountDownLatch(0);
+        } else {
+            gameSyncro.getGameWaiter().put(gameId, new CountDownLatch(1));
+            latch = gameSyncro.getGameWaiter().get(gameId);
+        }
+        asyncContext.start(new SecondPlayerChecker(asyncContext, gameService, gameId,
+                latch, systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout()));
         if (LOG.isTraceEnabled()) {
             LOG.trace("Game started. AsyncContext working. ");
         }
@@ -118,18 +133,22 @@ public class CreateGameController {
 
         GameInfo info = gameService.getGameInfo(infoId);
         if (info.getPlayers().size() > 1) {
-
             request.setAttribute("manyPlayers", Boolean.TRUE);
             RequestDispatcher rd = request.getRequestDispatcher("/game/join");
             rd.forward(request, response);
         } else {
-            final AsyncContext asyncContext = request.startAsync(request, response);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Integer playerId = gameService.addPlayer(auth.getName(), gameName);
+            model.addAttribute("playerId", playerId);
+            gameSyncro.getGameWaiter().get(infoId).countDown();
+            response.sendRedirect(request.getContextPath() + "/game/" + infoId + "/");
+            /*final AsyncContext asyncContext = request.startAsync(request, response);
             asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService
                     .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS));
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             Integer playerId = gameService.addPlayer(auth.getName(), gameName);
             model.addAttribute("playerId", playerId);
-            asyncContext.start(new GameChecker(asyncContext, gameName, gameService));
+            asyncContext.start(new GameChecker(asyncContext, gameName, gameService));*/
         }
     }
 }

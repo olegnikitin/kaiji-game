@@ -11,6 +11,7 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPool;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPoolImpl;
+import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +42,9 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private GameHistoryEntityDAO gameHistoryEntityDAO;
+
+    @Autowired
+    private GameSyncro gameSyncro;
 
     @Override
     public Game getGameById(Integer gameId) throws IllegalArgumentException {
@@ -92,7 +96,7 @@ public class GameServiceImpl implements GameService {
             } else {
                 newGameInfo.setGameType(Game.Type.TWO_PLAYER_GAME);
             }
-        } else{
+        } else {
             newGameInfo.setGameType(Game.Type.KAIJI_GAME);
         }
 
@@ -111,6 +115,10 @@ public class GameServiceImpl implements GameService {
         Game game = getGameById(gameId);
 
         if (game != null && game.getState().equals(Game.State.GAME_FINISHED)) {
+
+            gameSyncro.getGameWaiter().remove(gameId);
+            gameSyncro.getRoundWaiter().remove(gameId);
+
             Player playerBot = null;
 
             Iterator<Player> playerIterator = game.getGameHistory().getGameInfo().getPlayers().iterator();
@@ -179,6 +187,8 @@ public class GameServiceImpl implements GameService {
                     GAMES_SYNC.remove(game.getId());
                 }
             }
+            gameSyncro.getGameWaiter().remove(gameInfoId);
+            gameSyncro.getRoundWaiter().remove(gameInfo);
             GAME_INFOS.release(gameInfoId);
             GAME_INFOS.remove(gameInfoId);
         }
