@@ -69,7 +69,7 @@
         }
     }
 
-    var locationWebSocket = "ws://" + document.location.host + "/timeout/"+<%=session.getAttribute("gameId")%>;
+    var locationWebSocket = "ws://" + document.location.host + "/timeout/" +<%=session.getAttribute("gameId")%>;
     var socketRoundTimeout;
     function connectToRoundTimeoutServer() {
         socketRoundTimeout = new WebSocket(locationWebSocket);
@@ -77,15 +77,18 @@
     }
 
     function onMessageTimeout(evt) {
-       window.location.href = '/game/join?timeout=true';
+        window.location.href = '/game/join?timeout=true';
     }
 
     window.onbeforeunload = function (evt) {
-       // socketRoundTimeout.close();
+        // socketRoundTimeout.close();
 
     }
 
     $(document).ready(function () {
+        $("#left_column").attr('class', 'columns_play_game');
+        $("#right_column").attr('class', 'columns_play_game');
+        $("#main_div").attr('class', 'main_play_game');
         connectToRoundTimeoutServer();
     })
 </script>

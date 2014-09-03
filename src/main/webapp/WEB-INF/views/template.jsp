@@ -49,14 +49,14 @@
     <tiles:insertAttribute name="header"/>
 </div>
 <div class="container_main">
-    <div class="left_column">
+    <div class="left_column" id="left_column">
         <img src="http://s17.postimg.org/p0yjk3bcv/image.jpg" width="100%"
              alt="left column"/>
     </div>
-    <div class="main_div">
+    <div class="main_div" id="main_div">
         <tiles:insertAttribute name="content"/>
     </div>
-    <div class="right_column">
+    <div class="right_column" id="right_column">
         <img src="http://s8.postimg.org/4au96l4r9/image.jpg" width="100%"
              alt="left column"/>
     </div>
