@@ -1,62 +1,77 @@
 /* main styles */
 
 .header {
-	display: block;
-	float: left; /* for setting all div's in line*/
-	width: 100%;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 100%;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 
 .container_main {
-	display: block;
-	float: left; /* for setting all div's in line*/
-	width: 100%;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 100%;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 
 .left_column, .right_column {
-	display: block;
-	float: left; /* for setting all div's in line*/
-	width: 20%;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 20%;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+.columns_play_game {
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 0%;
+    background: #fff;
+}
+
+.main_play_game {
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 100%;
+    padding: 20px;
+    background: #fff;
 }
 
 .main_div {
-	display: block;
-	float: left; /* for setting all div's in line*/
-	width: 60%;
-	padding: 20px;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
+    display: block;
+    float: left; /* for setting all div's in line*/
+    width: 60%;
+    padding: 20px;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 
 .footer {
-	display: block;
-	float: down;
-	width: 100%;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	text-align: center;
+    display: block;
+    float: down;
+    width: 100%;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    text-align: center;
 }
 
 /* another styles */
 #login-box {
-	width: 300px;
-	padding: 20px;
-	margin: 100px auto;
-	background: #fff;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border: 1px solid #000;
-	text-align: center;
+    width: 300px;
+    padding: 20px;
+    margin: 100px auto;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border: 1px solid #000;
+    text-align: center;
 }
 
 /* create game style */
@@ -69,45 +84,46 @@
     -moz-border-radius: 2px;
     text-align: center;
 }
+
 /* chat */
 .received {
-	width: 250px;
-	font-size: 14px;
-	font-weight: bold;
+    width: 250px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .users {
-	width: 250px;
-	font-weight: bold;
-	font-size: 22px;
-	color: blue;
+    width: 250px;
+    font-weight: bold;
+    font-size: 22px;
+    color: blue;
 }
 
 /* login-page */
 .error {
-	padding: 15px;
-	margin-bottom: 20px;
-	border: 1px solid transparent;
-	border-radius: 4px;
-	color: #a94442;
-	background-color: #f2dede;
-	border-color: #ebccd1;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
 
 /* play game */
 .card-count {
-	background-color: #faebcc;
-	width: 1em;
-	padding: 4px;
-	font-size: 1.5em;
-	display: inline-table;
-	-moz-border-radius: 1em;
-	-webkit-border-radius: 1em;
-	border-radius: 1em;
+    background-color: #faebcc;
+    width: 1em;
+    padding: 4px;
+    font-size: 1.5em;
+    display: inline-table;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
 }
 
 /* play game */
 .error_message {
-	color: #ff0000;
-	font-weight: bold;
+    color: #ff0000;
+    font-weight: bold;
 }
