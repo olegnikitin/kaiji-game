@@ -59,6 +59,16 @@
 	text-align: center;
 }
 
+/* create game style */
+#create-game {
+    width: 500px;
+    padding: 20px;
+    margin: 60px auto;
+    background: #fff;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    text-align: center;
+}
 /* chat */
 .received {
 	width: 250px;
