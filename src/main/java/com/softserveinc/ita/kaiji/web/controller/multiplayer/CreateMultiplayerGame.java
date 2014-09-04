@@ -5,6 +5,7 @@ import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
+import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -63,13 +64,15 @@ public class CreateMultiplayerGame {
 
         System.err.println("Join multiplayer");
         final AsyncContext asyncContext = request.startAsync(request, response);
-        asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService
-                .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS));
+        asyncContext.addListener(new TimeoutListener(), request, response);
+        Long timeout = TimeUnit.MILLISECONDS.convert(systemConfigurationService
+                .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS);
+        asyncContext.setTimeout(timeout);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer playerId = gameService.addPlayer(auth.getName(), gameName);
         //model.addAttribute("playerId", playerId);
 
-        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService));
+        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout));
 
     }
 }
