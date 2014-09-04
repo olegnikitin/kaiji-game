@@ -63,4 +63,9 @@
 		<put-attribute name="title" value="system_configuration.headTitle" />
 		<put-attribute name="content" value="/WEB-INF/views/system-configuration.jsp" />
 	</definition>
+
+    <definition name="join-multiplayer-game" extends="general">
+        <put-attribute name="title" value="system_configuration.headTitle" />
+        <put-attribute name="content" value="/WEB-INF/views/join-multiplayer-game.jsp" />
+    </definition>
 </tiles-definitions>
