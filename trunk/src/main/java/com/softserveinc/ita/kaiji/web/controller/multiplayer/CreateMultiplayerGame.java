@@ -62,7 +62,6 @@ public class CreateMultiplayerGame {
                          HttpServletRequest request, HttpServletResponse response,
                          Model model) throws IOException, ServletException {
 
-        System.err.println("Join multiplayer");
         final AsyncContext asyncContext = request.startAsync(request, response);
         asyncContext.addListener(new TimeoutListener(), request, response);
         Long timeout = TimeUnit.MILLISECONDS.convert(systemConfigurationService
