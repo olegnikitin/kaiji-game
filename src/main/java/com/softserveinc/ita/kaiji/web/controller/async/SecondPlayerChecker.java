@@ -1,10 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.AsyncContext;
 import java.util.concurrent.CountDownLatch;

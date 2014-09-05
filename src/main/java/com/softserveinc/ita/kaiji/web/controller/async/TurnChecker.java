@@ -17,26 +17,17 @@ public class TurnChecker implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(TurnChecker.class);
 
-    //private UserService userService;
     private AsyncContext asyncContext;
-    //Player enemy;
-    //Player player;
     private Integer gameId;
     private CountDownLatch latch;
     private Long timeout;
 
     public TurnChecker(AsyncContext asyncContext,
                        Integer gameId,
-                       //UserService userService,
-                       //Integer enemyId,
-                       //Integer personId,
                        CountDownLatch latch,
                        Long timeout) {
         this.asyncContext = asyncContext;
         this.gameId = gameId;
-        //this.userService = userService;
-        //enemy = userService.getPlayerById(enemyId);
-        //player = userService.getPlayerById(personId);
         this.latch = latch;
         this.timeout = timeout;
     }
@@ -45,9 +36,13 @@ public class TurnChecker implements Runnable {
     public void run() {
         boolean status = false;
         try {
-             status = latch.await(timeout, TimeUnit.SECONDS);
+            System.err.println(latch);
+            status = latch.await(timeout, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOG.error("Failed to check second player turn. " + e.getMessage());
+        }
+        if (status) {
+            asyncContext.dispatch("/game/" + gameId + "/");
         }
         /*if (!enemy.isBot()) {
             try {
@@ -61,9 +56,6 @@ public class TurnChecker implements Runnable {
                 LOG.error("Failed to check second player turn. " + e.getMessage());
             }
         }*/
-        if(status) {
-            asyncContext.dispatch("/game/" + gameId + "/");
-        }
     }
 }
 
