@@ -15,9 +15,74 @@
 <spring:message code="admin-page.deleteButton" var="deleteButton"/>
 <spring:message code="admin-page.backButton" var="backButton"/>
 
-<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">${backButton}</a>
-<br>
+<spring:message code="create-game.gameNameLabel" var="gameNameLabel"/>
+<spring:message code="create-game.numberOfPlayers" var="playersNum"/>
+<spring:message code="create-game.numberOfCardsLabel"
+                var="numberOfCardsLabel"/>
+<spring:message code="create-game.numberOfStarsLabel"
+                var="numberOfStarsLabel"/>
+<spring:message code="create-game.gameTimeout" var="gameTimeout"/>
+<spring:message code="create-game.createButton" var="createButton"/>
 
+<a href="${pageContext.servletContext.contextPath}/admin" class="btn btn-success btn-large active">${backButton}</a>
+<br/>
+<br/>
+
+<spring:url value="/game/multiplayer/new" var="url"/>
+<form:form action="${url}" method="POST" modelAttribute="multiplayerGameInfo" role="form">
+    <table>
+        <tr>
+            <td>
+                <div style="display:inline-block;width:80px">${gameNameLabel}</div>
+            </td>
+            <td><form:input path="gameName" size="25" class="form-control"/>
+            <td><form:errors path="gameName"/></td>
+        </tr>
+
+        <tr>
+            <td>
+                <div style="display:inline-block;width:80px">${playersNum}</div>
+            </td>
+            <td><form:input path="numberOfPlayers" size="25" class="form-control"/></td>
+            <td>
+                    <form:errors path="numberOfPlayers"/>
+            <td/>
+        </tr>
+
+        <tr>
+            <td>
+                <div style="display:inline-block;width:80px">${numberOfCardsLabel}</div>
+            </td>
+            <td><form:input path="numberOfCards" size="25" class="form-control"/></td>
+            <td><form:errors path="numberOfCards"/></td>
+        </tr>
+
+        <tr>
+            <td>
+                <div style="display:inline-block;width:80px">${numberOfStarsLabel}</div>
+            </td>
+
+            <td><form:input path="numberOfStars" size="25" class="form-control"/></td>
+            <td><form:errors path="numberOfStars"/></td>
+        </tr>
+
+        <tr>
+            <td>
+                <div style="display:inline-block;width:80px">${gameTimeout}</div>
+            </td>
+
+            <td><form:input path="gameTimeout" size="25" cssStyle="width: 200px" class="form-control"/></td>
+            <td><form:errors path="gameTimeout"/></td>
+        </tr>
+
+    </table>
+
+    <form:button class="btn btn-primary">${createButton}</form:button>
+
+</form:form>
+
+<br/>
+<br/>
 <form action="${pageContext.servletContext.contextPath}/admin/gameinfo" method="POST" class="navbar-form navbar-left">
     <div class="form-group">
         <select size="1" name="userId" class="form-control">
@@ -29,62 +94,6 @@
     </div>
     <button type="submit" class="btn btn-default" style="background:#E1E1E1">${searchButton}</button>
 </form>
-
-<div class="col-md-6 col-md-offset-3">
-
-    <spring:url value="/game/multiplayer/new" var="url"/>
-    <form:form action="${url}" method="POST" modelAttribute="multiplayerGameInfo" role="form">
-        <table>
-            <tr>
-                <td>
-                    <div style="display:inline-block;width:80px">GameName</div>
-                </td>
-                <td><form:input path="gameName" size="25" class="form-control"/>
-                <td><form:errors path="gameName"/></td>
-            </tr>
-
-            <tr>
-                <td>
-                    <div style="display:inline-block;width:80px">Number of players</div>
-                </td>
-                <td><form:input path="numberOfPlayers" size="25" class="form-control"/></td>
-                <td>
-                <form:errors path="numberOfPlayers"/>
-                <td/>
-            </tr>
-
-            <tr>
-                <td>
-                    <div style="display:inline-block;width:80px">Number of cards</div>
-                </td>
-                <td><form:input path="numberOfCards" size="25" class="form-control"/></td>
-                <td><form:errors path="numberOfCards"/></td>
-            </tr>
-
-            <tr>
-                <td>
-                    <div style="display:inline-block;width:80px"> Number of stars</div>
-                </td>
-
-                <td><form:input path="numberOfStars" size="25" class="form-control"/></td>
-                <td><form:errors path="numberOfStars"/></td>
-            </tr>
-
-            <tr>
-                <td>
-                    <div style="display:inline-block;width:80px"> Game timeout</div>
-                </td>
-
-                <td><form:input path="gameTimeout" size="25" cssStyle="width: 200px" class="form-control"/></td>
-                <td><form:errors path="gameTimeout"/></td>
-            </tr>
-
-        </table>
-
-        <form:button class="btn btn-primary">Create Game</form:button>
-
-    </form:form>
-</div>
 
 <br/>
 <br/>

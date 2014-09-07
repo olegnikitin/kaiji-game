@@ -1,6 +1,8 @@
 package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
@@ -23,6 +25,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -31,8 +38,22 @@ public class PlayMultiplayerGame {
 
     private static final Logger LOG = Logger.getLogger(PlayMultiplayerGame.class);
 
+    @Autowired
+    private GameService gameService;
+
     @RequestMapping(method = RequestMethod.GET)
-    public String createGame() {
+    public String createGame(@RequestParam("infoId") Integer gameId, Model model, Principal principal) {
+        GameInfo info = gameService.getGameInfo(gameId);
+        List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
+        Player playerForRemoving = null;
+        for (Player player : gamePlayers) {
+            if (player.getName().equals(principal.getName())) {
+                playerForRemoving = player;
+            }
+        }
+        gamePlayers.remove(playerForRemoving);
+
+        model.addAttribute("playersList", gamePlayers);
         return "join-multiplayer-game";
     }
 
