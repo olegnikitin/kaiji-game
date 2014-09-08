@@ -46,7 +46,6 @@ public class CreateMultiplayerGame {
     public String createGame(@ModelAttribute("multiplayerGameInfo") @Valid MultiplayerGameInfoDto multiplayerGameInfoDto,
                              BindingResult result,  RedirectAttributes redirectAttributes) {
 
-        System.err.println(multiplayerGameInfoDto);
         if (result.hasErrors()) {
             LOG.error("Multiplayer game creation failed: gameInfo model NOT VALID");
             return "redirect:/admin/gameinfo";
@@ -71,9 +70,9 @@ public class CreateMultiplayerGame {
         asyncContext.setTimeout(timeout);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer playerId = gameService.addPlayer(auth.getName(), gameName);
-        //model.addAttribute("playerId", playerId);
-
-        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout));
+        model.addAttribute("playerId", playerId);
+        Integer numberOfPlayers = gameService.getGameInfo(infoId).getNumberOfPlayers();
+        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout,numberOfPlayers));
 
     }
 }

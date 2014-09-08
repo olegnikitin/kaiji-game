@@ -62,7 +62,7 @@ public class TestPlayGameController {
 				"ownerName", 
 				3,
                 3,
-				Types.EASY, players);
+				Types.EASY, players,2);
 
 		gameHistory = new GameHistory() {
 

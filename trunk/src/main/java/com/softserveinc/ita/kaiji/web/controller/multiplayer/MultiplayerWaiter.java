@@ -18,15 +18,18 @@ public class MultiplayerWaiter implements Runnable {
     private GameInfo info;
     private Integer gameId;
     private Long timeout;
+    private Integer numberOfPlayers;
 
     public MultiplayerWaiter(AsyncContext asyncContext,
                              Integer gameId,
                              GameService gameService,
-                             Long timeout) {
+                             Long timeout,
+                             Integer numberOfPlayers) {
         this.asyncContext = asyncContext;
         this.gameId = gameId;
         this.gameService = gameService;
         this.timeout = timeout;
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     @Override
@@ -36,10 +39,11 @@ public class MultiplayerWaiter implements Runnable {
             synchronized (MultiplayerWaiter.lock) {
                 Long tBefore = System.currentTimeMillis();
                 info = gameService.getGameInfo(gameId);
-                if (info.getPlayers().size() != 2) {
+                if (info.getPlayers().size() != numberOfPlayers) {
                     MultiplayerWaiter.lock.wait(timeout);
                 } else {
                     MultiplayerWaiter.lock.notifyAll();
+                    gameService.createGame(info);
                 }
 
                 if (System.currentTimeMillis() - tBefore >= timeout)
@@ -48,12 +52,12 @@ public class MultiplayerWaiter implements Runnable {
                     return;
                 }
             }
-            gameId = gameService.createGame(info);
+
         } catch (InterruptedException e) {
             LOG.error("Failed asynchronously check player. " + e.getMessage());
 
         }
 
-        asyncContext.dispatch("/game/multiplayer/play");
+        asyncContext.dispatch("/game/multiplayer/play/" + gameId);
     }
 }

@@ -54,7 +54,7 @@ public class BotTest {
         this.testContextManager.prepareTestInstance(this);
 
         testBot = (Bot) playerFactory.makePlayer(Bot.Types.EASY, 1);
-        player=new HumanPlayer(new User(), 3, 3);
+        player = new HumanPlayer(new User(), 3, 3);
     }
 
     private static Object[] data() {
@@ -159,23 +159,23 @@ public class BotTest {
         Set<Player> players = new HashSet<>();
         players.add(new HumanPlayer(new User(), 3, 3));
         players.add(new HumanPlayer(new User(), 3, 3));
-        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
+        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players, 2);
         //Act //Assert
         BotGameImpl botGame = new BotGameImpl(gameInfo);
     }
 
     @Test
-    public void makeTurn(){
+    public void makeTurn() {
         //Arrange
         Card card = Card.PAPER;
         Set<Player> players = new HashSet<>();
         players.add(player);
         players.add(testBot);
-        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players);
+        GameInfo gameInfo = new GameInfoImpl("test", "testOwner", 3, 3, Bot.Types.EASY, players, 2);
         //Act
         BotGameImpl botGame = new BotGameImpl(gameInfo);
         //Assert
-        botGame.makeTurn(card,player);
+        botGame.makeTurn(card, player);
     }
 
 }

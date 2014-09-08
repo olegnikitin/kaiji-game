@@ -33,7 +33,7 @@ public class TwoPlayersGameRunner {
         playersSet.add(player1);
         playersSet.add(player2);
 
-        return new GameInfoImpl("Test Game", "no one", 1, 1, null, playersSet);
+        return new GameInfoImpl("Test Game", "no one", 1, 1, null, playersSet,2);
     }
 
     static void printPlayer(Player player) {

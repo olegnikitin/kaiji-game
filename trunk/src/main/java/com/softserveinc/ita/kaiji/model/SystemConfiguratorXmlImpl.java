@@ -1,12 +1,10 @@
 package com.softserveinc.ita.kaiji.model;
 
 import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
+import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import org.apache.log4j.Logger;
-import org.h2.store.fs.FilePath;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -38,6 +36,12 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     // 90 seconds
     private static final Long DEFAULT_ROUND_CONNECTION_TIMEOUT = 90L;
 
+    private static final Integer DEFAULT_PLAYERS_NUMBER = 5;
+
+    // 60 minutes -> 1 hour
+    private static final Long DEFAULT_MULTIUSER_GAME_DURATION = 60L;
+
+
     private SystemConfiguration currentSystemConfiguration;
     private Path filePath;
 
@@ -46,7 +50,7 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
     }
 
     @Override
-    public void setConfigurationFile(Path filePath){
+    public void setConfigurationFile(Path filePath) {
         this.filePath = filePath;
     }
 
@@ -128,6 +132,8 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
         currentSystemConfiguration.setBotType(DEFAULT_BOT_TYPE);
         currentSystemConfiguration.setGameConnectionTimeout(DEFAULT_GAME_CONNECTION_TIMEOUT);
         currentSystemConfiguration.setRoundTimeout(DEFAULT_ROUND_CONNECTION_TIMEOUT);
+        currentSystemConfiguration.setNumberOfPlayers(DEFAULT_PLAYERS_NUMBER);
+        currentSystemConfiguration.setMultiplayerGameDuration(DEFAULT_MULTIUSER_GAME_DURATION);
 
         saveSystemConfiguration(currentSystemConfiguration);
     }
@@ -139,7 +145,9 @@ public class SystemConfiguratorXmlImpl implements SystemConfigurator {
                 && currentSystemConfiguration.getNumberOfCards() != null
                 && currentSystemConfiguration.getRoundTimeout() != null
                 && currentSystemConfiguration.getUserName() != null
-                && currentSystemConfiguration.getNumberOfStars()!= null;
+                && currentSystemConfiguration.getNumberOfStars() != null
+                && currentSystemConfiguration.getNumberOfPlayers() != null
+                && currentSystemConfiguration.getMultiplayerGameDuration() != null;
 
     }
 
