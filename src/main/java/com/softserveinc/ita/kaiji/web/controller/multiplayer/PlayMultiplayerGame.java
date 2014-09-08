@@ -4,6 +4,7 @@ import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,14 +22,19 @@ public class PlayMultiplayerGame {
 
     private static final Logger LOG = Logger.getLogger(PlayMultiplayerGame.class);
 
-    private static List<Player> playerList;
-
     @Autowired
     private GameService gameService;
 
     @RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
-    public String createGame(@PathVariable("gameId") Integer gameId,
-                             Principal principal) {
+    public String createGame(@PathVariable("gameId") Integer gameId) {
+        return "redirect:/game/multiplayer/play/joined/" + gameId;
+    }
+
+    @RequestMapping(value = "/joined/{gameId}", method = RequestMethod.GET)
+    public String createdGame(@PathVariable("gameId") Integer gameId,
+                              Model model,
+                              Principal principal) {
+
         GameInfo info = gameService.getGameInfo(gameId);
         List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
         Player playerForRemoving = null;
@@ -38,15 +44,8 @@ public class PlayMultiplayerGame {
             }
         }
         gamePlayers.remove(playerForRemoving);
-        playerList = gamePlayers;
-        return "redirect:/game/multiplayer/play/joined";
-    }
 
-    @RequestMapping(value = "/joined", method = RequestMethod.GET)
-    public String createdGame(Model model) {
-        model.addAttribute("playersList", playerList);
+        model.addAttribute("playersList", gamePlayers);
         return "join-multiplayer-game";
     }
-
-
 }
