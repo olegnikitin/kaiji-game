@@ -147,7 +147,7 @@ public class SystemConfiguration {
                     && this.roundTimeout.equals(configuration.getRoundTimeout())
                     && this.numberOfStars.equals(configuration.getNumberOfStars())
                     && this.numberOfPlayers.equals(configuration.getNumberOfPlayers())
-                    &&this.multiplayerGameDuration.equals(configuration.getGameConnectionTimeout());
+                    && this.multiplayerGameDuration.equals(configuration.getMultiplayerGameDuration());
         }
         return false;
     }

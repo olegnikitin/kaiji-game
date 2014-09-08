@@ -12,6 +12,8 @@ CREATE TABLE `game` (
          'TWO_PLAYER_GAME',
          'KAIJI_GAME')) ,
   `number_of_cards` int(11) DEFAULT NULL,
+  `number_of_stars` int(11) DEFAULT NULL,
+  `number_of_players` int(11) DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `finish_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

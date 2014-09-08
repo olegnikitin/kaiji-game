@@ -53,6 +53,8 @@ public class SystemConfiguratorXmlImplTest {
             systemConfiguration.setNumberOfStars(3);
             systemConfiguration.setBotType(Bot.Types.HARD);
             systemConfiguration.setNumberOfCards(3);
+            systemConfiguration.setNumberOfPlayers(2);
+            systemConfiguration.setMultiplayerGameDuration(60L);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

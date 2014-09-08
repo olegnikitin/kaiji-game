@@ -59,6 +59,8 @@ public class RestSystemConfigurationTest {
         configuration.setNumberOfStars(3);
         configuration.setRoundTimeout(50L);
         configuration.setGameConnectionTimeout(150L);
+        configuration.setNumberOfPlayers(2);
+        configuration.setMultiplayerGameDuration(60L);
         systemConfigurationService.saveSystemConfiguration(configuration);
 
         mockMvc.perform(get("/rest/system-configuration"))
@@ -70,7 +72,9 @@ public class RestSystemConfigurationTest {
                 .andExpect(jsonPath("$.numberOfStars", is(3)))
                 .andExpect(jsonPath("$.botType", is("EASY")))
                 .andExpect(jsonPath("$.gameConnectionTimeout", is(150)))
-                .andExpect(jsonPath("$.roundTimeout", is(50)));
+                .andExpect(jsonPath("$.roundTimeout", is(50)))
+                .andExpect(jsonPath("$.numberOfPlayers", is(2)))
+                .andExpect(jsonPath("$.multiplayerGameDuration", is(60)));
     }
 
     @Test
