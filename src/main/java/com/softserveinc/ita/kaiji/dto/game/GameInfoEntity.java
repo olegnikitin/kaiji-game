@@ -17,7 +17,7 @@ import java.util.Set;
  * @since 07.04.14
  */
 @Entity
-@Table(name="game")
+@Table(name = "game")
 public class GameInfoEntity implements Identifiable {
 
     @Id
@@ -38,31 +38,38 @@ public class GameInfoEntity implements Identifiable {
             columnDefinition = "enum('BOT_GAME','TWO_PLAYER_GAME', 'KAIJI_GAME')")
     private Game.Type gameType;
 
+    @Column(name = "number_of_stars")
+    private Integer numberOfStars;
+
+    @Column(name = "number_of_players")
+    private Integer numberOfPlayers;
+
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="start_time")
+    @Column(name = "start_time")
     private Date gameStartTime;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="finish_time")
+    @Column(name = "finish_time")
     private Date gameFinishTime;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name = "link_game_to_user",
-            joinColumns = { @JoinColumn(name = "game_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") })
+            joinColumns = {@JoinColumn(name = "game_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<User> users;
 
-    @OneToOne(mappedBy = "gameInfoEntity",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "gameInfoEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private GameHistoryEntity gameHistoryEntity;
 
-    public GameInfoEntity(){
+    public GameInfoEntity() {
     }
 
     public GameInfoEntity(GameInfo gameInfo) {
         gameName = gameInfo.getGameName();
         numberOfCards = gameInfo.getNumberOfCards();
         gameType = gameInfo.getGameType();
+        numberOfStars = gameInfo.getNumberOfStars();
         gameStartTime = gameInfo.getGameStartTime();
         gameFinishTime = gameInfo.getGameFinishTime();
 
@@ -70,6 +77,7 @@ public class GameInfoEntity implements Identifiable {
         for (Player p : gameInfo.getPlayers()) {
             users.add(p.getUser());
         }
+        numberOfPlayers = users.size();
     }
 
     public GameHistoryEntity getGameHistoryEntity() {
@@ -102,6 +110,22 @@ public class GameInfoEntity implements Identifiable {
 
     public Game.Type getGameType() {
         return gameType;
+    }
+
+    public Integer getNumberOfStars() {
+        return numberOfStars;
+    }
+
+    public void setNumberOfStars(Integer numberOfStars) {
+        this.numberOfStars = numberOfStars;
+    }
+
+    public Integer getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(Integer numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public Date getGameStartTime() {

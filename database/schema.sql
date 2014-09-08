@@ -9,6 +9,8 @@ CREATE TABLE `game` (
   `name` varchar(80) DEFAULT NULL,
   `game_type` enum('BOT_GAME','TWO_PLAYER_GAME','KAIJI_GAME') NOT NULL,
   `number_of_cards` int(11) DEFAULT NULL,
+  `number_of_stars` int(11) DEFAULT NULL,
+  `number_of_players` int(11) DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `finish_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
