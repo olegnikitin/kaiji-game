@@ -21,11 +21,14 @@ public class PlayMultiplayerGame {
 
     private static final Logger LOG = Logger.getLogger(PlayMultiplayerGame.class);
 
+    private static List<Player> playerList;
+
     @Autowired
     private GameService gameService;
 
-    @RequestMapping(value = "/{gameId}",method = RequestMethod.GET)
-    public String createGame(@PathVariable("gameId") Integer gameId, Model model, Principal principal) {
+    @RequestMapping(value = "/{gameId}", method = RequestMethod.GET)
+    public String createGame(@PathVariable("gameId") Integer gameId,
+                             Principal principal) {
         GameInfo info = gameService.getGameInfo(gameId);
         List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
         Player playerForRemoving = null;
@@ -35,8 +38,13 @@ public class PlayMultiplayerGame {
             }
         }
         gamePlayers.remove(playerForRemoving);
+        playerList = gamePlayers;
+        return "redirect:/game/multiplayer/play/joined";
+    }
 
-        model.addAttribute("playersList", gamePlayers);
+    @RequestMapping(value = "/joined", method = RequestMethod.GET)
+    public String createdGame(Model model) {
+        model.addAttribute("playersList", playerList);
         return "join-multiplayer-game";
     }
 
