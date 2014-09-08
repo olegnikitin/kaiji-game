@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
@@ -43,7 +44,7 @@ public class CreateMultiplayerGame {
 
     @RequestMapping(method = RequestMethod.POST)
     public String createGame(@ModelAttribute("multiplayerGameInfo") @Valid MultiplayerGameInfoDto multiplayerGameInfoDto,
-                             BindingResult result) {
+                             BindingResult result,  RedirectAttributes redirectAttributes) {
 
         System.err.println(multiplayerGameInfoDto);
         if (result.hasErrors()) {
@@ -53,6 +54,7 @@ public class CreateMultiplayerGame {
 
         LOG.trace("Multiplayer game created");
         gameService.setGameInfo(convertMultiplayerDto.toGameInfoDto(multiplayerGameInfoDto));
+        redirectAttributes.addFlashAttribute("notification", "Game was successfully created");
         return "redirect:/admin/gameinfo";
     }
 

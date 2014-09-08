@@ -89,7 +89,7 @@
         <div class="alert alert-warning alert-dismissable">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
 
-            <h3>${notification}</h3>
+            <center><h3>${notification}</h3></center>
 
         </div>
     </div>
