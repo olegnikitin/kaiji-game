@@ -88,7 +88,8 @@ public class GameServiceImpl implements GameService {
         GameInfo newGameInfo = new GameInfoImpl(gameInfoDto.getGameName(),
                 gameInfoDto.getPlayerName(), gameInfoDto.getNumberOfCards(),
                 gameInfoDto.getNumberOfStars(),
-                gameInfoDto.getBotType(), playersSet);
+                gameInfoDto.getBotType(), playersSet,
+                gameInfoDto.getNumberOfPlayers());
 
         if (!Game.Type.KAIJI_GAME.equals(gameInfoDto.getGameType())) {
             if (gameInfoDto.getBotGame()) {

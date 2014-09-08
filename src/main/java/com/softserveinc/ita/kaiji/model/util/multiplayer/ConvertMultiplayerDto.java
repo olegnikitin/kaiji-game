@@ -15,6 +15,7 @@ public class ConvertMultiplayerDto {
         gameInfoDto.setGameName(multiplayerGameInfoDto.getGameName());
         gameInfoDto.setNumberOfCards(multiplayerGameInfoDto.getNumberOfCards());
         gameInfoDto.setGameType(Game.Type.KAIJI_GAME);
+        gameInfoDto.setNumberOfPlayers(multiplayerGameInfoDto.getNumberOfPlayers());
 
         return gameInfoDto;
     }

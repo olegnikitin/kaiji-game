@@ -24,15 +24,6 @@ public class MultiplayerGameInfoDto {
     @Range(min = 1, max = 10)
     private Integer numberOfStars;
 
-    @NotNull
-    @Range(min = 100, max = 1800)
-    private Integer gameTimeout;
-
-    //private Integer gameId;
-
-    //private Game.Type gameType;
-    //private Integer playerId;
-
     private boolean botGame = false;
 
     /*public Integer getPlayerId() {
@@ -49,14 +40,6 @@ public class MultiplayerGameInfoDto {
 
     public void setNumberOfPlayers(Integer numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
-    }
-
-    public Integer getGameTimeout() {
-        return gameTimeout;
-    }
-
-    public void setGameTimeout(Integer gameTimeout) {
-        this.gameTimeout = gameTimeout;
     }
 
     public Integer getNumberOfStars() {
@@ -114,7 +97,6 @@ public class MultiplayerGameInfoDto {
                 ", numberOfPlayers=" + numberOfPlayers +
                 ", numberOfCards=" + numberOfCards +
                 ", numberOfStars=" + numberOfStars +
-                ", gameTimeout=" + gameTimeout +
                 '}';
     }
 }

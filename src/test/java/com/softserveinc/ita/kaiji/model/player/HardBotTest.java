@@ -68,7 +68,7 @@ public class HardBotTest {
         playersSet.add(testPlayer);
         playersSet.add(testBot);
 
-        gameInfo = new GameInfoImpl("Game1", "Human1", 1, 1, Bot.Types.HARD, playersSet);
+        gameInfo = new GameInfoImpl("Game1", "Human1", 1, 1, Bot.Types.HARD, playersSet, 2);
         gameInfo.setGameType(Game.Type.BOT_GAME);
         testGame = gameFactory.makeGame(gameInfo);
 

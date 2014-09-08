@@ -51,12 +51,14 @@ public class GameInfoImpl implements GameInfo {
             , Integer numberOfCards
             , Integer numberOfStars
             , Types botType
-            , Set<Player> players) {
+            , Set<Player> players
+            , Integer numberOfPlayers) {
         this.gameName = gameName;
         this.numberOfCards = numberOfCards;
         this.numberOfStars = numberOfStars;
         this.botGame = botGame;
         this.players = players;
+        this.numberOfPlayers = numberOfPlayers;
         if (this.botGame && LOG.isDebugEnabled()) {
             LOG.trace("GameInfoImpl: the mod is: bot VS player");
         }

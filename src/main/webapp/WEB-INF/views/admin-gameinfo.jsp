@@ -66,15 +66,6 @@
             <td><form:errors path="numberOfStars"/></td>
         </tr>
 
-        <tr>
-            <td>
-                <div style="display:inline-block;width:80px">${gameTimeout}</div>
-            </td>
-
-            <td><form:input path="gameTimeout" size="25" cssStyle="width: 200px" class="form-control"/></td>
-            <td><form:errors path="gameTimeout"/></td>
-        </tr>
-
     </table>
 
     <form:button class="btn btn-primary">${createButton}</form:button>

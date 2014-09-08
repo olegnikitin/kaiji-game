@@ -33,6 +33,15 @@ public class GameInfoDto implements Cloneable {
     @Range(min = 1, max = 10, message = "{Range.gameinfodtoimpl.numberofstars}")
     private Integer numberOfStars;
 
+    @NotNull(message = "{NotNull.gameinfodtoimpl.numberOfPlayers}")
+    @Range(min = 2, max = 5, message = "{Range.gameinfodtoimpl.numberOfPlayers}")
+    private Integer numberOfPlayers;
+
+    @NotNull(message = "{NotNull.gameinfodtoimpl.multiplayerGameDuration}")
+    @Range(min = 10, max = 120, message = "{Range.gameinfodtoimpl.multiplayerGameDuration}")
+    private Long multiplayerGameDuration;
+
+
     private Integer gameId;
     private Bot.Types botType;
     private Game.Type gameType;
@@ -86,7 +95,6 @@ public class GameInfoDto implements Cloneable {
         return numberOfCards;
     }
 
-
     public Bot.Types getBotType() {
         return botType;
     }
@@ -109,6 +117,22 @@ public class GameInfoDto implements Cloneable {
 
     public void setBotType(Bot.Types botType) {
         this.botType = botType;
+    }
+
+    public Integer getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(Integer numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public Long getMultiplayerGameDuration() {
+        return multiplayerGameDuration;
+    }
+
+    public void setMultiplayerGameDuration(Long multiPlayerGameDuration) {
+        this.multiplayerGameDuration = multiPlayerGameDuration;
     }
 
     public Object clone() throws CloneNotSupportedException {

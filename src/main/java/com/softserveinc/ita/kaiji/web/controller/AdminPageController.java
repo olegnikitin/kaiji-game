@@ -3,18 +3,23 @@ package com.softserveinc.ita.kaiji.web.controller;
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dao.UserDAO;
+import com.softserveinc.ita.kaiji.dto.GameInfoDto;
+import com.softserveinc.ita.kaiji.dto.SystemConfiguration;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.model.util.email.MailSender;
+import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -40,6 +45,9 @@ public class AdminPageController {
 
     @Autowired
     private MailSender mailSender;
+
+    @Autowired
+    private SystemConfigurationService systemConfigurationService;
 
     @RequestMapping
     public String adminAPI() {
@@ -93,12 +101,14 @@ public class AdminPageController {
 
         model.addAttribute("usersList", userDAO.findAll());
         model.addAttribute("gamesList", gameInfoEntityDAO.findAll());
+
+        SystemConfiguration systemConfiguration = systemConfigurationService.getSystemConfiguration();
+
         MultiplayerGameInfoDto multiplayerGameInfoDto = new MultiplayerGameInfoDto();
-        multiplayerGameInfoDto.setGameName("Zoro");
-        multiplayerGameInfoDto.setNumberOfStars(2);
-        multiplayerGameInfoDto.setNumberOfCards(2);
-        multiplayerGameInfoDto.setNumberOfPlayers(2);
-        multiplayerGameInfoDto.setGameTimeout(1000);
+        multiplayerGameInfoDto.setGameName(systemConfiguration.getGameName());
+        multiplayerGameInfoDto.setNumberOfCards(systemConfiguration.getNumberOfCards());
+        multiplayerGameInfoDto.setNumberOfStars(systemConfiguration.getNumberOfStars());
+        multiplayerGameInfoDto.setNumberOfPlayers(systemConfiguration.getNumberOfPlayers());
         model.addAttribute("multiplayerGameInfo", multiplayerGameInfoDto);
 
         return "admin-gameinfo";

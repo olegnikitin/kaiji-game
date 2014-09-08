@@ -37,6 +37,14 @@ public class SystemConfiguration {
     @Range(min =  1, max = 100)
     private Long roundTimeout;
 
+    @NotNull(message = "{NotNull.gameinfodtoimpl.numberOfPlayers}")
+    @Range(min =  2, max = 5, message = "{Range.gameinfodtoimpl.numberOfPlayers}")
+    private Integer numberOfPlayers;
+
+    @NotNull (message = "{NotNull.gameinfodtoimpl.multiplayerGameDuration}")
+    @Range(min = 10, max = 120, message = "{Range.gameinfodtoimpl.multiplayerGameDuration}")
+    private Long multiplayerGameDuration;
+
     public Bot.Types getBotType() {
         return botType;
     }
@@ -100,6 +108,24 @@ public class SystemConfiguration {
         this.numberOfStars = numberOfStars;
     }
 
+    public Integer getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    @XmlElement
+    public void setNumberOfPlayers(Integer numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public Long getMultiplayerGameDuration() {
+        return multiplayerGameDuration;
+    }
+
+    @XmlElement
+    public void setMultiplayerGameDuration(Long multiplayerGameDuration) {
+        this.multiplayerGameDuration = multiplayerGameDuration;
+    }
+
     @Override
     public boolean equals(Object obj) {
 
@@ -119,7 +145,9 @@ public class SystemConfiguration {
                     && this.botType.equals(configuration.botType)
                     && this.gameConnectionTimeout.equals(configuration.getGameConnectionTimeout())
                     && this.roundTimeout.equals(configuration.getRoundTimeout())
-                    && this.numberOfStars.equals(configuration.getNumberOfStars());
+                    && this.numberOfStars.equals(configuration.getNumberOfStars())
+                    && this.numberOfPlayers.equals(configuration.getNumberOfPlayers())
+                    &&this.multiplayerGameDuration.equals(configuration.getGameConnectionTimeout());
         }
         return false;
     }
@@ -133,6 +161,8 @@ public class SystemConfiguration {
         result = 31 * result + (gameConnectionTimeout != null ? gameConnectionTimeout.hashCode() : 0);
         result = 31 * result + (roundTimeout != null ? roundTimeout.hashCode() : 0);
         result = 31 * result + (numberOfStars != null ? numberOfStars.hashCode() : 0);
+        result = 31 * result + (numberOfPlayers != null ? numberOfPlayers.hashCode() : 0);
+        result = 31 * result + (multiplayerGameDuration != null ? multiplayerGameDuration.hashCode() : 0);
         return result;
     }
 }
