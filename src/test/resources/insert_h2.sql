@@ -1,7 +1,7 @@
 --
 -- Data for table `game`
 --
-INSERT INTO `game` VALUES (16, 'Duel', 'BOT_GAME',2 ,'2014-08-17 09:56:33.0','2014-08-17 09:56:36.0',),(30, 'Duel', 'BOT_GAME',2, '2014-08-20 09:19:35','2014-08-20 09:19:40');
+INSERT INTO `game` VALUES (16, 'Duel', 'BOT_GAME',2 ,0, 2,'2014-08-17 09:56:33.0','2014-08-17 09:56:36.0'),(30, 'Duel', 'BOT_GAME', 2, 3, 2, '2014-08-20 09:19:35','2014-08-20 09:19:40');
 
 --
 -- Data for table `game_history`
