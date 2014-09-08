@@ -16,6 +16,7 @@
 <spring:message code="join-game.titleLabel" var="title_label"/>
 <spring:message code="join-game.hostLabel" var="host_label"/>
 <spring:message code="join-game.cardsLabel" var="cards_label"/>
+<spring:message code="join-game.starsLabel" var="stars_label"/>
 <spring:message code="join-game.connecting" var="connecting"/>
 
 <spring:url value="/game/new/join" var="url"/>
@@ -45,6 +46,7 @@
         <th>${title_label}</th>
         <th>${host_label}</th>
         <th>${cards_label}</th>
+        <th>${stars_label}</th>
     </tr>
 
     <c:forEach var="game" items="${openedGames}" varStatus="rowCounter">
@@ -64,6 +66,7 @@
             <td>${game.gameName}</td>
             <td>${game.players}</td>
             <td>${game.numberOfCards}</td>
+            <td>${game.numberOfStars}</td>
             <td>${game.gameType}</td>
             <c:choose>
                 <c:when test="${game.gameType eq 'KAIJI_GAME'}">
