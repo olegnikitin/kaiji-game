@@ -72,7 +72,7 @@
         var message = evt.data;
         switch (message) {
             case 'yes':
-                window.location.href = "/";
+                window.location.href = "/game/multiplayer/play/"+${gameId};
                 break;
             case 'no':
                 alert("Invitation rejected :(");
@@ -81,7 +81,7 @@
             {
                 if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                     socketInvitation.send(message + '#' + 'yes');
-                    window.location.href = "/";
+                    window.location.href = "/game/multiplayer/play/"+${gameId};
                 }
                 else {
                     socketInvitation.send(message + '#' + 'no');
