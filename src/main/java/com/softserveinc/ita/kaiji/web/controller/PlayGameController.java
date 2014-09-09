@@ -9,6 +9,7 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.service.UserService;
+import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import com.softserveinc.ita.kaiji.web.controller.async.TurnChecker;
@@ -62,6 +63,9 @@ public class PlayGameController {
 
     @Autowired
     private GameSyncro gameSyncro;
+
+    @Autowired
+    private SyncroCreatedGames syncroCreatedGames;
 
     @RequestMapping(value = "/{gameId}/",
             method = {RequestMethod.GET, RequestMethod.POST})
@@ -168,6 +172,9 @@ public class PlayGameController {
                 gameSyncro.getRoundWaiter().remove(gameId);
                 gameSyncro.getGameWaiter().remove(gameId);
                 gameService.clearGameInfo(gameId);
+                synchronized (syncroCreatedGames) {
+                    syncroCreatedGames.notifyAll();
+                }
             }
             String errorMessage = messageSource.getMessage("Timeout.error", null, locale);
             model.addAttribute("notification", errorMessage);

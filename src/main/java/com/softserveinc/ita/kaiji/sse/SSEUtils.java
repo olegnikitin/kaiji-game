@@ -20,6 +20,7 @@ public class SSEUtils {
         createdGameInfoDto.setNumberOfCards(info.getNumberOfCards());
         createdGameInfoDto.setNumberOfStars(info.getNumberOfStars());
         createdGameInfoDto.setNumberOfPlayers(info.getNumberOfPlayers());
+        createdGameInfoDto.setGameType(info.getGameType());
 
         return createdGameInfoDto;
     }

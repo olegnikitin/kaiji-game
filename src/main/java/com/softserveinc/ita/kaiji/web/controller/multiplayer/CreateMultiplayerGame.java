@@ -4,6 +4,7 @@ import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
+import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
 import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import org.apache.log4j.Logger;
@@ -42,9 +43,12 @@ public class CreateMultiplayerGame {
     @Autowired
     private SystemConfigurationService systemConfigurationService;
 
+    @Autowired
+    private SyncroCreatedGames syncroCreatedGames;
+
     @RequestMapping(method = RequestMethod.POST)
     public String createGame(@ModelAttribute("multiplayerGameInfo") @Valid MultiplayerGameInfoDto multiplayerGameInfoDto,
-                             BindingResult result,  RedirectAttributes redirectAttributes) {
+                             BindingResult result, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             LOG.error("Multiplayer game creation failed: gameInfo model NOT VALID");
@@ -54,6 +58,10 @@ public class CreateMultiplayerGame {
         LOG.trace("Multiplayer game created");
         gameService.setGameInfo(convertMultiplayerDto.toGameInfoDto(multiplayerGameInfoDto));
         redirectAttributes.addFlashAttribute("notification", "Game was successfully created");
+
+        synchronized (syncroCreatedGames) {
+            syncroCreatedGames.notifyAll();
+        }
         return "redirect:/admin/gameinfo";
     }
 
@@ -72,7 +80,7 @@ public class CreateMultiplayerGame {
         Integer playerId = gameService.addPlayer(auth.getName(), gameName);
         model.addAttribute("playerId", playerId);
         Integer numberOfPlayers = gameService.getGameInfo(infoId).getNumberOfPlayers();
-        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout,numberOfPlayers));
+        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout, numberOfPlayers));
 
     }
 }

@@ -118,7 +118,7 @@
     window.onbeforeunload = function (evt) {
         eventSource.close()
     }
-    <%=Game.Type.KAIJI_GAME%>
+
     function updateGames() {
         eventSource = new EventSource("/joingame/update");
 
@@ -138,15 +138,13 @@
             msg.forEach(
                     function fillTable(game) {
 
-                        if ('${game.gameType eq 'KAIJI_GAME'}') {
-
+                        if (game.gameType == 'KAIJI_GAME') {
                             url = '<a class =\"btn btn-primary btn-xs\" href="/game/multiplayer/new/join?gameName=' +
                                     game.gameName + '&infoId=' + game.id + '\">Join Multi</a>';
                         } else {
                             url = '<a class =\"btn btn-primary btn-xs\" href="/game/new/join?gameName=' +
                                     game.gameName + '&infoId=' + game.id + '\">Join</a>';
                         }
-
                         <sec:authorize access="hasRole('ADMIN_ROLE')">
                         removeUrl = '<a class=\"label label-danger\" href ="/game/cleanup/' + game.id
                                 + '\">Remove</a>'

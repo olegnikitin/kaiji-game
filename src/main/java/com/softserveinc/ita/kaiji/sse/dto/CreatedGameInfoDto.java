@@ -1,5 +1,7 @@
 package com.softserveinc.ita.kaiji.sse.dto;
 
+import com.softserveinc.ita.kaiji.model.game.Game;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ public class CreatedGameInfoDto {
     private Set<String> players = new HashSet<>();
     private Integer numberOfStars;
     private Integer numberOfPlayers;
+    private Game.Type gameType;
 
     public Integer getId() {
         return id;
@@ -67,6 +70,14 @@ public class CreatedGameInfoDto {
 
     public void setNumberOfPlayers(Integer numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public Game.Type getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(Game.Type gameType) {
+        this.gameType = gameType;
     }
 
     @Override

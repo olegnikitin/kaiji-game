@@ -11,7 +11,7 @@ public class MultiplayerWaiter implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(MultiplayerWaiter.class);
 
-    static final Object lock = new Object();
+    private static final Object lock = new Object();
 
     private GameService gameService;
     private AsyncContext asyncContext;
