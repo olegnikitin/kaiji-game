@@ -66,6 +66,8 @@ public class CreateGameController {
         gameInfoDto.setNumberOfCards(systemConfiguration.getNumberOfCards());
         gameInfoDto.setBotType(systemConfiguration.getBotType());
         gameInfoDto.setNumberOfStars(systemConfiguration.getNumberOfStars());
+        gameInfoDto.setNumberOfPlayers(systemConfiguration.getNumberOfPlayers());
+        gameInfoDto.setMultiplayerGameDuration(systemConfiguration.getMultiplayerGameDuration());
         model.addAttribute("gameInfo", gameInfoDto);
         model.addAttribute("playerId", new Integer(0));
 

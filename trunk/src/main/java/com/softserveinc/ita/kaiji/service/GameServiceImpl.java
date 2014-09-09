@@ -1,8 +1,10 @@
 package com.softserveinc.ita.kaiji.service;
 
 import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
+import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
+import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
@@ -45,6 +47,9 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private GameSyncro gameSyncro;
+
+    @Autowired
+    private GameInfoEntityDAO gameInfoEntityDAO;
 
     @Override
     public Game getGameById(Integer gameId) throws IllegalArgumentException {
@@ -230,10 +235,11 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        //GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
-        //Don't save game to DB. We must do it after game completion
-        /*Integer databaseId = gameInfoEntityDAO.save(gameInfoEntity);*/
-        //gameInfo.setDatabaseId(databaseId);
+        if (gameInfo.getGameType().equals(Game.Type.KAIJI_GAME)) {
+            GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
+            gameInfoEntityDAO.save(gameInfoEntity);
+            //gameInfo.setDatabaseId(databaseId);
+        }
         if (gameInfo.getPlayers().size() != 2) {
             LOG.trace("Add boot player " + botPlayer);
             gameInfo.getPlayers().add(botPlayer);
