@@ -1,6 +1,5 @@
 package com.softserveinc.ita.kaiji.sse.dto;
 
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +10,8 @@ public class CreatedGameInfoDto {
     private Integer numberOfCards;
     private String gameName;
     private Set<String> players = new HashSet<>();
+    private Integer numberOfStars;
+    private Integer numberOfPlayers;
 
     public Integer getId() {
         return id;
@@ -50,6 +51,22 @@ public class CreatedGameInfoDto {
 
     public void setPlayers(Set<String> players) {
         this.players = players;
+    }
+
+    public Integer getNumberOfStars() {
+        return numberOfStars;
+    }
+
+    public void setNumberOfStars(Integer numberOfStars) {
+        this.numberOfStars = numberOfStars;
+    }
+
+    public Integer getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public void setNumberOfPlayers(Integer numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     @Override

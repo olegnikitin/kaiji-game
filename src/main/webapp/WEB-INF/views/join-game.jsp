@@ -1,3 +1,4 @@
+<%@ page import="com.softserveinc.ita.kaiji.model.game.Game" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="pl" uri="/WEB-INF/tld/play-game.tld" %>
@@ -8,16 +9,15 @@
            uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="с" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page import="com.softserveinc.ita.kaiji.model.game.*" %>
-
 <spring:message code="join-game.enterGameName" var="enter_game_name"/>
 <spring:message code="join-game.searchButton" var="search_button"/>
 <spring:message code="join-game.numberLabel" var="number_label"/>
 <spring:message code="join-game.titleLabel" var="title_label"/>
-<spring:message code="join-game.hostLabel" var="host_label"/>
+<spring:message code="join-game.playersLabel" var="players_label"/>
 <spring:message code="join-game.cardsLabel" var="cards_label"/>
 <spring:message code="join-game.starsLabel" var="stars_label"/>
 <spring:message code="join-game.connecting" var="connecting"/>
+<spring:message code="join-game.playersNumber" var="players_number"/>
 
 <spring:url value="/game/new/join" var="url"/>
 
@@ -44,9 +44,10 @@
     <tr>
         <th>${number_label}</th>
         <th>${title_label}</th>
-        <th>${host_label}</th>
+        <th>${players_label}</th>
         <th>${cards_label}</th>
         <th>${stars_label}</th>
+        <th>${players_number}</th>
     </tr>
 
     <c:forEach var="game" items="${openedGames}" varStatus="rowCounter">
@@ -67,7 +68,7 @@
             <td>${game.players}</td>
             <td>${game.numberOfCards}</td>
             <td>${game.numberOfStars}</td>
-            <td>${game.gameType}</td>
+            <td>${game.numberOfPlayers}</td>
             <c:choose>
                 <c:when test="${game.gameType eq 'KAIJI_GAME'}">
                     <td><a href="${urlMultiGame}"
@@ -117,41 +118,52 @@
     window.onbeforeunload = function (evt) {
         eventSource.close()
     }
-
+    <%=Game.Type.KAIJI_GAME%>
     function updateGames() {
         eventSource = new EventSource("/joingame/update");
 
-        /*eventSource.onmessage = function (event) {
+        eventSource.onmessage = function (event) {
             $('#games').empty();
             var removeUrl = '';
             var url = '';
             var $createdGames = $('<tr><th>' + '${number_label}'
                     + '</th><th>' + '${title_label}'
-                    + '</th><th>' + '${host_label}'
+                    + '</th><th>' + '${players_label}'
                     + '</th><th>' + '${cards_label}'
+                    + '</th><th>' + '${stars_label}'
+                    + '</th><th>' + '${players_number}'
                     + '</th></tr>');
             $('#games').append($createdGames);
             var msg = JSON.parse(event.data);
             msg.forEach(
                     function fillTable(game) {
-                        url = '<a class =\"btn btn-primary btn-xs\" href="new/join?gameName=' +
-                                game.gameName + '&infoId=' + game.id + '\">Join</a>';
+
+                        if ('${game.gameType eq 'KAIJI_GAME'}') {
+
+                            url = '<a class =\"btn btn-primary btn-xs\" href="/game/multiplayer/new/join?gameName=' +
+                                    game.gameName + '&infoId=' + game.id + '\">Join Multi</a>';
+                        } else {
+                            url = '<a class =\"btn btn-primary btn-xs\" href="/game/new/join?gameName=' +
+                                    game.gameName + '&infoId=' + game.id + '\">Join</a>';
+                        }
+
                         <sec:authorize access="hasRole('ADMIN_ROLE')">
                         removeUrl = '<a class=\"label label-danger\" href ="/game/cleanup/' + game.id
                                 + '\">Remove</a>'
                         </sec:authorize>
-                        console.log(url);
-                        console.log(removeUrl);
+
                         $('#games').append(
                                         '<tr><td>' + game.number
                                         + '</td><td>' + game.gameName
                                         + '</td><td>' + game.players
                                         + '</td><td>' + game.numberOfCards
+                                        + '</td><td>' + game.numberOfStars
+                                        + '</td><td>' + game.numberOfPlayers
                                         + '</td><td>' + url
                                         + '</td><td>' + removeUrl + '</td></tr>')
 
                     })
-        };*/
+        };
     }
     ;
 

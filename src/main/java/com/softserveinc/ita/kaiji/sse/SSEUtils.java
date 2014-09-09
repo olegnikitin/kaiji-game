@@ -18,6 +18,8 @@ public class SSEUtils {
         }
         createdGameInfoDto.setNumber(number);
         createdGameInfoDto.setNumberOfCards(info.getNumberOfCards());
+        createdGameInfoDto.setNumberOfStars(info.getNumberOfStars());
+        createdGameInfoDto.setNumberOfPlayers(info.getNumberOfPlayers());
 
         return createdGameInfoDto;
     }
