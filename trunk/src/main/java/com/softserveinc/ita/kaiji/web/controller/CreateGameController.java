@@ -6,7 +6,6 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
-import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.SecondPlayerChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
@@ -54,7 +53,7 @@ public class CreateGameController {
     private GameSyncro gameSyncro;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String sendToForm(Model model, HttpServletResponse response) {
+    public String sendToForm(Model model, HttpServletRequest request) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("CreateGameController got GET-request");
         }
@@ -74,6 +73,7 @@ public class CreateGameController {
         if (LOG.isTraceEnabled()) {
             LOG.trace("gameInfoDto added to the model and will be sent to form");
         }
+        model.addAttribute("gameNameExist", request.getAttribute("gameNameExist"));
         return "create-game";
     }
 
@@ -96,35 +96,52 @@ public class CreateGameController {
     public void startGame(@ModelAttribute("gameInfo") GameInfoDto gameInfoDto,
                           HttpServletRequest request, HttpServletResponse response,
                           Model model) throws IOException {
+        if (!checkIfGameNameAlreadyExist(gameInfoDto.getGameName())) {
+            request.setAttribute("gameNameExist",false);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            gameInfoDto.setPlayerName(auth.getName());
+            final AsyncContext asyncContext = request.startAsync(request, response);
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        gameInfoDto.setPlayerName(auth.getName());
-        final AsyncContext asyncContext = request.startAsync(request, response);
-
-        asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(
-                systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.SECONDS));
-        asyncContext.addListener(new TimeoutListener(), request, response);
-        Integer gameId = gameService.setGameInfo(gameInfoDto);
-        Integer abandonedGameId = gameService.getAbandonedGameId(auth.getName(), gameId);
-        if (abandonedGameId != null) {
-            LOG.trace("Remove abandoned game from pool.");
-            gameService.clearGameInfo(abandonedGameId);
-        }
-        Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameId);
-        model.addAttribute("playerId", playerId);
-        request.setAttribute("id", gameId);
-        CountDownLatch latch;
-        if (Game.Type.BOT_GAME.equals(gameService.getGameInfo(gameId).getGameType())) {
-            latch = new CountDownLatch(0);
+            asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(
+                    systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.SECONDS));
+            asyncContext.addListener(new TimeoutListener(), request, response);
+            Integer gameId = gameService.setGameInfo(gameInfoDto);
+            Integer abandonedGameId = gameService.getAbandonedGameId(auth.getName(), gameId);
+            if (abandonedGameId != null) {
+                LOG.trace("Remove abandoned game from pool.");
+                gameService.clearGameInfo(abandonedGameId);
+            }
+            Integer playerId = gameService.getPlayerIdFromGame(auth.getName(), gameId);
+            model.addAttribute("playerId", playerId);
+            request.setAttribute("id", gameId);
+            CountDownLatch latch;
+            if (Game.Type.BOT_GAME.equals(gameService.getGameInfo(gameId).getGameType())) {
+                latch = new CountDownLatch(0);
+            } else {
+                gameSyncro.getGameWaiter().put(gameId, new CountDownLatch(1));
+                latch = gameSyncro.getGameWaiter().get(gameId);
+            }
+            asyncContext.start(new SecondPlayerChecker(asyncContext, gameService, gameId,
+                    latch, systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout()));
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Game started. AsyncContext working. ");
+            }
         } else {
-            gameSyncro.getGameWaiter().put(gameId, new CountDownLatch(1));
-            latch = gameSyncro.getGameWaiter().get(gameId);
+            try {
+                request.setAttribute("gameNameExist", true);
+                request.getRequestDispatcher("/game/new").forward(request, response);
+            } catch (ServletException e) {
+                LOG.error("Wrong forward from /game/new to /game/new?gameNameExist=true");
+            }
         }
-        asyncContext.start(new SecondPlayerChecker(asyncContext, gameService, gameId,
-                latch, systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout()));
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Game started. AsyncContext working. ");
+    }
+
+    private boolean checkIfGameNameAlreadyExist(String gameName) {
+        for (GameInfo gameInfo : gameService.getAllGameInfos()) {
+            if (gameInfo.getGameName().equals(gameName))
+                return true;
         }
+        return false;
     }
 
     @RequestMapping(value = "join", method = RequestMethod.GET)
