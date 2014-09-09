@@ -13,6 +13,7 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPool;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPoolImpl;
+import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ public class GameServiceImpl implements GameService {
 
     @Autowired
     private GameInfoEntityDAO gameInfoEntityDAO;
+
+    @Autowired
+    private SyncroCreatedGames syncroCreatedGames;
 
     @Override
     public Game getGameById(Integer gameId) throws IllegalArgumentException {
@@ -197,6 +201,9 @@ public class GameServiceImpl implements GameService {
             gameSyncro.getRoundWaiter().remove(gameInfo);
             GAME_INFOS.release(gameInfoId);
             GAME_INFOS.remove(gameInfoId);
+            synchronized (syncroCreatedGames) {
+                syncroCreatedGames.notifyAll();
+            }
         }
     }
 

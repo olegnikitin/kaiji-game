@@ -6,6 +6,7 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class SseReceivedCreatedGames extends AbstractTransactionalJUnit4SpringCo
 
     private MockMvc mockMvc;
 
+    @Ignore
     @Test
     public void sentNothingBecauseCreatedGameIsBotGame() throws Exception {
 

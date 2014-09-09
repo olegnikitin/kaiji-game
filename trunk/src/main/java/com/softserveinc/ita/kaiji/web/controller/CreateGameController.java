@@ -6,6 +6,7 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
+import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.SecondPlayerChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
@@ -52,6 +53,9 @@ public class CreateGameController {
     @Autowired
     private GameSyncro gameSyncro;
 
+    @Autowired
+    private SyncroCreatedGames syncroCreatedGames;
+
     @RequestMapping(method = RequestMethod.GET)
     public String sendToForm(Model model, HttpServletRequest request) {
         if (LOG.isTraceEnabled()) {
@@ -97,7 +101,7 @@ public class CreateGameController {
                           HttpServletRequest request, HttpServletResponse response,
                           Model model) throws IOException {
         if (!checkIfGameNameAlreadyExist(gameInfoDto.getGameName())) {
-            request.setAttribute("gameNameExist",false);
+            request.setAttribute("gameNameExist", false);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             gameInfoDto.setPlayerName(auth.getName());
             final AsyncContext asyncContext = request.startAsync(request, response);
@@ -120,6 +124,9 @@ public class CreateGameController {
             } else {
                 gameSyncro.getGameWaiter().put(gameId, new CountDownLatch(1));
                 latch = gameSyncro.getGameWaiter().get(gameId);
+            }
+            synchronized (syncroCreatedGames) {
+                syncroCreatedGames.notifyAll();
             }
             asyncContext.start(new SecondPlayerChecker(asyncContext, gameService, gameId,
                     latch, systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout()));

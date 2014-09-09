@@ -21,6 +21,10 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/joingame")
 public class CreateGameEvent {
 
+
+    @Autowired
+    private SyncroCreatedGames syncroCreatedGames;
+
     //Update created games each 3 seconds
     //todo should sent game list if detects some changes
     private static final Long CREATED_GAME_UPDATE = 3L;
@@ -40,17 +44,27 @@ public class CreateGameEvent {
 
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
+
         try {
-            Thread.sleep(TimeUnit.MILLISECONDS.convert(CREATED_GAME_UPDATE, TimeUnit.SECONDS));
+            synchronized (syncroCreatedGames) {
+                syncroCreatedGames.wait();
+            }
         } catch (InterruptedException e) {
             LOG.error("Failed to send data from server " + e.getMessage());
         }
+
+      /*  try {
+            Thread.sleep(TimeUnit.MILLISECONDS.convert(CREATED_GAME_UPDATE, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            LOG.error("Failed to send data from server " + e.getMessage());
+        }*/
 
         List<CreatedGameInfoDto> gamesInfo = new ArrayList<>();
         Integer number = 0;
         for (GameInfo info : gameService.getRealPlayerGames()) {
             gamesInfo.add(sseUtils.ToGameInfoDto(info, ++number));
         }
+        LOG.info("Send updatedata Syncro sse");
 
         return "data:" + new Gson().toJson(gamesInfo) + "\n\n";
     }
