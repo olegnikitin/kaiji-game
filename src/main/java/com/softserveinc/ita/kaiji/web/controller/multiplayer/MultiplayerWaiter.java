@@ -58,6 +58,6 @@ public class MultiplayerWaiter implements Runnable {
 
         }
 
-        asyncContext.dispatch("/game/multiplayer/play/" + gameId);
+        asyncContext.dispatch("/game/multiplayer/" + gameId);
     }
 }
