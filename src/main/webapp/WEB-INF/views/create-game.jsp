@@ -93,6 +93,7 @@
             </tr>
         </table>
 
+
     </form:form>
 
     <div id="wait" style="display: none;" class="jumbotron">
@@ -112,6 +113,8 @@
     })
 
     function WaitDiv() {
+        if (${!gameNameExist==false})
+            alert("Game with this name has already existed!");
         setTimeout(function () {
             connectToSessionServer()
             startSessionActivity('${userName}', 1000)
@@ -120,7 +123,7 @@
         document.getElementById('wait').style.display = 'block';
         var target = document.getElementById('wait');
         var spinner = new Spinner(createOpts).spin(target);
-    }
+    };
 
     function showStars(it, box) {
         var visibility = (box.checked) ? "none" : "block";

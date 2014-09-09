@@ -25,7 +25,7 @@ public class ServerEndpointTimeoutRound {
 
     @OnError
     public void onError(Session session, Throwable t) {
-        LOG.error("Chat Server Endpoint Timeout Round socket was broken. " + t.getMessage());
+        LOG.error("Server Endpoint Timeout Round socket was broken. " + t.getMessage());
     }
 
 

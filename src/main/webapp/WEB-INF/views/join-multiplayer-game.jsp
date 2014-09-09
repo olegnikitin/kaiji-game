@@ -38,10 +38,10 @@
     <c:forEach var="player" items="${playersList}" varStatus="rowCounter">
         <tr>
             <td>${rowCounter.count}</td>
-            <td>${player.name}</td>
+            <td>${player.user.nickname}</td>
             <td>
                 <a href=""
-                   onclick="WaitDiv('wait-${rowCounter.count}', 'spin-${rowCounter.count}');"
+                   onclick="socketInvitation.send('${player.user.nickname}'+'#')"
                    class="btn btn-primary btn-xs">${inviteButton}</a>
             </td>
 
@@ -56,3 +56,47 @@
     </c:forEach>
 </table>
 
+
+<script type="text/javascript">
+
+    var locationWebSocket = "ws://" + document.location.host + "/invitation/"
+            +'${pageContext.request.userPrincipal.name}';
+    var socketInvitation;
+
+    function connectToInvitationServer() {
+        socketInvitation = new WebSocket(locationWebSocket);
+        socketInvitation.onmessage = onInvitation;
+    }
+
+    function onInvitation(evt) {
+        var message = evt.data;
+        switch (message) {
+            case 'yes':
+                window.location.href = "/";
+                break;
+            case 'no':
+                alert("Invitation rejected :(");
+                break;
+            default:
+            {
+                if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
+                    socketInvitation.send(message + '#' + 'yes');
+                    window.location.href = "/";
+                }
+                else {
+                    socketInvitation.send(message + '#' + 'no');
+                }
+            }
+        }
+    }
+
+    window.onbeforeunload = function (evt) {
+        // socketRoundTimeout.close();
+
+    }
+
+    $(document).ready(function () {
+        connectToInvitationServer();
+    })
+
+</script>
