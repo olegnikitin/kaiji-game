@@ -4,6 +4,7 @@ package com.softserveinc.ita.kaiji.web.controller;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.game.GameInfoImpl;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
@@ -177,7 +178,6 @@ public class PlayGameController {
 
         }
         model.addAttribute("openedGames", gameService.getRealPlayerGames());
-
         return "join-game";
     }
 

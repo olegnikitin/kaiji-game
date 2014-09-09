@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class CreateGameEvent {
 
     //Update created games each 3 seconds
+    //todo should sent game list if detects some changes
     private static final Long CREATED_GAME_UPDATE = 3L;
 
     private static final Logger LOG = Logger.getLogger(CreateGameEvent.class);

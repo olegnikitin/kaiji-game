@@ -23,7 +23,7 @@ public class SessionTimer extends TimerTask {
         if (System.currentTimeMillis() - SessionUtils.getUserSession().get(name).getCurrentTime() >
                 TimeUnit.MILLISECONDS.convert(timeout, TimeUnit.SECONDS)) {
             if (SessionUtils.getUserSession().get(name).getSession() != null) {
-                SessionUtils.getUserSession().get(name).getSession().invalidate();
+                //SessionUtils.getUserSession().get(name).getSession().invalidate();
                 LOG.info(name  + " session timeouted.");
             }
         }
