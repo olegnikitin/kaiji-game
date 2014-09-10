@@ -1,7 +1,10 @@
 package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
+import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.util.PlayerStates;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
+import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.sse.ServerEventsSyncro;
@@ -78,6 +81,10 @@ public class CreateMultiplayerGame {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer playerId = gameService.addPlayer(auth.getName(), gameName);
         model.addAttribute("playerId", playerId);
+
+        PlayersStatus.getPlayersStatus().put(infoId, gameService.getGameInfo(infoId).getPlayers());
+        PlayersStatus.getInvitePlayers().put(infoId,new Object());
+
         Integer numberOfPlayers = gameService.getGameInfo(infoId).getNumberOfPlayers();
         asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout, numberOfPlayers));
 

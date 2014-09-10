@@ -2,8 +2,10 @@ package com.softserveinc.ita.kaiji.sse;
 
 import com.google.gson.Gson;
 import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.sse.dto.InvitePlayerDto;
+import com.sun.deploy.util.Waiter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,10 +45,12 @@ public class InvitePlayerEvent {
         response.setCharacterEncoding("UTF-8");
 
         try {
-          /*  synchronized (serverEventsSyncro.getInvitePlayers()) {
-                serverEventsSyncro.getInvitePlayers().wait();
-            }*/
-            Thread.sleep(3000);
+
+            synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
+                System.err.println("Waiting on gameId " + gameId);
+                PlayersStatus.getInvitePlayers().get(gameId).wait();
+            }
+            //Thread.sleep(3000);
         } catch (InterruptedException e) {
             LOG.error("Failed to send data from server " + e.getMessage());
         }
@@ -56,7 +60,7 @@ public class InvitePlayerEvent {
         for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
             playerDto.add(sseUtils.ToInvitePlayerDto(player, ++number));
         }
-
+        System.err.println(new Gson().toJson(playerDto));
         return "data:" + new Gson().toJson(playerDto) + "\n\n";
     }
 }

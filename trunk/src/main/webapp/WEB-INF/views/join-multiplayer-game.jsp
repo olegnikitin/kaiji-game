@@ -106,6 +106,7 @@
         eventSource = new EventSource("/multiplayer/invite/" + ${gameId});
 
         eventSource.onmessage = function (event) {
+            alert('AAAAAAAAAAAAAAAAAAAAA')
             $('#players').empty();
             var inviteBtn = '';
             var inviteUserHeader = $('<tr><th>' + '#'
@@ -115,10 +116,15 @@
             var msg = JSON.parse(event.data);
             msg.forEach(
                     function fillUserTable(player) {
-                        inviteBtn = '<a class=\"btn btn-primary btn-xs\" onclick = ' +
+                        var inviteButtonStyle = 'btn btn-primary btn-xs';
+                        if(player.isPlaying == 'true'){
+                            inviteButtonStyle = 'btn btn-primary disabled'
+                        }
+                        inviteBtn = '<a class=' + "\""+  inviteButtonStyle + "\"" + ' onclick = ' +
                                 '\"socketInvitation.send(' + '\'' + player.name + '#' + '\'' + ')\"' +
                                 ' href="">${inviteButton}</a>'
                         console.log(inviteBtn);
+                        console.log(player.isPlaying )
                         $('#players').append(
                                         '<tr><td>' + player.number
                                         + '</td><td>' + player.name
