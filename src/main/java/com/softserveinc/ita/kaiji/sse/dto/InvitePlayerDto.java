@@ -4,9 +4,9 @@ public class InvitePlayerDto {
 
     private Integer number;
     private String name;
-    private boolean isPlaying;
+    private Boolean isPlaying;
 
-    public InvitePlayerDto(Integer number, String name, boolean isPlaying) {
+    public InvitePlayerDto(Integer number, String name, Boolean isPlaying) {
         this.number = number;
         this.name = name;
         this.isPlaying = isPlaying;

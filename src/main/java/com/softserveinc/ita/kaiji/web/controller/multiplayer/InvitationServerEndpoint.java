@@ -45,13 +45,11 @@ public class InvitationServerEndpoint {
                 if (player.getName().equals(playerLogin)) {
                     player.startPlaying();
                     gameId = playerEntry.getKey();
-                    System.err.println("Player is playing " + player.getName() + " " + gameId);
                 }
             }
         }
 
         synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
-
             PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
         }
 
