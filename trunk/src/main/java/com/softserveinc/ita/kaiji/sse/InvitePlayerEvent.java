@@ -45,22 +45,17 @@ public class InvitePlayerEvent {
         response.setCharacterEncoding("UTF-8");
 
         try {
-
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
-                System.err.println("Waiting on gameId " + gameId);
                 PlayersStatus.getInvitePlayers().get(gameId).wait();
             }
-            //Thread.sleep(3000);
         } catch (InterruptedException e) {
             LOG.error("Failed to send data from server " + e.getMessage());
         }
-
         List<InvitePlayerDto> playerDto = new ArrayList<>();
         Integer number = 0;
         for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
             playerDto.add(sseUtils.ToInvitePlayerDto(player, ++number));
         }
-        System.err.println(new Gson().toJson(playerDto));
         return "data:" + new Gson().toJson(playerDto) + "\n\n";
     }
 }
