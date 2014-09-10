@@ -2,6 +2,7 @@ package com.softserveinc.ita.kaiji.model.game.creator;
 
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.game.MultiPlayerGameImpl;
 import com.softserveinc.ita.kaiji.model.game.TwoPlayerGameImpl;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
@@ -40,6 +41,6 @@ public class MultiPlayerGameCreatorImpl implements GameCreator {
 
     @Override
     public Game create(GameInfo gameInfo) {
-        return new TwoPlayerGameImpl(gameInfo);
+        return new MultiPlayerGameImpl(gameInfo);
     }
 }

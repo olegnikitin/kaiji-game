@@ -17,10 +17,10 @@ public class TurnChecker implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(TurnChecker.class);
 
-    private AsyncContext asyncContext;
-    private Integer gameId;
-    private CountDownLatch latch;
-    private Long timeout;
+    protected AsyncContext asyncContext;
+    protected Integer gameId;
+    protected CountDownLatch latch;
+    protected Long timeout;
 
     public TurnChecker(AsyncContext asyncContext,
                        Integer gameId,

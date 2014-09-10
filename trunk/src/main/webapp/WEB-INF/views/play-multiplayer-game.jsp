@@ -130,7 +130,7 @@
 
 
                     <a id="cardBtn"
-                       href="${urlMain}game/${gameId }/card/${cardEntry }/"
+                       href="${urlMain}game/multiplayer/${gameId }/card/${cardEntry }/"
                             <c:if test="${enemyObject.isBot() ne true}">
                                 onclick="WaitDiv();"
                             </c:if>

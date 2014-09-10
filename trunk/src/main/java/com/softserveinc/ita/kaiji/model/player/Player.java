@@ -132,4 +132,10 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
      * @return PlayerStatistic instance
      */
     PlayerStatistics getStatistic();
+
+    void startPlaying();
+
+    void stopPlaying();
+
+    Boolean isPlaying();
 }
