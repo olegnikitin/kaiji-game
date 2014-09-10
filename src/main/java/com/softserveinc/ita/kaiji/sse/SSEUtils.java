@@ -27,6 +27,6 @@ public class SSEUtils {
     }
 
     public InvitePlayerDto ToInvitePlayerDto(Player player, Integer number) {
-        return new InvitePlayerDto(number, player.getName());
+        return new InvitePlayerDto(number, player.getName(), player.isPlaying());
     }
 }

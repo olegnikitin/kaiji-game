@@ -1,5 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 
+import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import org.apache.log4j.Logger;
 
 import javax.websocket.OnError;
@@ -9,6 +11,8 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by kbardtc on 8/28/2014.
@@ -33,6 +37,24 @@ public class InvitationServerEndpoint {
     public void onMessage(Session session, String message) {
         // Integer playerId = (Integer) session.getUserProperties().get("playerId");
         String playerLogin = message.substring(0, message.indexOf("#"));
+
+        //todo refactor code add to parameters enemy name and gam id
+        Integer gameId = null;
+        for (Map.Entry<Integer, Set<Player>> playerEntry : PlayersStatus.getPlayersStatus().entrySet()) {
+            for (Player player : playerEntry.getValue()) {
+                if (player.getName().equals(playerLogin)) {
+                    player.startPlaying();
+                    gameId = playerEntry.getKey();
+                    System.err.println("Player is playing " + player.getName() + " " + gameId);
+                }
+            }
+        }
+
+        synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
+
+            PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
+        }
+
         String data = null;
         if (message.indexOf("#") != message.length() - 1)
             data = message.substring(message.indexOf("#") + 1, message.length());
@@ -41,7 +63,9 @@ public class InvitationServerEndpoint {
                 if (playerLogin.equals(s.getUserProperties().get("playerLogin")))
                     if (data == null) {
                         s.getBasicRemote().sendText(String.valueOf(session.getUserProperties().get("playerLogin")));
-                    } else{ s.getBasicRemote().sendText(data);}
+                    } else {
+                        s.getBasicRemote().sendText(data);
+                    }
             }
         } catch (IOException e) {
             LOG.error("onMessage failed. " + e.getMessage());
