@@ -25,6 +25,7 @@ public abstract class AbstractPlayer implements Player {
     protected boolean gameWithStars;
     protected Card chosenCard;
     protected Boolean canPlay;
+    protected Boolean isPlaying;
 
     protected PlayerStatistics statistic = new PlayerStatistics();
 
@@ -91,6 +92,18 @@ public abstract class AbstractPlayer implements Player {
 
     public void setStar(Integer starNumber) {
         this.star = new Star(starNumber);
+    }
+
+    public void startPlaying() {
+        isPlaying = true;
+    }
+
+    public void stopPlaying() {
+        isPlaying = false;
+    }
+
+    public Boolean isPlaying() {
+        return isPlaying;
     }
 
     @Override
