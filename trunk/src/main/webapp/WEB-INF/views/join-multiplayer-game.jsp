@@ -60,8 +60,10 @@
 <script type="text/javascript">
 
     var locationWebSocket = "ws://" + document.location.host + "/invitation/"
-            +'${pageContext.request.userPrincipal.name}';
+            + '${pageContext.request.userPrincipal.name}';
     var socketInvitation;
+    var eventSource;
+
 
     function connectToInvitationServer() {
         socketInvitation = new WebSocket(locationWebSocket);
@@ -72,7 +74,7 @@
         var message = evt.data;
         switch (message) {
             case 'yes':
-                window.location.href = "/game/multiplayer/play/"+${gameId};
+                window.location.href = "/game/multiplayer/play/" +${gameId};
                 break;
             case 'no':
                 alert("Invitation rejected :(");
@@ -81,7 +83,7 @@
             {
                 if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                     socketInvitation.send(message + '#' + 'yes');
-                    window.location.href = "/game/multiplayer/play/"+${gameId};
+                    window.location.href = "/game/multiplayer/play/" +${gameId};
                 }
                 else {
                     socketInvitation.send(message + '#' + 'no');
@@ -97,6 +99,34 @@
 
     $(document).ready(function () {
         connectToInvitationServer();
+        updatePlayers();
     })
+
+    function updatePlayers() {
+        eventSource = new EventSource("/multiplayer/invite/" + ${gameId});
+
+        eventSource.onmessage = function (event) {
+            $('#players').empty();
+            var inviteBtn = '';
+            var inviteUserHeader = $('<tr><th>' + '#'
+                    + '</th><th>' + '${playerNickname}'
+                    + '</th></tr>');
+            $('#players').append(inviteUserHeader);
+            var msg = JSON.parse(event.data);
+            msg.forEach(
+                    function fillUserTable(player) {
+                        inviteBtn = '<a class=\"btn btn-primary btn-xs\" onclick = ' +
+                                '\"socketInvitation.send(' + '\'' + player.name + '#' + '\'' + ')\"' +
+                                ' href="">${inviteButton}</a>'
+                        console.log(inviteBtn);
+                        $('#players').append(
+                                        '<tr><td>' + player.number
+                                        + '</td><td>' + player.name
+                                        + '</td><td>' + inviteBtn
+                                        + '</td></tr>')
+                    })
+        };
+    }
+    ;
 
 </script>

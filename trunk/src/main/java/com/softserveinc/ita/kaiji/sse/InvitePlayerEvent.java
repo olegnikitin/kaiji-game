@@ -1,30 +1,31 @@
 package com.softserveinc.ita.kaiji.sse;
 
 import com.google.gson.Gson;
-import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.GameService;
-import com.softserveinc.ita.kaiji.sse.dto.CreatedGameInfoDto;
+import com.softserveinc.ita.kaiji.sse.dto.InvitePlayerDto;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/joingame")
-public class CreateGameEvent {
-
+@RequestMapping("/multiplayer")
+public class InvitePlayerEvent {
 
     @Autowired
     private ServerEventsSyncro serverEventsSyncro;
 
-    private static final Logger LOG = Logger.getLogger(CreateGameEvent.class);
+    private static final Logger LOG = Logger.getLogger(InvitePlayerEvent.class);
 
     @Autowired
     private GameService gameService;
@@ -32,30 +33,30 @@ public class CreateGameEvent {
     @Autowired
     private SSEUtils sseUtils;
 
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @RequestMapping(value = "/invite/{gameId}", method = RequestMethod.GET)
     public
     @ResponseBody
-    String sendMessage(HttpServletResponse response) throws IOException {
+    String sendMessage(@PathVariable("gameId") Integer gameId,
+                       HttpServletResponse response, Principal principal) throws IOException {
 
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
 
         try {
-            synchronized (serverEventsSyncro.getCreatedGames()) {
-                serverEventsSyncro.getCreatedGames().wait();
-            }
+          /*  synchronized (serverEventsSyncro.getInvitePlayers()) {
+                serverEventsSyncro.getInvitePlayers().wait();
+            }*/
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             LOG.error("Failed to send data from server " + e.getMessage());
         }
 
-
-        List<CreatedGameInfoDto> gamesInfo = new ArrayList<>();
+        List<InvitePlayerDto> playerDto = new ArrayList<>();
         Integer number = 0;
-        for (GameInfo info : gameService.getRealPlayerInGame()) {
-            gamesInfo.add(sseUtils.ToGameInfoDto(info, ++number));
+        for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
+            playerDto.add(sseUtils.ToInvitePlayerDto(player, ++number));
         }
-        LOG.info("Send updatedata Syncro sse");
 
-        return "data:" + new Gson().toJson(gamesInfo) + "\n\n";
+        return "data:" + new Gson().toJson(playerDto) + "\n\n";
     }
 }

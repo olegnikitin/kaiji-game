@@ -57,15 +57,15 @@ public class PlayMultiplayerGame {
                               Model model,
                               Principal principal) {
 
-        GameInfo info = gameService.getGameInfo(gameId);
-        List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
-        Player playerForRemoving = null;
+        //GameInfo info = gameService.getGameInfo(gameId);
+        Set<Player> gamePlayers = gameService.getAllOtherPlayers(gameId,principal.getName());//new ArrayList<>(info.getPlayers());
+        /*Player playerForRemoving = null;
         for (Player player : gamePlayers) {
             if (player.getName().equals(principal.getName())) {
                 playerForRemoving = player;
             }
         }
-        gamePlayers.remove(playerForRemoving);
+        gamePlayers.remove(playerForRemoving);*/
 
         model.addAttribute("gameId", gameId);
         model.addAttribute("playersList", gamePlayers);
