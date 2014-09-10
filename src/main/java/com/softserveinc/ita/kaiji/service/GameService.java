@@ -5,6 +5,7 @@ import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.player.Player;
 
 import java.util.Set;
 
@@ -134,6 +135,12 @@ public interface GameService {
      *
      * @return set of real player games
      */
-    Set<GameInfo> getRealPlayerGames();
+    Set<GameInfo> getRealPlayerInGame();
+
+    /**
+     *
+     * @return set of real player games
+     */
+    Set<Player> getAllOtherPlayers(Integer gameId, String userName);
 
 }

@@ -6,7 +6,7 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
-import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
+import com.softserveinc.ita.kaiji.sse.ServerEventsSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.SecondPlayerChecker;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
@@ -54,7 +54,7 @@ public class CreateGameController {
     private GameSyncro gameSyncro;
 
     @Autowired
-    private SyncroCreatedGames syncroCreatedGames;
+    private ServerEventsSyncro serverEventsSyncro;
 
     @RequestMapping(method = RequestMethod.GET)
     public String sendToForm(Model model, HttpServletRequest request) {
@@ -125,8 +125,8 @@ public class CreateGameController {
                 gameSyncro.getGameWaiter().put(gameId, new CountDownLatch(1));
                 latch = gameSyncro.getGameWaiter().get(gameId);
             }
-            synchronized (syncroCreatedGames) {
-                syncroCreatedGames.notifyAll();
+            synchronized (serverEventsSyncro.getCreatedGames()) {
+                serverEventsSyncro.getCreatedGames().notifyAll();
             }
             asyncContext.start(new SecondPlayerChecker(asyncContext, gameService, gameId,
                     latch, systemConfigurationService.getSystemConfiguration().getGameConnectionTimeout()));

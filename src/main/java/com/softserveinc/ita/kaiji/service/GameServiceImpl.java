@@ -4,7 +4,6 @@ import com.softserveinc.ita.kaiji.dao.GameHistoryEntityDAO;
 import com.softserveinc.ita.kaiji.dao.GameInfoEntityDAO;
 import com.softserveinc.ita.kaiji.dto.GameInfoDto;
 import com.softserveinc.ita.kaiji.dto.game.GameHistoryEntity;
-import com.softserveinc.ita.kaiji.dto.game.GameInfoEntity;
 import com.softserveinc.ita.kaiji.dto.game.RoundResultEntity;
 import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.User;
@@ -13,7 +12,7 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.bot.Bot;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPool;
 import com.softserveinc.ita.kaiji.model.util.pool.ConcurrentPoolImpl;
-import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
+import com.softserveinc.ita.kaiji.sse.ServerEventsSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class GameServiceImpl implements GameService {
     private GameInfoEntityDAO gameInfoEntityDAO;
 
     @Autowired
-    private SyncroCreatedGames syncroCreatedGames;
+    private ServerEventsSyncro serverEventsSyncro;
 
     @Override
     public Game getGameById(Integer gameId) throws IllegalArgumentException {
@@ -66,7 +65,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Set<GameInfo> getRealPlayerGames() {
+    public Set<GameInfo> getRealPlayerInGame() {
 
         Set<GameInfo> playersGames = new HashSet<>();
         for (GameInfo gameInfo : getAllGameInfos()) {
@@ -76,6 +75,19 @@ public class GameServiceImpl implements GameService {
         }
 
         return playersGames;
+    }
+
+    @Override
+    public Set<Player> getAllOtherPlayers(Integer gameId, String userName) {
+
+        Set<Player> otherPlayers = new HashSet<>();
+        for (Player player : getGameInfo(gameId).getPlayers()) {
+            if (!player.getName().equals(userName)) {
+                otherPlayers.add(player);
+            }
+        }
+
+        return otherPlayers;
     }
 
     @Override
@@ -197,12 +209,15 @@ public class GameServiceImpl implements GameService {
                     GAMES_SYNC.remove(game.getId());
                 }
             }
+
             gameSyncro.getGameWaiter().remove(gameInfoId);
             gameSyncro.getRoundWaiter().remove(gameInfo);
+
             GAME_INFOS.release(gameInfoId);
             GAME_INFOS.remove(gameInfoId);
-            synchronized (syncroCreatedGames) {
-                syncroCreatedGames.notifyAll();
+
+            synchronized (serverEventsSyncro.getCreatedGames()) {
+                serverEventsSyncro.getCreatedGames().notifyAll();
             }
         }
     }
@@ -242,11 +257,11 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        if (gameInfo.getGameType().equals(Game.Type.KAIJI_GAME)) {
+     /*   if (gameInfo.getGameType().equals(Game.Type.KAIJI_GAME)) {
             GameInfoEntity gameInfoEntity = new GameInfoEntity(gameInfo);
             gameInfoEntityDAO.save(gameInfoEntity);
             //gameInfo.setDatabaseId(databaseId);
-        }
+        }*/
         if (gameInfo.getPlayers().size() != 2) {
             LOG.trace("Add boot player " + botPlayer);
             gameInfo.getPlayers().add(botPlayer);

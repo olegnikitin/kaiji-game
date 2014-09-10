@@ -3,6 +3,7 @@ package com.softserveinc.ita.kaiji.sse;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.sse.dto.CreatedGameInfoDto;
+import com.softserveinc.ita.kaiji.sse.dto.InvitePlayerDto;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,5 +24,9 @@ public class SSEUtils {
         createdGameInfoDto.setGameType(info.getGameType());
 
         return createdGameInfoDto;
+    }
+
+    public InvitePlayerDto ToInvitePlayerDto(Player player, Integer number) {
+        return new InvitePlayerDto(number, player.getName());
     }
 }

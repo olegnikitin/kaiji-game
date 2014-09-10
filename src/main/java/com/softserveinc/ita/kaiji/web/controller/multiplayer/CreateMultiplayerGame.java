@@ -4,8 +4,7 @@ import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
-import com.softserveinc.ita.kaiji.sse.SyncroCreatedGames;
-import com.softserveinc.ita.kaiji.web.controller.async.GameChecker;
+import com.softserveinc.ita.kaiji.sse.ServerEventsSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class CreateMultiplayerGame {
     private SystemConfigurationService systemConfigurationService;
 
     @Autowired
-    private SyncroCreatedGames syncroCreatedGames;
+    private ServerEventsSyncro serverEventsSyncro;
 
     @RequestMapping(method = RequestMethod.POST)
     public String createGame(@ModelAttribute("multiplayerGameInfo") @Valid MultiplayerGameInfoDto multiplayerGameInfoDto,
@@ -59,8 +58,8 @@ public class CreateMultiplayerGame {
         gameService.setGameInfo(convertMultiplayerDto.toGameInfoDto(multiplayerGameInfoDto));
         redirectAttributes.addFlashAttribute("notification", "Game was successfully created");
 
-        synchronized (syncroCreatedGames) {
-            syncroCreatedGames.notifyAll();
+        synchronized (serverEventsSyncro.getCreatedGames()) {
+            serverEventsSyncro.getCreatedGames().notifyAll();
         }
         return "redirect:/admin/gameinfo";
     }
