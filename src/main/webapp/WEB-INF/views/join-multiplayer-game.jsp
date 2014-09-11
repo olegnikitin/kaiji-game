@@ -75,7 +75,7 @@
 
     function onInvitation(evt) {
         var message = evt.data;
-        updatePlayers();
+
         switch (message) {
             case 'yes':
                 window.location.href = "/game/multiplayer/play/" +${gameId};
@@ -91,7 +91,7 @@
                     window.location.href = "/game/multiplayer/play/" +${gameId};
                 }
                 else {
-
+                    updatePlayers();
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
                             '${gameId}' + '#' + 'no');
                 }
@@ -133,7 +133,8 @@
                             inviteButtonStyle = 'btn btn-primary disabled'
                         }
                         inviteBtn = '<button class=' + "\"" + inviteButtonStyle + "\"" + ' onclick = ' +
-                                '\"socketInvitation.send(' + '\'' + player.name + '#' + '\'' + ')\"' +
+                                '\"socketInvitation.send(' + '\'' + player.name + '/' +
+                                '${ownLogin}' + '/' + '${gameId}' + '#' + '\'' + ')\"' +
                                 '>${inviteButton}</button>'
                         console.log(inviteBtn);
                         console.log(player.isPlaying)
