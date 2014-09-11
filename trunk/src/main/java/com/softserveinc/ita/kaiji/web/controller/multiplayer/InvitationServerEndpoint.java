@@ -1,5 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 
+import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import org.apache.log4j.Logger;
 
 import javax.websocket.OnError;
@@ -31,31 +33,30 @@ public class InvitationServerEndpoint {
 
     @OnMessage
     public void onMessage(Session session, String message) {
-        String delim="[/]";
-        String[] values = message.substring(0,message.indexOf('#')).split(delim);
+        String delim = "[/]";
+        String[] values = message.substring(0, message.indexOf('#')).split(delim);
         String enemyLogin = values[0];
         String ownLogin = values[1];
-        String gameId = values[2];
+        Integer gameId = Integer.parseInt(values[2]);
 
-
-        //todo refactor code add to parameters enemy name and game id
-     /*   Integer gameId = null;
-
-        for (Map.Entry<Integer, Set<Player>> playerEntry : PlayersStatus.getPlayersStatus().entrySet()) {
-            for (Player player : playerEntry.getValue()) {
-                if (player.getName().equals(playerLogin)) {
-                    player.startPlaying();
-                    gameId = playerEntry.getKey();
-                }
-            }
-        }
-        synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
-            PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
-        }
-     */
         String data = null;
         if (message.indexOf("#") != message.length() - 1)
             data = message.substring(message.indexOf("#") + 1, message.length());
+
+        Boolean isPlaying = (data == null) || ("yes").equals(data);
+
+        System.err.println(enemyLogin + " " + ownLogin + " " + isPlaying);
+        for (Player player : PlayersStatus.getPlayersStatus().get(gameId)) {
+            if (player.getName().equals(ownLogin) || player.getName().equals(enemyLogin)) {
+                player.playing(isPlaying);
+            }
+
+        }
+        synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
+            System.err.println("Notify all");
+            PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
+        }
+
         try {
             for (Session s : session.getOpenSessions()) {
                 if (enemyLogin.equals(s.getUserProperties().get("playerLogin")))
