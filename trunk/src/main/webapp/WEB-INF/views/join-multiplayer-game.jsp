@@ -12,6 +12,7 @@
 <spring:message code="join-game.connecting" var="connecting"/>
 <spring:message code="join-game.playerNickname" var="playerNickname"/>
 <spring:message code="join-game.inviteButton" var="inviteButton"/>
+<c:set var="ownLogin" value="${pageContext.request.userPrincipal.name}"></c:set>
 
 
 <form class="form-inline" role="form">
@@ -40,7 +41,7 @@
             <td>${rowCounter.count}</td>
             <td>${player.user.nickname}</td>
             <td>
-                <button onclick="socketInvitation.send('${player.user.nickname}'+'#')"
+                <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
                         class="btn btn-primary btn-xs">${inviteButton}</button>
                     <%--                <a href=""
                                        onclick="socketInvitation.send('${player.user.nickname}'+'#')"
@@ -84,14 +85,21 @@
             default:
             {
                 if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
-                    socketInvitation.send(message + '#' + 'yes');
+                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
+                            '${gameId}' + '#' + 'yes');
                     window.location.href = "/game/multiplayer/play/" +${gameId};
                 }
                 else {
-                    socketInvitation.send(message + '#' + 'no');
+                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
+                            '${gameId}' + '#' + 'no');
                 }
             }
         }
+    }
+
+    function sendToServer(enemyLogin) {
+        sessionStorage.setItem("enemyLogin", enemyLogin);
+        ;
     }
 
     window.onbeforeunload = function (evt) {
@@ -128,7 +136,7 @@
                         console.log(inviteBtn);
                         console.log(player.isPlaying)
                         $('#players').append(
-                                '<tr><td>' + player.number
+                                        '<tr><td>' + player.number
                                         + '</td><td>' + player.name
                                         + '</td><td>' + inviteBtn
                                         + '</td></tr>')
