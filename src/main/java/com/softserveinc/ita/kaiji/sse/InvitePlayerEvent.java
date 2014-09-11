@@ -53,9 +53,13 @@ public class InvitePlayerEvent {
         }
         List<InvitePlayerDto> playerDto = new ArrayList<>();
         Integer number = 0;
+        Boolean isPlaying = gameService.getPlayerByName(gameId, principal.getName()).isPlaying();
         for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
-            playerDto.add(sseUtils.ToInvitePlayerDto(player, ++number));
+            playerDto.add(new InvitePlayerDto(++number, player.getName(),
+                    (isPlaying ? true : player.isPlaying())));
         }
+        System.err.println(new Gson().toJson(playerDto));
         return "data:" + new Gson().toJson(playerDto) + "\n\n";
+
     }
 }

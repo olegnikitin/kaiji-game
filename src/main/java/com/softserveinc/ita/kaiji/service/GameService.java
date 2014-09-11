@@ -139,8 +139,9 @@ public interface GameService {
 
     /**
      *
-     * @return set of real player games
+     * @return set of all other player games
      */
     Set<Player> getAllOtherPlayers(Integer gameId, String userName);
 
+    Player getPlayerByName(Integer gameId, String userName);
 }

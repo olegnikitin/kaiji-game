@@ -91,6 +91,19 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Player getPlayerByName(Integer gameId, String userName) {
+
+        Player currentPlayer = null;
+        for (Player player : getGameInfo(gameId).getPlayers()) {
+            if (player.getName().equals(userName)) {
+                currentPlayer = player;
+                break;
+            }
+        }
+        return currentPlayer;
+    }
+
+    @Override
     public synchronized Integer setGameInfo(GameInfoDto gameInfoDto) {
 
         if (LOG.isTraceEnabled()) {

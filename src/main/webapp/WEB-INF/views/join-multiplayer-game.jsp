@@ -40,9 +40,11 @@
             <td>${rowCounter.count}</td>
             <td>${player.user.nickname}</td>
             <td>
-                <a href=""
-                   onclick="socketInvitation.send('${player.user.nickname}'+'#')"
-                   class="btn btn-primary btn-xs">${inviteButton}</a>
+                <button onclick="socketInvitation.send('${player.user.nickname}'+'#')"
+                        class="btn btn-primary btn-xs">${inviteButton}</button>
+                    <%--                <a href=""
+                                       onclick="socketInvitation.send('${player.user.nickname}'+'#')"
+                                       class="btn btn-primary btn-xs">${inviteButton}</a>--%>
             </td>
 
             <td>
@@ -117,16 +119,16 @@
             msg.forEach(
                     function fillUserTable(player) {
                         inviteButtonStyle = 'btn btn-primary btn-xs';
-                        if(player.isPlaying == true){
+                        if (player.isPlaying == true) {
                             inviteButtonStyle = 'btn btn-primary disabled'
                         }
-                        inviteBtn = '<a class=' + "\""+  inviteButtonStyle + "\"" + ' onclick = ' +
+                        inviteBtn = '<button class=' + "\"" + inviteButtonStyle + "\"" + ' onclick = ' +
                                 '\"socketInvitation.send(' + '\'' + player.name + '#' + '\'' + ')\"' +
-                                ' href="">${inviteButton}</a>'
+                                '>${inviteButton}</button>'
                         console.log(inviteBtn);
-                        console.log(player.isPlaying )
+                        console.log(player.isPlaying)
                         $('#players').append(
-                                        '<tr><td>' + player.number
+                                '<tr><td>' + player.number
                                         + '</td><td>' + player.name
                                         + '</td><td>' + inviteBtn
                                         + '</td></tr>')
