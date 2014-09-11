@@ -75,6 +75,7 @@
 
     function onInvitation(evt) {
         var message = evt.data;
+        updatePlayers();
         switch (message) {
             case 'yes':
                 window.location.href = "/game/multiplayer/play/" +${gameId};
@@ -90,6 +91,7 @@
                     window.location.href = "/game/multiplayer/play/" +${gameId};
                 }
                 else {
+
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
                             '${gameId}' + '#' + 'no');
                 }
