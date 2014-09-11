@@ -11,8 +11,7 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by kbardtc on 8/28/2014.
@@ -38,8 +37,9 @@ public class InvitationServerEndpoint {
         // Integer playerId = (Integer) session.getUserProperties().get("playerId");
         String playerLogin = message.substring(0, message.indexOf("#"));
 
-        //todo refactor code add to parameters enemy name and gam id
+        //todo refactor code add to parameters enemy name and game id
         Integer gameId = null;
+
         for (Map.Entry<Integer, Set<Player>> playerEntry : PlayersStatus.getPlayersStatus().entrySet()) {
             for (Player player : playerEntry.getValue()) {
                 if (player.getName().equals(playerLogin)) {
@@ -48,7 +48,6 @@ public class InvitationServerEndpoint {
                 }
             }
         }
-
         synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
             PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
         }
