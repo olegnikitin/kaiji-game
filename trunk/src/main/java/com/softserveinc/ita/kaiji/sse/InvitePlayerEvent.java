@@ -46,6 +46,7 @@ public class InvitePlayerEvent {
 
         try {
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
+                System.err.println("User " + principal.getName() + " is waiting");
                 PlayersStatus.getInvitePlayers().get(gameId).wait();
             }
         } catch (InterruptedException e) {

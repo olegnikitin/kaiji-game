@@ -94,13 +94,17 @@ public abstract class AbstractPlayer implements Player {
         this.star = new Star(starNumber);
     }
 
-    public void startPlaying() {
+    @Override
+    public void playing(Boolean play){
+        isPlaying = play;
+    }
+   /* public void startPlaying() {
         isPlaying = true;
     }
 
     public void stopPlaying() {
         isPlaying = false;
-    }
+    }*/
 
     public Boolean isPlaying() {
         return isPlaying;

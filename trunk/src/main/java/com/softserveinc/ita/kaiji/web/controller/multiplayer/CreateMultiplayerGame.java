@@ -81,7 +81,7 @@ public class CreateMultiplayerGame {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer playerId = gameService.addPlayer(auth.getName(), gameName);
         model.addAttribute("playerId", playerId);
-
+        System.err.println(infoId);
         PlayersStatus.getPlayersStatus().put(infoId, gameService.getGameInfo(infoId).getPlayers());
         PlayersStatus.getInvitePlayers().put(infoId,new Object());
 

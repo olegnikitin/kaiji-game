@@ -94,8 +94,8 @@ public class PlayMultiplayerGame {
         }
 
         if (person != null && enemy != null) {
-            person.startPlaying();
-            enemy.startPlaying();
+            person.playing(true);
+            enemy.playing(true);
         }
 
         model.addAttribute("gameId", gameId);

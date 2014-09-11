@@ -10,9 +10,10 @@ import com.softserveinc.ita.kaiji.model.util.pool.Poolable;
 
 /**
  * Interface represent some instance who can play
- * @author  Ievgen Sukhov
- * @since 15.03.14
+ *
+ * @author Ievgen Sukhov
  * @version 1.7
+ * @since 15.03.14
  */
 public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Comparable<Player>, Poolable<Integer> {
 
@@ -45,12 +46,14 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
 
     /**
      * Name of real player or bot
+     *
      * @return Player`s name
      */
     String getName();
 
     /**
      * Get user entity associated with current player
+     *
      * @return {@link User} object from which this player was created
      */
     User getUser();
@@ -58,13 +61,15 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
     /**
      * Check if currently selected card is available
      * in player`s deck(if it is, it will be removed)
+     *
      * @throws java.lang.IllegalArgumentException if  no
-     * such card available
+     *                                            such card available
      */
     void makeTurn(Card card);
 
     /**
      * Gets last choosen by player card
+     *
      * @return Card object that represents player`s card
      * for current round
      * @throws java.lang.IllegalStateException if current card is not set
@@ -75,28 +80,33 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
      * Sets player's state to ready for next turn
      * Nullifies field for chosen card in current Player
      * Only works if player has already made last turn successfully (TURN_FINISHED state)
+     *
      * @param result - accepts {@link Card.DuelResult} enum type to calculate statistics for player
-     * in current game
+     *               in current game
      */
     void commitTurn(Card.DuelResult result);
 
     /**
      * Return deck of player's cards
+     *
      * @return Deck object from current Player
      */
     Deck getDeck();
 
     boolean isGameWithStars();
+
     void setGameWithStars(boolean gameWithStars);
 
     /**
      * Return player's stars
+     *
      * @return Star object from current Player
      */
     Star getStar();
 
     /**
      * Checks if this object is not real player
+     *
      * @return <code>true</code> if this instance is some bot implementation
      */
     Boolean isBot();
@@ -110,32 +120,35 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
 
     /**
      * Returns <code>integer</code> number of all cards left in player's deck
+     *
      * @return java.lang.Integer number of available cards
      */
     Integer getCardCount();
 
     /**
-     *  Returns <code>true</code> if player can make next turn
-     *  <code>false</code> if player quited game or some error happened inside
-     *  @return java.lang.Boolean player state
+     * Returns <code>true</code> if player can make next turn
+     * <code>false</code> if player quited game or some error happened inside
+     *
+     * @return java.lang.Boolean player state
      */
     Boolean canPlay();
 
     /**
-     *  Sets player state for current game to FINISHED
+     * Sets player state for current game to FINISHED
      */
     void finish();
 
     /**
      * Gets {@link PlayerStatistics} object for current player with stats on previous
      * rounds results
+     *
      * @return PlayerStatistic instance
      */
     PlayerStatistics getStatistic();
 
-    void startPlaying();
+    void playing(Boolean play);
 
-    void stopPlaying();
+    //void stopPlaying();
 
     Boolean isPlaying();
 }
