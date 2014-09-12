@@ -5,6 +5,7 @@ import com.softserveinc.ita.kaiji.model.Card;
 import com.softserveinc.ita.kaiji.model.game.Game;
 import com.softserveinc.ita.kaiji.model.game.GameHistory;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
+import com.softserveinc.ita.kaiji.model.game.Round;
 import com.softserveinc.ita.kaiji.model.player.Player;
 
 import java.util.Set;
@@ -94,6 +95,8 @@ public interface GameService {
      */
     void makeTurn(Integer gameId, Integer playerId, Card card);
 
+    void makeTurn(Integer gameId, Integer playerId, Card card, Round round);
+
     /**
      * @param gameId - the id of the current game
      * @return true if the game is complete
@@ -144,4 +147,5 @@ public interface GameService {
     Set<Player> getAllOtherPlayers(Integer gameId, String userName);
 
     Player getPlayerByName(Integer gameId, String userName);
+
 }

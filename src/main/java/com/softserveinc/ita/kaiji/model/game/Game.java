@@ -112,6 +112,8 @@ public interface Game extends Identifiable, Statable<Game.State>, Poolable<Integ
      */
     void makeTurn(Card card, Player player);
 
+    void makeTurn(Card card, Player player, Round round);
+
     /**
      * Returns true if game can be normally finished.
      *

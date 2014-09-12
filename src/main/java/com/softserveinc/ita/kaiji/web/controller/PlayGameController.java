@@ -142,7 +142,7 @@ public class PlayGameController {
                 asyncContext.addListener(new TimeoutListener(), request, response);
                 gameSyncro.getRoundWaiter().put(gameId, new CountDownLatch(1));
                 asyncContext.start(new TurnChecker(asyncContext, gameId, gameSyncro.getRoundWaiter().get(gameId),
-                        systemConfigurationService.getSystemConfiguration().getRoundTimeout()));
+                        systemConfigurationService.getSystemConfiguration().getRoundTimeout(),"/game/"));
             } else {
                 gameSyncro.getRoundWaiter().get(gameId).countDown();
                 response.sendRedirect(request.getContextPath() + "/game/" + gameId + "/");

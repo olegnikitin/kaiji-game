@@ -25,7 +25,7 @@ public class MultiPlayerGameCreatorImpl implements GameCreator {
             return false;
         }
 
-        /*if (gameInfo.getPlayers().size() != COUNT_OF_PLAYERS) {
+        /*if (gameInfo.getPlayersNames().size() != COUNT_OF_PLAYERS) {
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Wrong count of players for game : BotGameImpl");
             }

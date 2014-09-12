@@ -13,7 +13,7 @@ import com.softserveinc.ita.kaiji.model.util.Statable;
  * @version 2.7
  * @since 20.03.14
  */
-interface Round extends Identifiable, Statable<Round.State> {
+public interface Round extends Identifiable, Statable<Round.State> {
 
     /**
      * All possible states of round.

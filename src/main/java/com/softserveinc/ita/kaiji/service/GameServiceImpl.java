@@ -290,8 +290,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void makeTurn(Integer gameId, Integer playerId, Card card)
-            throws IllegalArgumentException {
+    public void makeTurn(Integer gameId, Integer playerId, Card card) {
+        makeTurn(gameId, playerId, card, null);
+    }
+
+    @Override
+    public void makeTurn(Integer gameId, Integer playerId, Card card, Round round) throws IllegalArgumentException {
         Player activePlayer = userService.getPlayerById(playerId);
 
         Game game = getGameById(gameId);
@@ -304,7 +308,7 @@ public class GameServiceImpl implements GameService {
         if (LOG.isTraceEnabled()) {
             LOG.trace("makeTurn: exucuting a turn");
         }
-        game.makeTurn(card, activePlayer);
+        game.makeTurn(card, activePlayer, round);
         GAMES_SYNC.release(gameId);
     }
 

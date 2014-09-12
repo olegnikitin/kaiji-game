@@ -63,7 +63,7 @@ public class InvitationServerEndpoint {
                     if (data == null) {
                         s.getBasicRemote().sendText(String.valueOf(session.getUserProperties().get("playerLogin")));
                     } else {
-                        s.getBasicRemote().sendText(data);
+                        s.getBasicRemote().sendText(data+"/"+session.getUserProperties().get("playerLogin"));
                     }
             }
         } catch (IOException e) {

@@ -17,19 +17,22 @@ public class TurnChecker implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(TurnChecker.class);
 
-    protected AsyncContext asyncContext;
-    protected Integer gameId;
-    protected CountDownLatch latch;
-    protected Long timeout;
+    private AsyncContext asyncContext;
+    private Integer gameId;
+    private CountDownLatch latch;
+    private Long timeout;
+    private String dispatchLink;
 
     public TurnChecker(AsyncContext asyncContext,
                        Integer gameId,
                        CountDownLatch latch,
-                       Long timeout) {
+                       Long timeout,
+                       String dispatchLink) {
         this.asyncContext = asyncContext;
         this.gameId = gameId;
         this.latch = latch;
         this.timeout = timeout;
+        this.dispatchLink = dispatchLink;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class TurnChecker implements Runnable {
             LOG.error("Failed to check second player turn. " + e.getMessage());
         }
         if (status) {
-            asyncContext.dispatch("/game/" + gameId + "/");
+            asyncContext.dispatch(dispatchLink + gameId + "/");
         }
         /*if (!enemy.isBot()) {
             try {

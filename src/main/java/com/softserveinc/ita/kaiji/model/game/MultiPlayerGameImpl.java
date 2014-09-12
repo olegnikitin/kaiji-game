@@ -12,20 +12,20 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Created by ALEXANDRA on 09.09.2014.
+ * @author Sydorenko Oleksandra
+ * @version 1.0
+ * @since 09.09.14
  */
 public class MultiPlayerGameImpl extends TwoPlayerGameImpl {
 
     private static final Logger LOG = Logger.getLogger(MultiPlayerGameImpl.class);
-
-    private volatile Round currentRound = new StateRoundImpl();
 
     public MultiPlayerGameImpl(GameInfo gameInfo) {
         super(gameInfo);
     }
 
     @Override
-    public synchronized void makeTurn(Card card, Player player) {
+    public synchronized void makeTurn(Card card, Player player, Round round) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("<in> makeTurn()");
         }
@@ -34,14 +34,14 @@ public class MultiPlayerGameImpl extends TwoPlayerGameImpl {
 
         checkPlayer(player);
 
-        currentRound.makeTurn(card, player);
+        round.makeTurn(card, player);
 
-        if (currentRound.getState() == Round.State.ROUND_READY_TO_FINISH) {
+        if (round.getState() == Round.State.ROUND_READY_TO_FINISH) {
             if (LOG.isTraceEnabled()) {
                 LOG.trace("Game is finishing round...");
             }
 
-            finishRound(currentRound);
+            finishRound(round);
         }
 
         if (LOG.isDebugEnabled()) {
