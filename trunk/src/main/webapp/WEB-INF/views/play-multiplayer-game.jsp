@@ -214,7 +214,7 @@
             <hr style="margin-bottom: 0">
         </div>
     </div>
-    <div class="row">
+    <%--<div class="row">
         <div class="col-md-12" style="text-align: center;">
             <h2>
                 <c:choose>
@@ -232,7 +232,7 @@
                 </c:choose>
             </h2>
         </div>
-    </div>
+    </div>--%>
     <div class="row">
         <div class="col-md-12">
             <hr style="margin-top: 10px">
@@ -248,7 +248,6 @@
                 </c:if>
             </div>
             <div class="col-md-6" style="text-align: center;">
-                <span>${round } ${numberOfRound }</span>
             </div>
             <div class="col-md-3" style="text-align: center;">
                 <c:if test="${enemyStatus eq 'WIN'}">
