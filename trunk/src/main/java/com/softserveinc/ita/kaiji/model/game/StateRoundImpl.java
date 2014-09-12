@@ -18,7 +18,7 @@ import java.util.*;
  * @version 1.4
  * @since 20.03.14
  */
-class StateRoundImpl implements Round {
+public class StateRoundImpl implements Round {
 
     private static final Logger LOGGER = Logger.getLogger(StateRoundImpl.class);
     private static final Map<State, Set<State>> STATUS_SCHEMA = initStatusSchema();
@@ -34,7 +34,7 @@ class StateRoundImpl implements Round {
 
     private volatile RoundResult roundResult = null;
 
-    StateRoundImpl() {
+    public StateRoundImpl() {
         try {
             statusChanger.switchState(State.ROUND_STARTED);
         } catch (SwitchStateException e) {

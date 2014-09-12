@@ -1,5 +1,6 @@
 package com.softserveinc.ita.kaiji.web.controller.async;
 
+import com.softserveinc.ita.kaiji.model.game.Round;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,6 +11,7 @@ import java.util.concurrent.CountDownLatch;
 public class GameSyncro {
 
     private ConcurrentMap<Integer, CountDownLatch> roundWaiter = new ConcurrentHashMap<>();
+    private ConcurrentMap<Round, CountDownLatch> multiplayerRoundWaiter = new ConcurrentHashMap<>();
     private ConcurrentMap<Integer, CountDownLatch> gameWaiter = new ConcurrentHashMap<>();
 
     public ConcurrentMap<Integer, CountDownLatch> getRoundWaiter() {
@@ -26,5 +28,13 @@ public class GameSyncro {
 
     public void setGameWaiter(ConcurrentMap<Integer, CountDownLatch> gameWaiter) {
         this.gameWaiter = gameWaiter;
+    }
+
+    public ConcurrentMap<Round, CountDownLatch> getMultiplayerRoundWaiter() {
+        return multiplayerRoundWaiter;
+    }
+
+    public void setMultiplayerRoundWaiter(ConcurrentMap<Round, CountDownLatch> multiplayerRoundWaiter) {
+        this.multiplayerRoundWaiter = multiplayerRoundWaiter;
     }
 }

@@ -32,18 +32,19 @@ public class PlayGameRoundsTag extends SimpleTagSupport {
         List<RoundResult> roundResults = gameHistory.getRoundResults();
 
         for (int i = roundResults.size(); i > 0; i--) {
+            RoundResult currentRoundResult = roundResults.get(i - 1);
+            if (currentRoundResult.getPlayers().contains(player) && currentRoundResult.getPlayers().contains(enemy)) {
+                pageContext.setAttribute("numberOfRound", i);
 
-            pageContext.setAttribute("numberOfRound", i);
+                pageContext.setAttribute("playerStatus", currentRoundResult.getDuelResult(player));
+                pageContext.setAttribute("enemyStatus", currentRoundResult.getDuelResult(enemy));
 
-            pageContext.setAttribute("playerStatus", roundResults.get(i - 1).getDuelResult(player));
-            pageContext.setAttribute("enemyStatus", roundResults.get(i - 1).getDuelResult(enemy));
+                pageContext.setAttribute("playerCardIconUrl", getCardIconUrlByCard(currentRoundResult.getCard(player)));
+                pageContext.setAttribute("enemyCardIconUrl", getCardIconUrlByCard(currentRoundResult.getCard(enemy)));
+                getJspBody().invoke(null);
 
-            pageContext.setAttribute("playerCardIconUrl", getCardIconUrlByCard(roundResults.get(i - 1).getCard(player)));
-            pageContext.setAttribute("enemyCardIconUrl", getCardIconUrlByCard(roundResults.get(i - 1).getCard(enemy)));
-            getJspBody().invoke(null);
-
+            }
         }
-
     }
 
     private String getCardIconUrlByCard(Card card) {

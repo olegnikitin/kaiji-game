@@ -45,7 +45,7 @@ public class TurnCheckerTest {
     @Test
     public void run() throws Exception {
 
-        TurnChecker turnChecker = new TurnChecker(context, 0, new CountDownLatch(0), 1L);
+        TurnChecker turnChecker = new TurnChecker(context, 0, new CountDownLatch(0), 1L,"/game/");
         turnChecker.run();
         verify(context, times(1)).dispatch(eq("/game/0/"));
     }

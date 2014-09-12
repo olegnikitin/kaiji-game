@@ -75,10 +75,10 @@
 
     function onInvitation(evt) {
         var message = evt.data;
-
-        switch (message) {
+        var dataArr = message.split('/');
+        switch (dataArr[0]) {
             case 'yes':
-                window.location.href = "/game/multiplayer/play/" +${gameId};
+                window.location.href = "/game/multiplayer/play/${gameId}?enemy="+dataArr[1];
                 break;
             case 'no':
                 alert("Invitation rejected :(");
@@ -88,7 +88,7 @@
                 if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
                             '${gameId}' + '#' + 'yes');
-                    window.location.href = "/game/multiplayer/play/" +${gameId};
+                    window.location.href = "/game/multiplayer/play/${gameId}?enemy="+message;
                 }
                 else {
                     updatePlayers();
@@ -101,7 +101,6 @@
 
     function sendToServer(enemyLogin) {
         sessionStorage.setItem("enemyLogin", enemyLogin);
-        ;
     }
 
     window.onbeforeunload = function (evt) {

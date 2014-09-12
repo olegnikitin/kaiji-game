@@ -11,10 +11,10 @@ import java.util.Date;
 /**
  * Implementation of <code>Game</code> where can play one user and one bot.
  * Holds only one round in one period of time.
- * @see com.softserveinc.ita.kaiji.model.game.Game
  *
  * @author Paziy Evgeniy
  * @version 2.0
+ * @see com.softserveinc.ita.kaiji.model.game.Game
  * @since 26.03.14
  */
 public class BotGameImpl extends AbstractGame {
@@ -75,7 +75,12 @@ public class BotGameImpl extends AbstractGame {
     }
 
     @Override
-    public synchronized void makeTurn(Card card, Player player) {
+    public void makeTurn(Card card, Player player) {
+        makeTurn(card, player, null);
+    }
+
+    @Override
+    public synchronized void makeTurn(Card card, Player player, Round round) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("<in> makeTurn()");
         }

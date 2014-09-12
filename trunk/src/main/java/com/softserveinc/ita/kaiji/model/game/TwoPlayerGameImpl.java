@@ -40,7 +40,12 @@ public class TwoPlayerGameImpl extends AbstractGame {
     }
 
     @Override
-    public synchronized void makeTurn(Card card, Player player) {
+    public void makeTurn(Card card, Player player) {
+        makeTurn(card, player, null);
+    }
+
+    @Override
+    public synchronized void makeTurn(Card card, Player player, Round round) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("<in> makeTurn()");
         }
