@@ -1,5 +1,4 @@
 <%@ page language="java" isELIgnored="false" %>
-<%@ page import="com.softserveinc.ita.kaiji.chat.ChatUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
