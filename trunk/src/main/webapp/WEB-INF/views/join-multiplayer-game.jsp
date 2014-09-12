@@ -108,8 +108,8 @@
         $("#popWindow").hide();
         socketInvitation.send(users['${ownLogin}'] + '/' + '${ownLogin}' + '/' +
                 '${gameId}' + '#' + 'yes');
+        window.location.href = "/game/multiplayer/play/${gameId}?enemy="+users['${ownLogin}'];
         delete users['${ownLogin}'];
-        window.location.href = "/game/multiplayer/play/" +${gameId};
     }
 
     function declineInvitation() {
