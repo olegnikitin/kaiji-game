@@ -35,6 +35,10 @@
             href="${pageContext.servletContext.contextPath}/resources/css/styles.css"
             rel="stylesheet">
 
+    <link
+            href="${pageContext.servletContext.contextPath}/resources/css/custom.css"
+            rel="stylesheet">
+
     <script type="text/javascript"
             src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 

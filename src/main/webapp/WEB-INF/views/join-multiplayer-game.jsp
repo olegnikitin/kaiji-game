@@ -59,6 +59,36 @@
     </c:forEach>
 </table>
 
+<div id="popWindow" class="invite">
+    <div class="popup">
+        <div style="height:25px;line-height:25px;background-color:rgb(6, 62, 137);color:white;padding-left:5px;">
+            Invitation
+        </div>
+        <div align="center" style="padding-top:5px">
+            <div id="invitation" class="inv"></div>
+            <br/>
+            <input type="button" style="margin:5px" onClick="acceptInvitation()" value="Ok"/>
+            <input type="button" style="margin:5px" onClick="declineInvitation()" value="Cancel"/>
+        </div>
+    </div>
+</div>
+
+<div id="responseWindow" class="invite">
+    <div class="popup">
+        <div style="height:25px;line-height:25px;background-color:rgb(6, 62, 137);color:white;padding-left:5px;">
+            Response
+        </div>
+        <div align="center" style="padding-top:5px">
+            Invitation rejected :(.
+        </div>
+        <br/>
+
+        <div align="right" style="padding-top:5px">
+            <input type="button" style="margin:5px" onClick=$("#responseWindow").hide() value="Ok"/>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
 
@@ -66,11 +96,29 @@
             + '${pageContext.request.userPrincipal.name}';
     var socketInvitation;
     var eventSource;
+    var users = {};
 
 
     function connectToInvitationServer() {
         socketInvitation = new WebSocket(locationWebSocket);
         socketInvitation.onmessage = onInvitation;
+    }
+
+    function acceptInvitation() {
+        $("#popWindow").hide();
+        socketInvitation.send(users['${ownLogin}'] + '/' + '${ownLogin}' + '/' +
+                '${gameId}' + '#' + 'yes');
+        delete users['${ownLogin}'];
+        window.location.href = "/game/multiplayer/play/" +${gameId};
+    }
+
+    function declineInvitation() {
+        setTimeout(function () {
+            $("#popWindow").hide();
+            socketInvitation.send(users['${ownLogin}'] + '/' + '${ownLogin}' + '/' +
+                    '${gameId}' + '#' + 'no');
+            delete users['${ownLogin}'];
+        }, 1000);
     }
 
     function onInvitation(evt) {
@@ -81,11 +129,29 @@
                 window.location.href = "/game/multiplayer/play/${gameId}?enemy="+dataArr[1];
                 break;
             case 'no':
-                alert("Invitation rejected :(");
+                $("#responseWindow").show();
+                //alert("Invitation rejected :(");
                 break;
             default:
             {
-                if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
+                $("#popWindow").show();
+                $("#invitation.inv").text(message + " send you invitation to play. Do you want to play?");
+                users['${ownLogin}'] = message;
+                /*  if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
+                 socketInvitation.send(message + '/' + '
+                ${ownLogin}' + '/' +
+             '
+                ${gameId}' + '#' + 'yes');
+             window.location.href = "/game/multiplayer/play/" +
+                ${gameId};
+             }*/
+                //else {
+                /*    socketInvitation.send(message + '/' + '
+                ${ownLogin}' + '/' +
+             '
+                ${gameId}' + '#' + 'no');*/
+                //}
+     /*           if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
                             '${gameId}' + '#' + 'yes');
                     window.location.href = "/game/multiplayer/play/${gameId}?enemy="+message;
@@ -94,7 +160,7 @@
                     updatePlayers();
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
                             '${gameId}' + '#' + 'no');
-                }
+                }*/
             }
         }
     }
@@ -109,6 +175,7 @@
     }
 
     $(document).ready(function () {
+        $("#popWindow").hide();
         connectToInvitationServer();
         updatePlayers();
     })
