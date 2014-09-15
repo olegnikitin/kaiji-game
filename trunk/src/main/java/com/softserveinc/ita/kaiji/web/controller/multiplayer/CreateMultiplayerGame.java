@@ -1,6 +1,7 @@
 package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
+import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.util.PlayerStates;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
@@ -9,6 +10,7 @@ import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.sse.ServerEventsSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -72,21 +76,27 @@ public class CreateMultiplayerGame {
                          @RequestParam Integer infoId,
                          HttpServletRequest request, HttpServletResponse response,
                          Model model) throws IOException, ServletException {
-
-        final AsyncContext asyncContext = request.startAsync(request, response);
-        asyncContext.addListener(new TimeoutListener(), request, response);
-        Long timeout = TimeUnit.MILLISECONDS.convert(systemConfigurationService
-                .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS);
-        asyncContext.setTimeout(timeout);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Integer playerId = gameService.addPlayer(auth.getName(), gameName);
-        model.addAttribute("playerId", playerId);
-        System.err.println(infoId);
-        PlayersStatus.getPlayersStatus().put(infoId, gameService.getGameInfo(infoId).getPlayers());
-        PlayersStatus.getInvitePlayers().put(infoId,new Object());
-
-        Integer numberOfPlayers = gameService.getGameInfo(infoId).getNumberOfPlayers();
-        asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout, numberOfPlayers));
-
+        
+        GameInfo info = gameService.getGameInfo(infoId);
+        Integer numberOfPlayers = info.getNumberOfPlayers();
+        if (info.getPlayers().size() >= numberOfPlayers) {
+            request.setAttribute("manyPlayers", Boolean.TRUE);
+            RequestDispatcher rd = request.getRequestDispatcher("/game/multiplayer/join/" + infoId);
+            rd.forward(request, response);
+        } else {
+            final AsyncContext asyncContext = request.startAsync(request, response);
+            asyncContext.addListener(new TimeoutListener(), request, response);
+            Long timeout = TimeUnit.MILLISECONDS.convert(systemConfigurationService
+                    .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS);
+            asyncContext.setTimeout(timeout);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Integer playerId = gameService.addPlayer(auth.getName(), gameName);
+            model.addAttribute("playerId", playerId);
+            System.err.println(infoId);
+            PlayersStatus.getPlayersStatus().put(infoId, info.getPlayers());
+            PlayersStatus.getInvitePlayers().put(infoId,new Object());
+    
+            asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout, numberOfPlayers));
+        }
     }
 }
