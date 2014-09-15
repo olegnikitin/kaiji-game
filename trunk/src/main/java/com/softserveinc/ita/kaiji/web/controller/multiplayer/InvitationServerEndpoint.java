@@ -48,8 +48,11 @@ public class InvitationServerEndpoint {
         for (Player player : PlayersStatus.getPlayersStatus().get(gameId)) {
             if (player.getName().equals(ownLogin) || player.getName().equals(enemyLogin)) {
                 player.playing(isPlaying);
+                if (data != null){
+                    player.opponent(false);
+                }
             }
-            if(player.getName().equals(enemyLogin)){
+            if(player.getName().equals(enemyLogin) && data == null){
                 player.opponent(isPlaying);
             }
 
