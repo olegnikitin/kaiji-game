@@ -45,15 +45,16 @@ public class InvitationServerEndpoint {
 
         Boolean isPlaying = (data == null) || ("yes").equals(data);
 
-        System.err.println(enemyLogin + " " + ownLogin + " " + isPlaying);
         for (Player player : PlayersStatus.getPlayersStatus().get(gameId)) {
             if (player.getName().equals(ownLogin) || player.getName().equals(enemyLogin)) {
                 player.playing(isPlaying);
             }
+            if(player.getName().equals(enemyLogin)){
+                player.opponent(isPlaying);
+            }
 
         }
         synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
-            System.err.println("Notify all");
             PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
         }
 

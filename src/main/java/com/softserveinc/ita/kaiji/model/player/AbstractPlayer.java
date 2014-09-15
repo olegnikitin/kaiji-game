@@ -26,6 +26,7 @@ public abstract class AbstractPlayer implements Player {
     protected Card chosenCard;
     protected Boolean canPlay;
     protected Boolean isPlaying;
+    protected Boolean isOpponent;
 
     protected PlayerStatistics statistic = new PlayerStatistics();
 
@@ -108,6 +109,16 @@ public abstract class AbstractPlayer implements Player {
 
     public Boolean isPlaying() {
         return isPlaying;
+    }
+
+    @Override
+    public void opponent(Boolean opponent){
+        isOpponent = opponent;
+    }
+
+    @Override
+    public Boolean isOpponent(){
+        return isOpponent;
     }
 
     @Override

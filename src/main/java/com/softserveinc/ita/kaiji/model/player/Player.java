@@ -150,5 +150,9 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
 
     //void stopPlaying();
 
+    void opponent(Boolean opponent);
+
+    Boolean isOpponent();
+
     Boolean isPlaying();
 }

@@ -12,7 +12,7 @@
 <spring:message code="join-game.connecting" var="connecting"/>
 <spring:message code="join-game.playerNickname" var="playerNickname"/>
 <spring:message code="join-game.inviteButton" var="inviteButton"/>
-<c:set var="ownLogin" value="${pageContext.request.userPrincipal.name}"></c:set>
+<c:set var="ownLogin" value="${pageContext.request.userPrincipal.name}"/>
 
 
 <form class="form-inline" role="form">
@@ -40,13 +40,25 @@
         <tr>
             <td>${rowCounter.count}</td>
             <td>${player.user.nickname}</td>
+
             <td>
+            <c:choose>
+                <c:when test="${!player.isPlaying()}">
+                    <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
+                            class="btn btn-primary btn-xs">${inviteButton}</button>
+                </c:when>
+                <c:otherwise>
+                    <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
+                            class="btn btn-primary disabled">${inviteButton}</button>
+                </c:otherwise>
+            </c:choose>
+                </td>
+
+        <%--    <td>
+
                 <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
                         class="btn btn-primary btn-xs">${inviteButton}</button>
-                    <%--                <a href=""
-                                       onclick="socketInvitation.send('${player.user.nickname}'+'#')"
-                                       class="btn btn-primary btn-xs">${inviteButton}</a>--%>
-            </td>
+            </td>--%>
 
             <td>
                 <div id="wait-${rowCounter.count}" style="display: none;"
@@ -59,7 +71,7 @@
     </c:forEach>
 </table>
 
-<div id="popWindow" class="invite">
+<%--<div id="popWindow" class="invite">
     <div class="popup">
         <div style="height:25px;line-height:25px;background-color:rgb(6, 62, 137);color:white;padding-left:5px;">
             Invitation
@@ -87,7 +99,7 @@
             <input type="button" style="margin:5px" onClick=$("#responseWindow").hide() value="Ok"/>
         </div>
     </div>
-</div>
+</div>--%>
 
 
 <script type="text/javascript">
@@ -104,11 +116,11 @@
         socketInvitation.onmessage = onInvitation;
     }
 
-    function acceptInvitation() {
+    /*function acceptInvitation() {
         $("#popWindow").hide();
         socketInvitation.send(users['${ownLogin}'] + '/' + '${ownLogin}' + '/' +
                 '${gameId}' + '#' + 'yes');
-        window.location.href = "/game/multiplayer/play/${gameId}?enemy="+users['${ownLogin}'];
+        window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + users['${ownLogin}'];
         delete users['${ownLogin}'];
     }
 
@@ -119,48 +131,47 @@
                     '${gameId}' + '#' + 'no');
             delete users['${ownLogin}'];
         }, 1000);
-    }
+    }*/
 
     function onInvitation(evt) {
         var message = evt.data;
         var dataArr = message.split('/');
         switch (dataArr[0]) {
             case 'yes':
-                window.location.href = "/game/multiplayer/play/${gameId}?enemy="+dataArr[1];
+                window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + dataArr[1];
                 break;
             case 'no':
-                $("#responseWindow").show();
-                //alert("Invitation rejected :(");
+                //$("#responseWindow").show();
+                alert("Invitation rejected :(");
                 break;
             default:
             {
-                $("#popWindow").show();
-                $("#invitation.inv").text(message + " send you invitation to play. Do you want to play?");
-                users['${ownLogin}'] = message;
-                /*  if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
+                /* $("#popWindow").show();
+                 $("#invitation.inv").text(message + " send you invitation to play. Do you want to play?");
+                 users['
+                ${ownLogin}'] = message;*/
+                if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
+                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' + '${gameId}' + '#' + 'yes');
+                    window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + message ;
+                }
+                else {
+                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' + '${gameId}' + '#' + 'no');
+                }
+                /*           if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                  socketInvitation.send(message + '/' + '
                 ${ownLogin}' + '/' +
              '
                 ${gameId}' + '#' + 'yes');
-             window.location.href = "/game/multiplayer/play/" +
-                ${gameId};
-             }*/
-                //else {
-                /*    socketInvitation.send(message + '/' + '
+             window.location.href = "/game/multiplayer/play/
+                ${gameId}?enemy="+message;
+             }
+             else {
+             updatePlayers();
+             socketInvitation.send(message + '/' + '
                 ${ownLogin}' + '/' +
              '
-                ${gameId}' + '#' + 'no');*/
-                //}
-     /*           if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
-                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
-                            '${gameId}' + '#' + 'yes');
-                    window.location.href = "/game/multiplayer/play/${gameId}?enemy="+message;
-                }
-                else {
-                    updatePlayers();
-                    socketInvitation.send(message + '/' + '${ownLogin}' + '/' +
-                            '${gameId}' + '#' + 'no');
-                }*/
+                ${gameId}' + '#' + 'no');
+             }*/
             }
         }
     }
@@ -170,6 +181,7 @@
     }
 
     window.onbeforeunload = function (evt) {
+        eventSource.close();
         // socketRoundTimeout.close();
 
     }
