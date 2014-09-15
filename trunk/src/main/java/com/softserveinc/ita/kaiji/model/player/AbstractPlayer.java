@@ -97,8 +97,13 @@ public abstract class AbstractPlayer implements Player {
     }
 
     @Override
-    public void playing(Boolean play){
-        isPlaying = play;
+     public void startPlaying(){
+        isPlaying = true;
+    }
+
+    @Override
+    public void stopPlaying(){
+        isPlaying = false;
     }
 
     @Override

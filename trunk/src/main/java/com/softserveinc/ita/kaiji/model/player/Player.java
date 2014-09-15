@@ -146,9 +146,9 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
      */
     PlayerStatistics getStatistic();
 
-    void playing(Boolean play);
+    void startPlaying();
 
-    //void stopPlaying();
+    void stopPlaying();
 
     void opponent(Boolean opponent);
 

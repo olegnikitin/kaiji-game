@@ -47,16 +47,20 @@ public class InvitationServerEndpoint {
 
         for (Player player : PlayersStatus.getPlayersStatus().get(gameId)) {
             if (player.getName().equals(ownLogin) || player.getName().equals(enemyLogin)) {
-                player.playing(isPlaying);
-                if (data != null){
+                if (isPlaying) {
+                    player.startPlaying();
+                } else {
+                    player.stopPlaying();
+                }
+                if (data != null) {
                     player.opponent(false);
                 }
             }
-            if(player.getName().equals(enemyLogin) && data == null){
+            if (player.getName().equals(enemyLogin) && data == null) {
                 player.opponent(isPlaying);
             }
 
-            if (player.getName().equals(enemyLogin) && ("no").equals(data)){
+            if (player.getName().equals(enemyLogin) && ("no").equals(data)) {
                 player.rejectInvitation(true);
             }
 
@@ -71,7 +75,7 @@ public class InvitationServerEndpoint {
                     if (data == null) {
                         s.getBasicRemote().sendText(String.valueOf(session.getUserProperties().get("playerLogin")));
                     } else {
-                        s.getBasicRemote().sendText(data+"/"+session.getUserProperties().get("playerLogin"));
+                        s.getBasicRemote().sendText(data + "/" + session.getUserProperties().get("playerLogin"));
                     }
             }
         } catch (IOException e) {
