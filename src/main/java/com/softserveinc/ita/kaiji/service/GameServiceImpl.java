@@ -390,7 +390,7 @@ public class GameServiceImpl implements GameService {
         for (GameInfo gi : GAME_INFOS) {
             if (gi.getGameName().equals(gameName)) {
                 Player secondPlayer = userService.addPlayer(nickname, gi);
-                secondPlayer.playing(false);
+                secondPlayer.stopPlaying();
                 secondPlayer.opponent(false);
                 secondPlayer.rejectInvitation(false);
                 gi.getPlayers().add(secondPlayer);

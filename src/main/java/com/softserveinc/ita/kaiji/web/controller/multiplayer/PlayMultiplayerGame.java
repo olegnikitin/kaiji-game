@@ -101,8 +101,8 @@ public class PlayMultiplayerGame {
             if (mrFactory.getMultiPlayerRoundBy(person.getName()) == null) {
                 if (enemy != null) {
                     mrFactory.addMultiPlayerRound(person.getName(), enemy.getName());
-                    person.playing(true);
-                    enemy.playing(true);
+                    person.startPlaying();
+                    enemy.startPlaying();
                 }
             }
         }
