@@ -44,18 +44,23 @@ public class InvitePlayerEvent {
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
 
+        Player currentPlayer = gameService.getPlayerByName(gameId, principal.getName());
         try {
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
                 System.err.println("User " + principal.getName() + " is waiting");
-                PlayersStatus.getInvitePlayers().get(gameId).wait();
-            }
+                if(!currentPlayer.isRejected()){
+                    PlayersStatus.getInvitePlayers().get(gameId).wait();
+                } else{
+                    currentPlayer.rejectInvitation(false);
+                }
+               }
         } catch (InterruptedException e) {
             LOG.error("Failed to send data from server " + e.getMessage());
         }
         List<InvitePlayerDto> playerDto = new ArrayList<>();
         Integer number = 0;
         Boolean playing;
-        Player currentPlayer = gameService.getPlayerByName(gameId, principal.getName());
+
         Boolean isPlaying = currentPlayer.isPlaying();
         for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
             playing = false;

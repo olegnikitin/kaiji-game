@@ -392,6 +392,7 @@ public class GameServiceImpl implements GameService {
                 Player secondPlayer = userService.addPlayer(nickname, gi);
                 secondPlayer.playing(false);
                 secondPlayer.opponent(false);
+                secondPlayer.rejectInvitation(false);
                 gi.getPlayers().add(secondPlayer);
                 return secondPlayer.getId();
             }

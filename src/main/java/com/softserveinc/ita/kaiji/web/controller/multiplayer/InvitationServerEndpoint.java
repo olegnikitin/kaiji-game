@@ -56,6 +56,10 @@ public class InvitationServerEndpoint {
                 player.opponent(isPlaying);
             }
 
+            if (player.getName().equals(enemyLogin) && ("no").equals(data)){
+                player.rejectInvitation(true);
+            }
+
         }
         synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
             PlayersStatus.getInvitePlayers().get(gameId).notifyAll();

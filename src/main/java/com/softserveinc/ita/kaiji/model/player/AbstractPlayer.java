@@ -27,6 +27,7 @@ public abstract class AbstractPlayer implements Player {
     protected Boolean canPlay;
     protected Boolean isPlaying;
     protected Boolean isOpponent;
+    protected Boolean isRejected;
 
     protected PlayerStatistics statistic = new PlayerStatistics();
 
@@ -99,14 +100,8 @@ public abstract class AbstractPlayer implements Player {
     public void playing(Boolean play){
         isPlaying = play;
     }
-   /* public void startPlaying() {
-        isPlaying = true;
-    }
 
-    public void stopPlaying() {
-        isPlaying = false;
-    }*/
-
+    @Override
     public Boolean isPlaying() {
         return isPlaying;
     }
@@ -119,6 +114,16 @@ public abstract class AbstractPlayer implements Player {
     @Override
     public Boolean isOpponent(){
         return isOpponent;
+    }
+
+    @Override
+    public void rejectInvitation(Boolean reject){
+        isRejected = reject;
+    }
+
+    @Override
+    public Boolean isRejected(){
+        return isRejected;
     }
 
     @Override
