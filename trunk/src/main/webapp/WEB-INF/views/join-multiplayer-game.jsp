@@ -44,11 +44,11 @@
             <td>
             <c:choose>
                 <c:when test="${!player.isPlaying()}">
-                    <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
+                    <button id="${player.user.nickname}" onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#');disableAllButtons()"
                             class="btn btn-primary btn-xs">${inviteButton}</button>
                 </c:when>
                 <c:otherwise>
-                    <button onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#')"
+                    <button <%--onclick="socketInvitation.send('${player.user.nickname}'+'/'+'${ownLogin}'+'/'+'${gameId}'+'#');disableAllButtons()"--%>
                             class="btn btn-primary disabled">${inviteButton}</button>
                 </c:otherwise>
             </c:choose>
@@ -84,21 +84,6 @@
         </div>
     </div>
 </div>
-
-<div id="responseWindow" class="invite">
-    <div class="popup">
-        <div style="height:25px;line-height:25px;background-color:rgb(6, 62, 137);color:white;padding-left:5px;">
-            Response
-        </div>
-        <div align="center" style="padding-top:5px">
-            Invitation rejected :(.
-        </div>
-        <br/>
-
-        <div align="right" style="padding-top:5px">
-            <input type="button" style="margin:5px" onClick=$("#responseWindow").hide() value="Ok"/>
-        </div>
-    </div>
 </div>--%>
 
 
@@ -123,15 +108,13 @@
         window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + users['${ownLogin}'];
         delete users['${ownLogin}'];
     }
-
-    function declineInvitation() {
-        setTimeout(function () {
-            $("#popWindow").hide();
-            socketInvitation.send(users['${ownLogin}'] + '/' + '${ownLogin}' + '/' +
-                    '${gameId}' + '#' + 'no');
-            delete users['${ownLogin}'];
-        }, 1000);
     }*/
+
+    function disableAllButtons(){
+        <c:forEach var="player" items="${playersList}" varStatus="rowCounter">
+        $("#" + '${player.user.nickname}').attr('class', 'btn btn-primary disabled');
+        </c:forEach>
+    }
 
     function onInvitation(evt) {
         var message = evt.data;
@@ -141,15 +124,10 @@
                 window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + dataArr[1];
                 break;
             case 'no':
-                //$("#responseWindow").show();
                 alert("Invitation rejected :(");
                 break;
             default:
             {
-                /* $("#popWindow").show();
-                 $("#invitation.inv").text(message + " send you invitation to play. Do you want to play?");
-                 users['
-                ${ownLogin}'] = message;*/
                 if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' + '${gameId}' + '#' + 'yes');
                     window.location.href = "/game/multiplayer/play/${gameId}?enemy=" + message ;
@@ -157,21 +135,6 @@
                 else {
                     socketInvitation.send(message + '/' + '${ownLogin}' + '/' + '${gameId}' + '#' + 'no');
                 }
-                /*           if (confirm(message + " send you invitation to play. Do you want to play with " + message + "?")) {
-                 socketInvitation.send(message + '/' + '
-                ${ownLogin}' + '/' +
-             '
-                ${gameId}' + '#' + 'yes');
-             window.location.href = "/game/multiplayer/play/
-                ${gameId}?enemy="+message;
-             }
-             else {
-             updatePlayers();
-             socketInvitation.send(message + '/' + '
-                ${ownLogin}' + '/' +
-             '
-                ${gameId}' + '#' + 'no');
-             }*/
             }
         }
     }
@@ -210,9 +173,10 @@
                         if (player.isPlaying == true) {
                             inviteButtonStyle = 'btn btn-primary disabled'
                         }
-                        inviteBtn = '<button class=' + "\"" + inviteButtonStyle + "\"" + ' onclick = ' +
-                                '\"socketInvitation.send(' + '\'' + player.name + '/' +
-                                '${ownLogin}' + '/' + '${gameId}' + '#' + '\'' + ')\"' +
+                        inviteBtn = '<button class=' + "\"" + inviteButtonStyle + "\"" +
+                                ' id = ' + "\"" +  player.name + "\" " +
+                                ' onclick = ' + '\"socketInvitation.send(' + '\'' + player.name + '/' +
+                                '${ownLogin}' + '/' + '${gameId}' + '#' + '\'' + ');disableAllButtons()\"' +
                                 '>${inviteButton}</button>'
                         console.log(inviteBtn);
                         console.log(player.isPlaying)
