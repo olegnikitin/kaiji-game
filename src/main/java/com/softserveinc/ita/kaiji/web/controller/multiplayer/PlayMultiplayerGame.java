@@ -11,8 +11,11 @@ import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import com.softserveinc.ita.kaiji.web.controller.async.TurnChecker;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +42,10 @@ public class PlayMultiplayerGame {
 
     @Autowired
     private GameService gameService;
+    
+    @Qualifier("messageSource")
+    @Autowired
+    private MessageSource messageSource;
 
     @Autowired
     private SystemConfigurationService systemConfigurationService;
@@ -51,22 +60,31 @@ public class PlayMultiplayerGame {
 
     @RequestMapping(value = "/join/{gameId}", method = RequestMethod.GET)
     public String createdGame(@PathVariable("gameId") Integer gameId,
+                              HttpServletRequest request,
                               Model model,
+                              Locale locale,
                               Principal principal) {
 
-        GameInfo info = gameService.getGameInfo(gameId);
-        List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
-        Player playerForRemoving = null;
-        for (Player player : gamePlayers) {
-            if (player.getName().equals(principal.getName())) {
-                playerForRemoving = player;
+        if ((Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE) {
+            String errorMessage = messageSource.getMessage("TooManyPlayers.error", null, locale);
+            model.addAttribute("notification", errorMessage);
+            model.addAttribute("openedGames", gameService.getRealPlayerInGame());
+            return "join-game";
+        } else {
+            GameInfo info = gameService.getGameInfo(gameId);
+            List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
+            Player playerForRemoving = null;
+            for (Player player : gamePlayers) {
+                if (player.getName().equals(principal.getName())) {
+                    playerForRemoving = player;
+                }
             }
+            gamePlayers.remove(playerForRemoving);
+    
+            model.addAttribute("gameId", gameId);
+            model.addAttribute("playersList", gamePlayers);
+            return "join-multiplayer-game";
         }
-        gamePlayers.remove(playerForRemoving);
-
-        model.addAttribute("gameId", gameId);
-        model.addAttribute("playersList", gamePlayers);
-        return "join-multiplayer-game";
     }
 
     @RequestMapping(value = "/play/{gameId}", method = RequestMethod.GET)
