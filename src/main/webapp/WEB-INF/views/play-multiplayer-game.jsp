@@ -110,7 +110,6 @@
              style="text-align: center; height: 30px; padding: 7px">
             ${playerObject.name}
             <c:if test="${isFinished}">
-                -
                 <script type="text/javascript">
 
                     $(document).ready(function () {
@@ -169,6 +168,7 @@
     </div>
     <div class="row" style="text-align: center">
         <br>
+        <c:if test="${isFinished}">
         <c:choose>
             <c:when test="${playerChosenCard eq 'ROCK'}">
                 <img style="width: 100%"
@@ -183,6 +183,7 @@
                      src="http://i60.tinypic.com/sdg4k4.jpg">
             </c:when>
         </c:choose>
+       </c:if>
     </div>
 </div>
 
@@ -289,7 +290,6 @@
              style="text-align: center; height: 30px; padding: 7px">
             ${enemyObject.name}
             <c:if test="${isFinished}">
-                -
                 <c:choose>
                     <c:when test="${empty gameHistory.getWinners()}">${drawStatus }</c:when>
                     <c:when test="${gameHistory.getWinners().contains(enemyObject) }">${winner}</c:when>
@@ -306,7 +306,7 @@
         <br>
 
         <div id="hide">
-
+            <c:if test="${isFinished}">
             <c:choose>
                 <c:when test="${enemyChosenCard eq 'ROCK'}">
                     <img style="width: 100%"
@@ -321,6 +321,7 @@
                          src="http://i60.tinypic.com/sdg4k4.jpg">
                 </c:when>
             </c:choose>
+           </c:if>
         </div>
     </div>
 </div>
