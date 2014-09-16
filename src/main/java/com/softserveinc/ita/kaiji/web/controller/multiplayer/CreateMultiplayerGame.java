@@ -3,7 +3,6 @@ package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
-import com.softserveinc.ita.kaiji.model.util.PlayerStates;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
@@ -79,7 +78,15 @@ public class CreateMultiplayerGame {
         
         GameInfo info = gameService.getGameInfo(infoId);
         Integer numberOfPlayers = info.getNumberOfPlayers();
-        if (info.getPlayers().size() >= numberOfPlayers) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Boolean containsPlayer = false;
+        for (Player player : info.getPlayers()) {
+            if (player.getUser().getNickname().equals(auth.getName())) {
+                containsPlayer = true;
+                break;
+            }
+        }
+        if (info.getPlayers().size() >= numberOfPlayers && !containsPlayer) {
             request.setAttribute("manyPlayers", Boolean.TRUE);
             RequestDispatcher rd = request.getRequestDispatcher("/game/multiplayer/join/" + infoId);
             rd.forward(request, response);
@@ -89,12 +96,13 @@ public class CreateMultiplayerGame {
             Long timeout = TimeUnit.MILLISECONDS.convert(systemConfigurationService
                     .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS);
             asyncContext.setTimeout(timeout);
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Integer playerId = gameService.addPlayer(auth.getName(), gameName);
-            model.addAttribute("playerId", playerId);
+            if (!containsPlayer) {
+                Integer playerId = gameService.addPlayer(auth.getName(), gameName);
+                model.addAttribute("playerId", playerId);
+            }
             System.err.println(infoId);
             PlayersStatus.getPlayersStatus().put(infoId, info.getPlayers());
-            PlayersStatus.getInvitePlayers().put(infoId,new Object());
+            PlayersStatus.getInvitePlayers().put(infoId, new Object());
     
             asyncContext.start(new MultiplayerWaiter(asyncContext, infoId, gameService, timeout, numberOfPlayers));
         }
