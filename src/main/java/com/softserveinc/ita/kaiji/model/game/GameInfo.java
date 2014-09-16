@@ -22,6 +22,14 @@ public interface GameInfo extends Identifiable, Poolable<Integer> {
      */
     Set<Player> getPlayers();
 
+
+    /**
+     *
+     * @param nickname player's nickname
+     * @return player by defined nickname
+     */
+    Player getPlayerByName(String nickname);
+
     /**
      * @return the name of the game
      */

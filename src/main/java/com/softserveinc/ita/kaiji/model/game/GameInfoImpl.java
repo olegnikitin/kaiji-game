@@ -3,6 +3,7 @@ package com.softserveinc.ita.kaiji.model.game;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 
 import com.softserveinc.ita.kaiji.model.player.Player;
@@ -88,12 +89,12 @@ public class GameInfoImpl implements GameInfo {
     }
 
     @Override
-    public Integer getNumberOfPlayers(){
+    public Integer getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
     @Override
-    public void setNumberOfPlayers(Integer numberOfPlayers){
+    public void setNumberOfPlayers(Integer numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
@@ -149,6 +150,16 @@ public class GameInfoImpl implements GameInfo {
     @Override
     public Set<Player> getPlayers() {
         return players;
+    }
+
+    @Override
+    public Player getPlayerByName(String nickname) {
+        for (Player p : getPlayers()) {
+            if (nickname.equals(p.getName())) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public Integer getDatabaseId() {

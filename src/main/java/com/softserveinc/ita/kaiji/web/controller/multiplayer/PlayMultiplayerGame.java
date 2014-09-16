@@ -201,9 +201,11 @@ public class PlayMultiplayerGame {
                               Model model,
                               RedirectAttributes ra) throws IOException {
         mrFactory.removeMultiPlayerRound(enemy);
+        Integer gameId = (Integer)model.asMap().get("gameId");
         if (gameOver) {
             return "redirect:/";
         } else {
+            gameService.getGameInfo(gameId).getPlayerByName(enemy).stopPlaying();
             return "redirect:/game/multiplayer/join/" + model.asMap().get("gameId");
         }
     }
