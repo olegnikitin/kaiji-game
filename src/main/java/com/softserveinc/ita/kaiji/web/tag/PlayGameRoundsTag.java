@@ -1,16 +1,16 @@
 package com.softserveinc.ita.kaiji.web.tag;
 
-import java.io.IOException;
-import java.util.List;
+import com.softserveinc.ita.kaiji.model.Card;
+import com.softserveinc.ita.kaiji.model.game.Game;
+import com.softserveinc.ita.kaiji.model.game.GameHistory;
+import com.softserveinc.ita.kaiji.model.game.RoundResult;
+import com.softserveinc.ita.kaiji.model.player.Player;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-
-import com.softserveinc.ita.kaiji.model.Card;
-import com.softserveinc.ita.kaiji.model.game.GameHistory;
-import com.softserveinc.ita.kaiji.model.game.RoundResult;
-import com.softserveinc.ita.kaiji.model.player.Player;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Eugene Semenkov
@@ -33,7 +33,8 @@ public class PlayGameRoundsTag extends SimpleTagSupport {
 
         for (int i = roundResults.size(); i > 0; i--) {
             RoundResult currentRoundResult = roundResults.get(i - 1);
-            if (currentRoundResult.getPlayers().contains(player) && currentRoundResult.getPlayers().contains(enemy)) {
+            if (!gameHistory.getGameInfo().getGameType().equals(Game.Type.KAIJI_GAME)&&
+                    currentRoundResult.getPlayers().contains(player) && currentRoundResult.getPlayers().contains(enemy)) {
                 pageContext.setAttribute("numberOfRound", i);
 
                 pageContext.setAttribute("playerStatus", currentRoundResult.getDuelResult(player));

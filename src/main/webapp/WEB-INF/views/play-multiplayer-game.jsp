@@ -18,7 +18,7 @@
 <spring:message code="play-game.winner" var="winner"/>
 <spring:message code="play-game.loser" var="loser"/>
 <spring:message code="play-game.draw" var="drawStatus"/>
-<spring:message code="play-game.gameOver" var="gameOver"/>
+<spring:message code="play-game.gameOver" var="gameOverLabel"/>
 <spring:message code="play-game.gameStart" var="gameStart"/>
 <spring:message code="play-game.newGame" var="newGame"/>
 <spring:message code="play-game.rules" var="rules"/>
@@ -29,7 +29,9 @@
 <c:set var="roundsCount"
        value="${fn:length(gameHistory.getRoundResults()) }"/>
 <c:set var="isFinished"
-       value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}"/>
+       value="${endRound}"/>
+<c:set var="gameOver"
+       value="${gameOver}"/>
 <c:set var="playerChosenCard"
        value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}"/>
 <c:set var="enemyChosenCard"
@@ -332,34 +334,24 @@
             <table class="table">
 
                 <tr>
-                    <td> Winner</td>
+                    <td> Result</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${gameHistory.winners.size() eq 0 }">DRAW</c:when>
-                            <c:otherwise>${gameHistory.winners}</c:otherwise>
-                        </c:choose>
+                        <h3> ${result} </h3>
                     </td>
                 </tr>
-                <tr>
-                    <td>State</td>
-                    <td>${gameHistory.gameStatus} </td>
-                </tr>
-                <tr>
-                    <td>Start time</td>
-                    <td>${gameHistory.gameInfo.gameStartTime} </td>
-                </tr>
-                <tr>
-                    <td>Finish time</td>
-                    <td>${gameHistory.gameInfo.gameFinishTime} </td>
-                </tr>
-                <tr>
-                    <td>Cards played</td>
-                    <td>${gameHistory.gameInfo.numberOfCards * 3} </td>
-                </tr>
+                <c:choose>
+                    <c:when test="${gameOver}">
+                        <tr>
+                            <td> Your game is over!:( Try again!!!</td>
+                        </tr>
+                    </c:when>
+                </c:choose>
             </table>
             </br>
-            <a href="<spring:url value="/game/finish/${gameId}"/>" class="btn btn-primary col-md-6 col-md-offset-3">Finish
-                game</a>
+
+            <a href="/game/multiplayer/finishRound/${enemyObject}?gameOver=${gameOver}"
+               class="btn btn-primary col-md-6 col-md-offset-3">Finish
+            </a>
             </br>
         </div>
     </div>

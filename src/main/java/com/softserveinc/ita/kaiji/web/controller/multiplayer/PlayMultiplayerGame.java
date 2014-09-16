@@ -11,7 +11,6 @@ import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
 import com.softserveinc.ita.kaiji.web.controller.async.TimeoutListener;
 import com.softserveinc.ita.kaiji.web.controller.async.TurnChecker;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,11 +18,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -42,7 +41,10 @@ public class PlayMultiplayerGame {
 
     @Autowired
     private GameService gameService;
-    
+
+    @Autowired
+    MultiPlayerRoundFactory mrFactory;
+
     @Qualifier("messageSource")
     @Autowired
     private MessageSource messageSource;
@@ -80,7 +82,7 @@ public class PlayMultiplayerGame {
                 }
             }
             gamePlayers.remove(playerForRemoving);
-    
+
             model.addAttribute("gameId", gameId);
             model.addAttribute("playersList", gamePlayers);
             return "join-multiplayer-game";
@@ -94,8 +96,6 @@ public class PlayMultiplayerGame {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Starting initGame for multiplayer game.");
         }
-
-        MultiPlayerRoundFactory mrFactory = new MultiPlayerRoundFactory();
 
         GameHistory gameHistory = gameService.getGameHistory(gameId);
         GameInfo gameInfo = gameHistory.getGameInfo();
@@ -130,6 +130,9 @@ public class PlayMultiplayerGame {
         model.addAttribute("playerObject", person);
         model.addAttribute("enemyObject", enemy);
         model.addAttribute("enemyNumCards", enemy != null ? enemy.getCardCount() : null);
+        if (gameHistory.getRoundResults().size() != 0)
+            model.addAttribute("result", gameHistory.getRoundResults().get(gameHistory.getRoundResults().size() - 1)
+                    .getDuelResult(person));
 
         return "play-multiplayer-game";
     }
@@ -149,8 +152,6 @@ public class PlayMultiplayerGame {
             }
         }
 
-        MultiPlayerRoundFactory mrFactory = new MultiPlayerRoundFactory();
-
         Player player = (Player) model.asMap().get("playerObject");
         Player enemy = (Player) model.asMap().get("enemyObject");
         Integer enemyNumCards = (Integer) model.asMap().get("enemyNumCards");
@@ -165,10 +166,46 @@ public class PlayMultiplayerGame {
             asyncContext.addListener(new TimeoutListener(), rq, rsp);
             gameSyncro.getMultiplayerRoundWaiter().put(playerRound, new CountDownLatch(1));
             asyncContext.start(new TurnChecker(asyncContext, gameId, gameSyncro.getMultiplayerRoundWaiter().get(playerRound),
-                    systemConfigurationService.getSystemConfiguration().getRoundTimeout(),"/game/multiplayer/play/"));
+                    systemConfigurationService.getSystemConfiguration().getRoundTimeout(),
+                    "/game/multiplayer/play/"));
+            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/showPopup/" + gameId);
         } else {
             gameSyncro.getMultiplayerRoundWaiter().get(playerRound).countDown();
-            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/play/" + gameId + "/");
+            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/showPopup/" + gameId);
         }
     }
+
+    @RequestMapping(value = "finish/{gameId}")
+    public String finishGame(@PathVariable Integer gameId) {
+        gameService.finishGame(gameId);
+        return "redirect:/game/multiplayer/join/{gameId}";
+    }
+
+    @RequestMapping(value = "/showPopup/{gameId}", method = RequestMethod.GET)
+    public String asd(@PathVariable Integer gameId,
+                      Model model,
+                      RedirectAttributes ra) throws IOException {
+        ra.addFlashAttribute("endRound", true);
+        if (((Player) model.asMap().get("playerObject")).getCardCount() == 0 ||
+                ((Player) model.asMap().get("playerObject")).getStar().getQuantity() == 0) {
+            ra.addFlashAttribute("gameOver", "true");
+        } else {
+            ra.addFlashAttribute("gameOver", "false");
+        }
+        return "redirect:/game/multiplayer/play/" + gameId;
+    }
+
+    @RequestMapping(value = "/finishRound/{enemy}", method = RequestMethod.GET)
+    public String finishRound(@PathVariable String enemy,
+                              @RequestParam("gameOver") boolean gameOver,
+                              Model model,
+                              RedirectAttributes ra) throws IOException {
+        mrFactory.removeMultiPlayerRound(enemy);
+        if (gameOver) {
+            return "redirect:/";
+        } else {
+            return "redirect:/game/multiplayer/join/" + model.asMap().get("gameId");
+        }
+    }
+
 }

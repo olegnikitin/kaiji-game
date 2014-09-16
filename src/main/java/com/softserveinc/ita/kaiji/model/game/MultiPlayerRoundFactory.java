@@ -1,5 +1,7 @@
 package com.softserveinc.ita.kaiji.model.game;
 
+import org.springframework.stereotype.Service;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -9,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @version 1.0
  * @since 10.09.14
  */
+@Service
 public class MultiPlayerRoundFactory {
 
     public static class MultiPlayerRound {
