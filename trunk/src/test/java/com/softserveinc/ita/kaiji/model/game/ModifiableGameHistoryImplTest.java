@@ -53,7 +53,7 @@ public class ModifiableGameHistoryImplTest {
         players.add(player);
         players.add(testBot);
         Mockito.when(gameInfo.getPlayers()).thenReturn(players);
-        modifiableGameHistory.determineWinners();
+        modifiableGameHistory.determineWinners(TwoPlayersWinnerStrategyImpl.getInstance());
         Mockito.verify(winnerStrategy,times(1)).getWinners(players);
     }
 }

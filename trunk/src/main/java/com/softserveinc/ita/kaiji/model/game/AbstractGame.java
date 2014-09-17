@@ -8,10 +8,10 @@ import java.util.*;
 
 /**
  * Abstract game with provide basic general functions.
- * @see com.softserveinc.ita.kaiji.model.game.Game
  *
  * @author Paziy Evgeniy
  * @version 1.4
+ * @see com.softserveinc.ita.kaiji.model.game.Game
  * @since 26.03.14
  */
 abstract class AbstractGame implements Game {
@@ -92,7 +92,11 @@ abstract class AbstractGame implements Game {
             stateChanger.trySwitchState(State.GAME_FINISHED);
 
             gameInfo.setGameFinishTime(new Date());
-            gameHistory.determineWinners();
+            if (gameInfo.getGameType().equals(Type.KAIJI_GAME)) {
+                gameHistory.determineWinners(MultiPlayerWinnerStrategyImpl.getInstance());
+            } else {
+                gameHistory.determineWinners(TwoPlayersWinnerStrategyImpl.getInstance());
+            }
         }
 
         return stateChanger.getState();

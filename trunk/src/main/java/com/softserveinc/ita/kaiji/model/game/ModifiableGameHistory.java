@@ -20,5 +20,5 @@ interface ModifiableGameHistory extends GameHistory {
     /**
      * Determines winners of the game
      */
-    void determineWinners();
+    void determineWinners(WinnerStrategy winnerStrategy);
 }
