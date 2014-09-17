@@ -6,6 +6,7 @@ import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.game.MultiPlayerRoundFactory;
 import com.softserveinc.ita.kaiji.model.game.Round;
 import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
 import com.softserveinc.ita.kaiji.service.SystemConfigurationService;
 import com.softserveinc.ita.kaiji.web.controller.async.GameSyncro;
@@ -199,13 +200,17 @@ public class PlayMultiplayerGame {
     public String finishRound(@PathVariable String enemy,
                               @RequestParam("gameOver") boolean gameOver,
                               Model model,
+                              Principal principal,
                               RedirectAttributes ra) throws IOException {
         mrFactory.removeMultiPlayerRound(enemy);
         Integer gameId = (Integer)model.asMap().get("gameId");
         if (gameOver) {
             return "redirect:/";
         } else {
-            gameService.getGameInfo(gameId).getPlayerByName(enemy).stopPlaying();
+            gameService.getGameInfo(gameId).getPlayerByName(principal.getName()).stopPlaying();
+            synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
+                PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
+            }
             return "redirect:/game/multiplayer/join/" + model.asMap().get("gameId");
         }
     }
