@@ -281,12 +281,12 @@
              style="text-align: center; height: 30px; padding: 7px">
             ${enemyObject.name}
             <c:if test="${isFinished}">
-                -
+               <%-- -
                 <c:choose>
                     <c:when test="${empty gameHistory.getWinners()}">${drawStatus }</c:when>
                     <c:when test="${gameHistory.getWinners().contains(enemyObject) }">${winner}</c:when>
                     <c:otherwise>${loser }</c:otherwise>
-                </c:choose>
+                </c:choose>--%>
             </c:if>
         </div>
 

@@ -28,9 +28,11 @@
 <c:set var="cardList" value="<%=Card.values()%>"/>
 <c:set var="roundsCount"
        value="${fn:length(gameHistory.getRoundResults()) }"/>
-<c:set var="isFinished"
+<c:set var="isFinishedRound"
        value="${endRound}"/>
-<c:set var="gameOver"
+<c:set var="isFinishedGame"
+       value="${gameHistory.getGameStatus() == 'GAME_FINISHED'}"/>
+<c:set var="playerGameOver"
        value="${gameOver}"/>
 <c:set var="playerChosenCard"
        value="${gameHistory.getLastRoundResultFor(playerObject).getCard(playerObject)}"/>
@@ -109,20 +111,26 @@
         <div class="col-md-12 alert alert-info"
              style="text-align: center; height: 30px; padding: 7px">
             ${playerObject.name}
-            <c:if test="${isFinished}">
-                <script type="text/javascript">
+            <c:choose>
+                <c:when test="${isFinishedGame}">
+                    <script type="text/javascript">
+                        $(document).ready(function () {
 
-                    $(document).ready(function () {
+                            $('#gameResults').modal('toggle');
+                        });
+                    </script>
+                </c:when>
+                <c:otherwise>
+                    <c:if test="${isFinishedRound}">
+                        <script type="text/javascript">
+                            $(document).ready(function () {
 
-                        $('.bs-example-modal-lg').modal('toggle');
-                    });
-                </script>
-                <c:choose>
-                    <c:when test="${empty gameHistory.getWinners() }">${drawStatus }</c:when>
-                    <c:when test="${gameHistory.getWinners().contains(playerObject)}">${winner}</c:when>
-                    <c:otherwise>${loser }</c:otherwise>
-                </c:choose>
-            </c:if>
+                                $('#roundResults').modal('toggle');
+                            });
+                        </script>
+                    </c:if>
+                </c:otherwise>
+            </c:choose>
         </div>
         <div class="row">
             <c:forEach items="${cardList}" var="cardEntry">
@@ -168,74 +176,33 @@
     </div>
     <div class="row" style="text-align: center">
         <br>
-        <c:if test="${isFinished}">
-        <c:choose>
-            <c:when test="${playerChosenCard eq 'ROCK'}">
-                <img style="width: 100%"
-                     src="http://i59.tinypic.com/dqj71u.jpg">
-            </c:when>
-            <c:when test="${playerChosenCard eq 'PAPER'}">
-                <img style="width: 100%"
-                     src="http://i59.tinypic.com/zna97s.jpg">
-            </c:when>
-            <c:when test="${playerChosenCard eq 'SCISSORS'}">
-                <img style="width: 100%"
-                     src="http://i60.tinypic.com/sdg4k4.jpg">
-            </c:when>
-        </c:choose>
-       </c:if>
+        <c:if test="${isFinishedRound}">
+            <c:choose>
+                <c:when test="${playerChosenCard eq 'ROCK'}">
+                    <img style="width: 100%"
+                         src="http://i59.tinypic.com/dqj71u.jpg">
+                </c:when>
+                <c:when test="${playerChosenCard eq 'PAPER'}">
+                    <img style="width: 100%"
+                         src="http://i59.tinypic.com/zna97s.jpg">
+                </c:when>
+                <c:when test="${playerChosenCard eq 'SCISSORS'}">
+                    <img style="width: 100%"
+                         src="http://i60.tinypic.com/sdg4k4.jpg">
+                </c:when>
+            </c:choose>
+        </c:if>
     </div>
 </div>
 
 <div class="col-md-4">
     <div class="row">
-
-        <pl:statistic player="${playerObject }">
-            <div class="col-md-4">
-                <div class="alert alert-warning"
-                     style="text-align: center; height: 30px; padding: 7px; margin-bottom: 0">
-                    <c:choose>
-                        <c:when test="${duelResult == 'WIN' || duelResult == 'LOSE'}">
-                            ${wins }
-                        </c:when>
-
-                        <c:when test="${duelResult == 'DRAW'}">
-                            ${ties }
-                        </c:when>
-                    </c:choose>
-                </div>
-                <div
-                        style="text-align: center; font-size: 35px; height: 75px; background-color: #fcf8f2; padding-top: 10px">
-                        ${count }
-                </div>
-            </div>
-        </pl:statistic>
-
     </div>
     <div class="row">
         <div class="col-md-12">
             <hr style="margin-bottom: 0">
         </div>
     </div>
-    <%--<div class="row">
-        <div class="col-md-12" style="text-align: center;">
-            <h2>
-                <c:choose>
-                    <c:when test="${isFinished }">
-                        ${gameOver }
-                    </c:when>
-
-                    <c:when test="${roundsCount == 0}">
-                        ${gameStart }
-                    </c:when>
-
-                    <c:otherwise>
-                        ${round } ${roundsCount+1}
-                    </c:otherwise>
-                </c:choose>
-            </h2>
-        </div>
-    </div>--%>
     <div class="row">
         <div class="col-md-12">
             <hr style="margin-top: 10px">
@@ -286,19 +253,12 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12 alert alert-danger"
-             style="text-align: center; height: 30px; padding: 7px">
-            ${enemyObject.name}
-            <c:if test="${isFinished}">
-                <c:choose>
-                    <c:when test="${empty gameHistory.getWinners()}">${drawStatus }</c:when>
-                    <c:when test="${gameHistory.getWinners().contains(enemyObject) }">${winner}</c:when>
-                    <c:otherwise>${loser }</c:otherwise>
-                </c:choose>
-            </c:if>
-        </div>
+    <div class="col-md-12 alert alert-danger"
+         style="text-align: center; height: 30px; padding: 7px">
+        ${enemyObject.name}
     </div>
-    
+</div>
+
     <div class="row" style="text-align: center; margin-top: 52px">
         <div id="wait" class="well" style="display: none;">
             Waiting for opponents turn...
@@ -306,22 +266,22 @@
         <br>
 
         <div id="hide">
-            <c:if test="${isFinished}">
-            <c:choose>
-                <c:when test="${enemyChosenCard eq 'ROCK'}">
-                    <img style="width: 100%"
-                         src="http://i59.tinypic.com/dqj71u.jpg">
-                </c:when>
-                <c:when test="${enemyChosenCard eq 'PAPER'}">
-                    <img style="width: 100%"
-                         src="http://i59.tinypic.com/zna97s.jpg">
-                </c:when>
-                <c:when test="${enemyChosenCard eq 'SCISSORS'}">
-                    <img style="width: 100%"
-                         src="http://i60.tinypic.com/sdg4k4.jpg">
-                </c:when>
-            </c:choose>
-           </c:if>
+            <c:if test="${isFinishedRound}">
+                <c:choose>
+                    <c:when test="${enemyChosenCard eq 'ROCK'}">
+                        <img style="width: 100%"
+                             src="http://i59.tinypic.com/dqj71u.jpg">
+                    </c:when>
+                    <c:when test="${enemyChosenCard eq 'PAPER'}">
+                        <img style="width: 100%"
+                             src="http://i59.tinypic.com/zna97s.jpg">
+                    </c:when>
+                    <c:when test="${enemyChosenCard eq 'SCISSORS'}">
+                        <img style="width: 100%"
+                             src="http://i60.tinypic.com/sdg4k4.jpg">
+                    </c:when>
+                </c:choose>
+            </c:if>
         </div>
     </div>
 </div>
@@ -329,8 +289,8 @@
 
 
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-    <div id="gameResults" class="modal-dialog modal-lg">
+     aria-hidden="true" id="roundResults">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <table class="table">
 
@@ -341,18 +301,62 @@
                     </td>
                 </tr>
                 <c:choose>
-                    <c:when test="${gameOver}">
+                    <c:when test="${playerGameOver}">
                         <tr>
-                            <td> Your game is over!:( Try again!!!</td>
+                            <td colspan="2" align="center"> Your game is over!:( Try again!!!</td>
                         </tr>
                     </c:when>
                 </c:choose>
             </table>
             </br>
 
-            <a href="/game/multiplayer/finishRound/${enemyObject}?gameOver=${gameOver}"
+            <a href="/game/multiplayer/finishRound?gameOver=${playerGameOver}"
                class="btn btn-primary col-md-6 col-md-offset-3">Finish
             </a>
+            </br>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true" id="gameResults">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <table class="table">
+                <tr>
+                    <td> Winner</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${gameHistory.winners.size() eq 0 }">DRAW</c:when>
+                            <c:otherwise>${gameHistory.winners}</c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+                <tr>
+                    <td>State</td>
+                    <td>${gameHistory.gameStatus} </td>
+                </tr>
+                <tr>
+                    <td>Start time</td>
+                    <td>${gameHistory.gameInfo.gameStartTime} </td>
+                </tr>
+                <tr>
+                    <td>Finish time</td>
+                    <td>${gameHistory.gameInfo.gameFinishTime} </td>
+                </tr>
+                <tr>
+                    <td>Rounds played</td>
+                    <td>${gameHistory.roundResults.size()}</td>
+                </tr>
+                <tr>
+                    <td>Players played</td>
+                    <td>${gameHistory.gameInfo.players.size()}</td>
+                </tr>
+            </table>
+            </br>
+            <a href="<spring:url value="/game/multiplayer/finish/${gameId}"/>"
+               class="btn btn-primary col-md-6 col-md-offset-3">Finish
+                game</a>
             </br>
         </div>
     </div>

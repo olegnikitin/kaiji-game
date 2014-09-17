@@ -11,6 +11,9 @@ import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Sydorenko Oleksandra
  * @version 1.0
@@ -42,6 +45,10 @@ public class MultiPlayerGameImpl extends TwoPlayerGameImpl {
             }
 
             finishRound(round);
+
+            if (canFinishGame()) {
+                finishGame();
+            }
         }
 
         if (LOG.isDebugEnabled()) {
@@ -49,28 +56,18 @@ public class MultiPlayerGameImpl extends TwoPlayerGameImpl {
         }
     }
 
-    public void finishRound(Round round) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("<in> finishRound(); status=" + getState());
+    @Override
+    public boolean canFinishGame() {
+        Set<Player> gamePlayers = gameInfo.getPlayers();
+        Set<Player> playersOutOfGame = new HashSet<>();
+
+        for (Player player : gamePlayers) {
+            if (player.getCardCount() == 0 || player.getStar().getQuantity() == 0) {
+                playersOutOfGame.add(player);
+            }
         }
 
-        round.finishRound();
-        RoundResult roundResult = round.getRoundResult();
-
-        if (roundResult == null) {
-            stateChanger.trySwitchState(State.GAME_BROKEN);
-            throw new IllegalStateException("roundResult is null after finishing round");
-        }
-
-        gameHistory.addRoundResult(roundResult);
-
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("roundResult = " + roundResult);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("<out> finishRound(); status=" + getState());
-        }
+        return (playersOutOfGame.size() == gamePlayers.size() - 1);
     }
 
 }
