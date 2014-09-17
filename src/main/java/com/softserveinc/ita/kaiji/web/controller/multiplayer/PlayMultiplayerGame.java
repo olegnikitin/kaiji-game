@@ -70,8 +70,11 @@ public class PlayMultiplayerGame {
                               Locale locale,
                               Principal principal) {
 
-        if ((Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE) {
-            String errorMessage = messageSource.getMessage("TooManyPlayers.error", null, locale);
+        if ((Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE || 
+            (Boolean) request.getAttribute("finishedGame") == Boolean.TRUE) {
+            String errorMessage = (Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE ? 
+                                  messageSource.getMessage("TooManyPlayers.error", null, locale) : 
+                                  messageSource.getMessage("FinishedGame.error", null, locale);
             model.addAttribute("notification", errorMessage);
             model.addAttribute("openedGames", gameService.getRealPlayerInGame());
             return "join-game";
