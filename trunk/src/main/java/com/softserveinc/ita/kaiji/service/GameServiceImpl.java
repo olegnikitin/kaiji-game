@@ -82,7 +82,8 @@ public class GameServiceImpl implements GameService {
 
         Set<Player> otherPlayers = new HashSet<>();
         for (Player player : getGameInfo(gameId).getPlayers()) {
-            if (!player.getName().equals(userName)) {
+            if (!player.getName().equals(userName) && player.getDeck().getDeckSize() > 0
+                    && player.getStar().getQuantity() > 0) {
                 otherPlayers.add(player);
             }
         }
