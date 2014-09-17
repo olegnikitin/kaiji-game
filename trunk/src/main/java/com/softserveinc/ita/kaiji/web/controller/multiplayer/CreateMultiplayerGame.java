@@ -3,6 +3,8 @@ package com.softserveinc.ita.kaiji.web.controller.multiplayer;
 import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
+import com.softserveinc.ita.kaiji.model.player.Player.PlayerStatus;
+import com.softserveinc.ita.kaiji.model.util.Statable;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
@@ -80,14 +82,21 @@ public class CreateMultiplayerGame {
         Integer numberOfPlayers = info.getNumberOfPlayers();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Boolean containsPlayer = false;
+        PlayerStatus playerStatus = null;
         for (Player player : info.getPlayers()) {
             if (player.getUser().getNickname().equals(auth.getName())) {
                 containsPlayer = true;
+                playerStatus = player.getState();
                 break;
             }
         }
-        if (info.getPlayers().size() >= numberOfPlayers && !containsPlayer) {
-            request.setAttribute("manyPlayers", Boolean.TRUE);
+        if ((info.getPlayers().size() >= numberOfPlayers && !containsPlayer) ||
+            playerStatus == Player.PlayerStatus.FINISHED) {
+            if (playerStatus == Player.PlayerStatus.FINISHED) {
+                request.setAttribute("finishedGame", Boolean.TRUE);
+            } else {
+                request.setAttribute("manyPlayers", Boolean.TRUE);
+            }
             RequestDispatcher rd = request.getRequestDispatcher("/game/multiplayer/join/" + infoId);
             rd.forward(request, response);
         } else {
