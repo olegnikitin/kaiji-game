@@ -18,12 +18,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/game/multiplayer")
-@SessionAttributes(value = {"gameId", "enemyObject", "playerObject", "playerNumCards", "enemyNumCards"})
+@SessionAttributes(value = {"gameId", "enemyObject", "playerObject", "enemyNumCards"})
 public class PlayMultiplayerGame {
 
     private static final Logger LOG = Logger.getLogger(PlayMultiplayerGame.class);
@@ -105,11 +107,16 @@ public class PlayMultiplayerGame {
         Player person = (Player) model.asMap().get("playerObject");
         Player enemy = (Player) model.asMap().get("enemyObject");
 
-        if (person == null && enemy == null) {
+        if (person == null) {
             for (Player player : players) {
                 if (player.getName().equals(principal.getName())) {
                     person = player;
                 }
+            }
+        }
+
+        if (enemy == null) {
+            for (Player player : players) {
                 if (player.getName().equals(enemyPlayerName)) {
                     enemy = player;
                 }
@@ -131,9 +138,6 @@ public class PlayMultiplayerGame {
         model.addAttribute("playerObject", person);
         model.addAttribute("enemyObject", enemy);
         model.addAttribute("enemyNumCards", enemy != null ? enemy.getCardCount() : null);
-        if (gameHistory.getRoundResults().size() != 0)
-            model.addAttribute("result", gameHistory.getRoundResults().get(gameHistory.getRoundResults().size() - 1)
-                    .getDuelResult(person));
 
         return "play-multiplayer-game";
     }
@@ -177,42 +181,65 @@ public class PlayMultiplayerGame {
     }
 
     @RequestMapping(value = "finish/{gameId}")
-    public String finishGame(@PathVariable Integer gameId) {
+    public String finishGame(@PathVariable Integer gameId, ModelMap model, HttpSession session) {
+        Player player = (Player) model.get("playerObject");
+        mrFactory.removeMultiPlayerRound(player.getName());
+
         gameService.finishGame(gameId);
-        return "redirect:/game/multiplayer/join/{gameId}";
+
+        cleanupSessionAttributes(session, model);
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/showPopup/{gameId}", method = RequestMethod.GET)
     public String asd(@PathVariable Integer gameId,
                       Model model,
-                      RedirectAttributes ra) throws IOException {
-        ra.addFlashAttribute("endRound", true);
-        if (((Player) model.asMap().get("playerObject")).getCardCount() == 0 ||
-                ((Player) model.asMap().get("playerObject")).getStar().getQuantity() == 0) {
-            ra.addFlashAttribute("gameOver", "true");
+                      RedirectAttributes redirectAttributes) throws IOException {
+        GameHistory gameHistory = gameService.getGameHistory(gameId);
+        Player player = (Player) model.asMap().get("playerObject");
+
+        redirectAttributes.addFlashAttribute("endRound", true);
+
+        if (gameHistory.getRoundResults().size() != 0)
+            redirectAttributes.addFlashAttribute("result", gameHistory.getRoundResults().get(gameHistory.getRoundResults().size() - 1)
+                    .getDuelResult(player));
+        if (player.getCardCount() == 0 || player.getStar().getQuantity() == 0) {
+            redirectAttributes.addFlashAttribute("gameOver", "true");
         } else {
-            ra.addFlashAttribute("gameOver", "false");
+            redirectAttributes.addFlashAttribute("gameOver", "false");
         }
         return "redirect:/game/multiplayer/play/" + gameId;
     }
 
-    @RequestMapping(value = "/finishRound/{enemy}", method = RequestMethod.GET)
-    public String finishRound(@PathVariable String enemy,
-                              @RequestParam("gameOver") boolean gameOver,
-                              Model model,
-                              Principal principal,
-                              RedirectAttributes ra) throws IOException {
-        mrFactory.removeMultiPlayerRound(enemy);
-        Integer gameId = (Integer)model.asMap().get("gameId");
-        if (gameOver) {
+    @RequestMapping(value = "/finishRound", method = RequestMethod.GET)
+    public String finishRound(@RequestParam("gameOver") boolean playerGameOver,
+                              ModelMap model,
+                              HttpSession session, Principal principal) throws IOException {
+        Player player = (Player) model.get("playerObject");
+        mrFactory.removeMultiPlayerRound(player.getName());
+        Integer gameId = (Integer) model.get("gameId");
+
+        cleanupSessionAttributes(session, model);
+
+        if (playerGameOver) {
             return "redirect:/";
         } else {
             gameService.getGameInfo(gameId).getPlayerByName(principal.getName()).stopPlaying();
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
                 PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
             }
-            return "redirect:/game/multiplayer/join/" + model.asMap().get("gameId");
+            return "redirect:/game/multiplayer/join/" + gameId;
         }
+    }
+
+    private void cleanupSessionAttributes(HttpSession session, ModelMap model) {
+        model.remove("enemyObject");
+        model.remove("gameId");
+        model.remove("enemyNumCards");
+
+        session.removeAttribute("enemyObject");
+        session.removeAttribute("gameId");
+        session.removeAttribute("enemyNumCards");
     }
 
 }
