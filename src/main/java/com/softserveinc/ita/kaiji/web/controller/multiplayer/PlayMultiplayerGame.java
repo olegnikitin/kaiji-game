@@ -77,17 +77,9 @@ public class PlayMultiplayerGame {
             return "join-game";
         } else {
             GameInfo info = gameService.getGameInfo(gameId);
-            List<Player> gamePlayers = new ArrayList<>(info.getPlayers());
-            Player playerForRemoving = null;
-            for (Player player : gamePlayers) {
-                if (player.getName().equals(principal.getName())) {
-                    playerForRemoving = player;
-                }
-            }
-            gamePlayers.remove(playerForRemoving);
 
             model.addAttribute("gameId", gameId);
-            model.addAttribute("playersList", gamePlayers);
+            model.addAttribute("playersList", gameService.getAllOtherPlayers(gameId, principal.getName()));
             return "join-multiplayer-game";
         }
     }

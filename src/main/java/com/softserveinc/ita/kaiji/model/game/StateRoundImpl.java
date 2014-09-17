@@ -145,12 +145,6 @@ public class StateRoundImpl implements Round {
             maxWins = Math.max(maxWins,p.getStatistic().getSpecificStat(Card.DuelResult.WIN));
         }
 
-        if (maxWins > deckSize){
-            for(Player p : players){
-                p.finish();
-            }
-        }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("<in> finishRound(); round finished");
         }

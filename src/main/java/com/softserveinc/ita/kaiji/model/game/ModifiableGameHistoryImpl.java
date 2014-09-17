@@ -16,16 +16,13 @@ class ModifiableGameHistoryImpl implements ModifiableGameHistory {
     private final GameInfo gameInfo;
     private final List<RoundResult> roundResults = new LinkedList<>();
     private Set<Player> winners = new HashSet<>();
-    private final WinnerStrategy winnerStrategy;
     private final FiniteStateMachine<Game.State> stateSwitcher;
 
     ModifiableGameHistoryImpl(
             GameInfo gameInfo,
-            FiniteStateMachine<Game.State> stateSwitcher,
-            WinnerStrategy winnerStrategy) {
+            FiniteStateMachine<Game.State> stateSwitcher) {
         this.gameInfo = gameInfo;
         this.stateSwitcher = stateSwitcher;
-        this.winnerStrategy = winnerStrategy;
     }
 
     @Override
@@ -61,7 +58,7 @@ class ModifiableGameHistoryImpl implements ModifiableGameHistory {
     }
 
     @Override
-    public synchronized void determineWinners() {
+    public synchronized void determineWinners(WinnerStrategy winnerStrategy) {
         winners = winnerStrategy.getWinners(gameInfo.getPlayers());
     }
 
