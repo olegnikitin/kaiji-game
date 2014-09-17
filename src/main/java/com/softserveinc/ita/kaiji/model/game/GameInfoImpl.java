@@ -162,6 +162,13 @@ public class GameInfoImpl implements GameInfo {
         return null;
     }
 
+    @Override
+    public void forceUpdateAllPlayers(){
+        for (Player p : getPlayers()) {
+            p.forceUpdate(true);
+        }
+    }
+
     public Integer getDatabaseId() {
         return databaseId;
     }

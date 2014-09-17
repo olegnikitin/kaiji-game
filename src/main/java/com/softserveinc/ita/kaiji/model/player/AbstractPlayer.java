@@ -28,6 +28,7 @@ public abstract class AbstractPlayer implements Player {
     protected Boolean isPlaying;
     protected Boolean isOpponent;
     protected Boolean isRejected;
+    protected Boolean update;
 
     protected PlayerStatistics statistic = new PlayerStatistics();
 
@@ -112,23 +113,13 @@ public abstract class AbstractPlayer implements Player {
     }
 
     @Override
-    public void opponent(Boolean opponent){
-        isOpponent = opponent;
+    public void forceUpdate(Boolean update){
+        this.update = update;
     }
 
     @Override
-    public Boolean isOpponent(){
-        return isOpponent;
-    }
-
-    @Override
-    public void rejectInvitation(Boolean reject){
-        isRejected = reject;
-    }
-
-    @Override
-    public Boolean isRejected(){
-        return isRejected;
+    public Boolean isUpdate(){
+        return  update;
     }
 
     @Override

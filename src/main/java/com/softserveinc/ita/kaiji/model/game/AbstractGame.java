@@ -44,7 +44,7 @@ abstract class AbstractGame implements Game {
             LOG.trace("Game info: " + gameInfo);
         }
 
-        gameHistory = new ModifiableGameHistoryImpl(gameInfo, stateChanger, winnerStrategy);
+        gameHistory = new ModifiableGameHistoryImpl(gameInfo, stateChanger);
         if (LOG.isTraceEnabled()) {
             LOG.trace("Game history initialized: " + gameHistory);
         }
