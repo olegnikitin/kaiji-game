@@ -30,6 +30,9 @@ public interface GameInfo extends Identifiable, Poolable<Integer> {
      */
     Player getPlayerByName(String nickname);
 
+
+    void forceUpdateAllPlayers();
+
     /**
      * @return the name of the game
      */

@@ -52,16 +52,9 @@ public class InvitationServerEndpoint {
                 } else {
                     player.stopPlaying();
                 }
-                if (data != null) {
-                    player.opponent(false);
-                }
             }
-            if (player.getName().equals(enemyLogin) && data == null) {
-                player.opponent(isPlaying);
-            }
-
-            if (player.getName().equals(enemyLogin) && ("no").equals(data)) {
-                player.rejectInvitation(true);
+            if (("no").equals(data)) {
+                player.forceUpdate(true);
             }
 
         }

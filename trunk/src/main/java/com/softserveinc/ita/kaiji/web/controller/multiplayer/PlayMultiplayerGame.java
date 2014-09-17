@@ -210,13 +210,15 @@ public class PlayMultiplayerGame {
         Player player = (Player) model.get("playerObject");
         mrFactory.removeMultiPlayerRound(player.getName());
         Integer gameId = (Integer) model.get("gameId");
+        GameInfo gameInfo = gameService.getGameInfo(gameId);
 
         cleanupSessionAttributes(session, model);
 
         if (playerGameOver) {
             return "redirect:/";
         } else {
-            gameService.getGameInfo(gameId).getPlayerByName(principal.getName()).stopPlaying();
+            gameInfo.getPlayerByName(principal.getName()).stopPlaying();
+            gameInfo.forceUpdateAllPlayers();
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
                 PlayersStatus.getInvitePlayers().get(gameId).notifyAll();
             }

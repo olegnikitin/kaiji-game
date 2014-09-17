@@ -54,7 +54,7 @@ public class GameHistoryEntityTest {
         players.add(testBot);
         gameHistory = new ModifiableGameHistoryImpl(
                 new GameInfoImpl("gameName", "ownerGame", 3, 3, Bot.Types.EASY, players,2),
-                new GameFiniteStateMachine(Game.State.GAME_STARTED, null), TwoPlayersWinnerStrategyImpl.getInstance());
+                new GameFiniteStateMachine(Game.State.GAME_STARTED, null));
     }
     @Ignore
     @Test

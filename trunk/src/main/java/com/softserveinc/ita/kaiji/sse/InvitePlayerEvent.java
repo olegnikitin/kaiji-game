@@ -47,11 +47,10 @@ public class InvitePlayerEvent {
         Player currentPlayer = gameService.getPlayerByName(gameId, principal.getName());
         try {
             synchronized (PlayersStatus.getInvitePlayers().get(gameId)) {
-                System.err.println("User " + principal.getName() + " is waiting");
-                if(!currentPlayer.isRejected()){
+                if(!currentPlayer.isUpdate()){
                     PlayersStatus.getInvitePlayers().get(gameId).wait();
                 } else{
-                    currentPlayer.rejectInvitation(false);
+                    currentPlayer.forceUpdate(false);
                 }
                }
         } catch (InterruptedException e) {
@@ -59,19 +58,14 @@ public class InvitePlayerEvent {
         }
         List<InvitePlayerDto> playerDto = new ArrayList<>();
         Integer number = 0;
-        Boolean playing;
 
         Boolean isPlaying = currentPlayer.isPlaying();
         for (Player player : gameService.getAllOtherPlayers(gameId, principal.getName())) {
-            playing = false;
-            if (!currentPlayer.isOpponent()) {
-                playing = isPlaying ? true : player.isPlaying();
-            }
-            playerDto.add(new InvitePlayerDto(++number, player.getName(),
-                    playing));
-        }
-        System.err.println(new Gson().toJson(playerDto));
-        return "data:" + new Gson().toJson(playerDto) + "\n\n";
 
+            playerDto.add(new InvitePlayerDto(++number, player.getName(),
+                    isPlaying ? true : player.isPlaying()));
+        }
+        LOG.info("Update user info " +  new Gson().toJson(playerDto));
+        return "data:" + new Gson().toJson(playerDto) + "\n\n";
     }
 }

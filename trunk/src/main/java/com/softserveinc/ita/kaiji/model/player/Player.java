@@ -150,13 +150,9 @@ public interface Player extends Identifiable, Statable<Player.PlayerStatus>, Com
 
     void stopPlaying();
 
-    void opponent(Boolean opponent);
-
-    Boolean isOpponent();
-
-    void rejectInvitation(Boolean reject);
-
-    Boolean isRejected();
-
     Boolean isPlaying();
+
+    void forceUpdate(Boolean update);
+
+    Boolean isUpdate();
 }
