@@ -47,18 +47,6 @@ public class TurnChecker implements Runnable {
         if (status) {
             asyncContext.dispatch(dispatchLink + gameId + "/");
         }
-        /*if (!enemy.isBot()) {
-            try {
-
-                while (!enemy.getCardCount().equals(player.getCardCount())) {
-                    Thread.sleep(1000);
-                    enemy = userService.getPlayerById(enemy.getId());
-                    player = userService.getPlayerById(player.getId());
-                }
-            } catch (InterruptedException e) {
-                LOG.error("Failed to check second player turn. " + e.getMessage());
-            }
-        }*/
     }
 }
 

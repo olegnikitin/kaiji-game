@@ -8,13 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.servlet.AsyncContext;
 import javax.servlet.RequestDispatcher;
 
-/**
- * Checks asynchronously if game is available
- * @author Ievgen Sukhov
- * @since 20.04.14.
- * @version 1.0
- */
-
 public class GameChecker implements Runnable{
 
     private static final Logger LOG  = Logger.getLogger(SecondPlayerChecker.class);
