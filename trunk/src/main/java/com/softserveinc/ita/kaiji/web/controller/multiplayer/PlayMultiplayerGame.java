@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
@@ -168,10 +166,10 @@ public class PlayMultiplayerGame {
             asyncContext.start(new TurnChecker(asyncContext, gameId, gameSyncro.getMultiplayerRoundWaiter().get(playerRound),
                     systemConfigurationService.getSystemConfiguration().getRoundTimeout(),
                     "/game/multiplayer/play/"));
-            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/showPopup/" + gameId);
+            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/finishRound/" + gameId);
         } else {
             gameSyncro.getMultiplayerRoundWaiter().get(playerRound).countDown();
-            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/showPopup/" + gameId);
+            rsp.sendRedirect(rq.getContextPath() + "/game/multiplayer/finishRound/" + gameId);
         }
     }
 
@@ -186,8 +184,8 @@ public class PlayMultiplayerGame {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/showPopup/{gameId}", method = RequestMethod.GET)
-    public String asd(@PathVariable Integer gameId,
+    @RequestMapping(value = "/finishRound/{gameId}", method = RequestMethod.GET)
+    public String finishRound(@PathVariable Integer gameId,
                       Model model,
                       RedirectAttributes redirectAttributes) throws IOException {
         GameHistory gameHistory = gameService.getGameHistory(gameId);
