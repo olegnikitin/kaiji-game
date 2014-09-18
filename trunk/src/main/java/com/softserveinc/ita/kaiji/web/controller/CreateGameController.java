@@ -168,13 +168,6 @@ public class CreateGameController {
             model.addAttribute("playerId", playerId);
             gameSyncro.getGameWaiter().get(infoId).countDown();
             response.sendRedirect(request.getContextPath() + "/game/" + infoId + "/");
-            /*final AsyncContext asyncContext = request.startAsync(request, response);
-            asyncContext.setTimeout(TimeUnit.MILLISECONDS.convert(systemConfigurationService
-                    .getSystemConfiguration().getGameConnectionTimeout(), TimeUnit.MILLISECONDS.SECONDS));
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Integer playerId = gameService.addPlayer(auth.getName(), gameName);
-            model.addAttribute("playerId", playerId);
-            asyncContext.start(new GameChecker(asyncContext, gameName, gameService));*/
         }
     }
 }
