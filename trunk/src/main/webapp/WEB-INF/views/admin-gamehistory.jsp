@@ -79,7 +79,7 @@
                                         <th>${gameType}</th>
                                         <th>${cardsNum}</th>
                                         <th>${startTime}</th>
-                                        <th>${endTime}/th>
+                                        <th>${endTime}</th>
                                         <th>${gameUsers}</th>
                                     </tr>
                                     <tr>
