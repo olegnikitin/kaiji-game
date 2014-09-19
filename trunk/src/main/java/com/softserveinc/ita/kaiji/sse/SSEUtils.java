@@ -6,6 +6,12 @@ import com.softserveinc.ita.kaiji.sse.dto.CreatedGameInfoDto;
 import com.softserveinc.ita.kaiji.sse.dto.InvitePlayerDto;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 26.08.14.
+ */
+
 @Component
 public class SSEUtils {
 

@@ -5,6 +5,12 @@ import org.apache.log4j.Logger;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 10.08.14.
+ */
+
 public class SessionTimer extends TimerTask {
 
     private static final Logger LOG = Logger.getLogger(SessionTimer.class);

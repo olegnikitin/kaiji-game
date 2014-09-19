@@ -8,12 +8,16 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.4
+ * @since 14.07.14.
+ */
+
 @Component
 public class MultiPlayerGameCreatorImpl implements GameCreator {
 
     private static final Game.Type GAME_TYPE = Game.Type.KAIJI_GAME;
-    ///private static final int COUNT_OF_PLAYERS = 2;
-
     private static final Logger LOG = Logger.getLogger(MultiPlayerGameCreatorImpl.class);
 
     @Override
@@ -24,13 +28,6 @@ public class MultiPlayerGameCreatorImpl implements GameCreator {
             }
             return false;
         }
-
-        /*if (gameInfo.getPlayersNames().size() != COUNT_OF_PLAYERS) {
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Wrong count of players for game : BotGameImpl");
-            }
-            return false;
-        }*/
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("GameInfo is valid for game : BotGameImpl");

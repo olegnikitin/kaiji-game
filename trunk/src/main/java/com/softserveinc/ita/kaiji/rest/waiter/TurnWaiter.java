@@ -4,7 +4,11 @@ import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.service.UserService;
 import org.apache.log4j.Logger;
 
-import javax.servlet.AsyncContext;
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.2
+ * @since 17.08.14.
+ */
 
 public class TurnWaiter implements Runnable {
 

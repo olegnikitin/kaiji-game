@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.5
+ * @since 14.07.14.
+ */
+
 @RestController
 @RequestMapping("/rest/botgame/create")
 public class RestCreateGameWithBotController {

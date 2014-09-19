@@ -7,6 +7,12 @@ import org.apache.log4j.Logger;
 import javax.servlet.AsyncContext;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 02.09.14.
+ */
+
 public class MultiplayerWaiter implements Runnable {
 
     private static final Logger LOG = Logger.getLogger(MultiplayerWaiter.class);

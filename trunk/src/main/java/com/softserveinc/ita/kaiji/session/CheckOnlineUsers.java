@@ -12,6 +12,12 @@ import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 01.08.14.
+ */
+
 public class CheckOnlineUsers implements HttpSessionListener {
 
     private static final Logger LOG =  Logger.getLogger(CheckOnlineUsers.class);
@@ -42,7 +48,7 @@ public class CheckOnlineUsers implements HttpSessionListener {
 
     private void registerInServletContext(ServletContext servletContext) {
 
-        if (servletContext.getAttribute(KEY) == null) {;
+        if (servletContext.getAttribute(KEY) == null) {
             servletContext.setAttribute(KEY, this);
         }
     }

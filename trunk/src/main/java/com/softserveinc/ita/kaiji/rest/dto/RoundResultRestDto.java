@@ -3,6 +3,12 @@ package com.softserveinc.ita.kaiji.rest.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 15.08.14.
+ */
+
 public class RoundResultRestDto {
 
     private Integer id;

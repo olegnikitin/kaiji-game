@@ -16,7 +16,7 @@ public interface GameInfoEntityDAO extends JpaRepository<GameInfoEntity, Integer
 
 	/**
 	 * Returns a list of games in which user took part
-	 * @param user whose games are to be found
+	 * @param userId whose games are to be found
 	 * @return list of games in which user took part
 	 */
 	@Query("from GameInfoEntity as g where ?1 in elements(g.users)")

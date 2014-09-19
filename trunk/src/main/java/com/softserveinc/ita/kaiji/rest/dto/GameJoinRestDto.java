@@ -3,6 +3,12 @@ package com.softserveinc.ita.kaiji.rest.dto;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.4
+ * @since 15.08.14.
+ */
+
 public class GameJoinRestDto {
 
     private Integer id;

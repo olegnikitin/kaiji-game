@@ -54,7 +54,7 @@ public interface GameInfo extends Identifiable, Poolable<Integer> {
     Integer getNumberOfPlayers();
 
     /**
-     * @return set number of players in game
+     * @param numberOfPlayers numbers of players
      */
     void setNumberOfPlayers(Integer numberOfPlayers);
 

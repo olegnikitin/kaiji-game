@@ -4,7 +4,6 @@ import com.softserveinc.ita.kaiji.dto.MultiplayerGameInfoDto;
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.model.player.Player;
 import com.softserveinc.ita.kaiji.model.player.Player.PlayerStatus;
-import com.softserveinc.ita.kaiji.model.util.Statable;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.ConvertMultiplayerDto;
 import com.softserveinc.ita.kaiji.model.util.multiplayer.PlayersStatus;
 import com.softserveinc.ita.kaiji.service.GameService;
@@ -34,6 +33,13 @@ import javax.validation.Valid;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+/**
+ * @author Konstantin Shevchuk
+ * @author Alexander Vorobyov
+ * @version 1.3
+ * @since 02.09.14.
+ */
 
 @Controller
 @RequestMapping("/game/multiplayer/new")

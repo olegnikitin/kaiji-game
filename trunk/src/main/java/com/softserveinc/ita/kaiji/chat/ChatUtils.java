@@ -2,14 +2,21 @@ package com.softserveinc.ita.kaiji.chat;
 
 import java.util.*;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 03.08.14.
+ */
+
 public class ChatUtils {
 
     private static final ChatUtils chatUtils = createChatUtils();
     private static Set<String> activeUsers;
     private static List<String> messages;
-    private static Map<String,Boolean> unReadMessages;
+    private static Map<String, Boolean> unReadMessages;
 
-    private ChatUtils(){}
+    private ChatUtils() {
+    }
 
     private static ChatUtils createChatUtils() {
         activeUsers = new HashSet<String>();

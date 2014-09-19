@@ -7,6 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 15.08.14.
+ */
+
 public class GameHistoryRestDto {
 
     private Integer id;

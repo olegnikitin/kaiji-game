@@ -1,5 +1,11 @@
 package com.softserveinc.ita.kaiji.sse.dto;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 26.08.14.
+ */
+
 public class InvitePlayerDto {
 
     private Integer number;

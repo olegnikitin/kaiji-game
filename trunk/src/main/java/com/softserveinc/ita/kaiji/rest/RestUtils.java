@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 18.08.14.
+ */
+
 @Component
 public class RestUtils {
 

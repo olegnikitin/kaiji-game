@@ -6,6 +6,15 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Represents Data Transfer Object which is used
+ * to pass information about the multiplayer game via a form
+ *
+ * @author Konstantin Shevchuk
+ * @version 1.6
+ * @since 14.07.14.
+ */
+
 @Component
 public class MultiplayerGameInfoDto {
 
@@ -24,16 +33,6 @@ public class MultiplayerGameInfoDto {
     @Range(min = 1, max = 10)
     private Integer numberOfStars;
 
-    private boolean botGame = false;
-
-    /*public Integer getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(Integer playerId) {
-        this.playerId = playerId;
-    }*/
-
     public Integer getNumberOfPlayers() {
         return numberOfPlayers;
     }
@@ -50,28 +49,8 @@ public class MultiplayerGameInfoDto {
         this.numberOfStars = numberOfStars;
     }
 
-    /*public Game.Type getGameType() {
-        return gameType;
-    }
-
-    public void setGameType(Game.Type gameType) {
-        this.gameType = gameType;
-    }*/
-
-    /*public Integer getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(Integer gameId) {
-        this.gameId = gameId;
-    }*/
-
     public String getGameName() {
         return gameName;
-    }
-
-    public boolean getBotGame() {
-        return botGame;
     }
 
     public Integer getNumberOfCards() {
@@ -80,10 +59,6 @@ public class MultiplayerGameInfoDto {
 
     public void setGameName(String gameName) {
         this.gameName = gameName;
-    }
-
-    public void setBotGame(boolean botGame) {
-        this.botGame = botGame;
     }
 
     public void setNumberOfCards(Integer numberOfCards) {

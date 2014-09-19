@@ -10,7 +10,7 @@ import com.softserveinc.ita.kaiji.model.util.FieldEquals;
  * @author Vladyslav Shelest, Oleg Nikitn
  * @version 1.0
  * @since 22.04.14.
- * Edited page: had set input confirmPassord
+ * Edited page: had set input confirmPassword
  * @since 04.08.14.
  */
 @Component

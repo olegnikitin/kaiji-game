@@ -4,6 +4,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 10.08.14.
+ */
+
 public class SessionUtils {
     private static final SessionUtils sessionUtils = createSessionUtils();
 

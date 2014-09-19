@@ -3,10 +3,19 @@ package com.softserveinc.ita.kaiji.chat;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import java.io.IOException;
+
+/**
+ * Online user indication in web chat
+ *
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 03.08.14.
+ */
 
 @ClientEndpoint
 public class ChatClientUpdateEndpoint {
@@ -18,7 +27,7 @@ public class ChatClientUpdateEndpoint {
         try {
             JSONObject obj = new JSONObject();
             JSONArray list = new JSONArray();
-            for(String user : ChatUtils.getActiveUsers()) {
+            for (String user : ChatUtils.getActiveUsers()) {
                 list.add(user);
             }
             obj.put("users", list);

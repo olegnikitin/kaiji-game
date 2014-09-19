@@ -2,15 +2,18 @@ package com.softserveinc.ita.kaiji.web.controller.async;
 
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.AsyncContext;
-import javax.servlet.RequestDispatcher;
 
-public class GameChecker implements Runnable{
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 14.07.14.
+ */
 
-    private static final Logger LOG  = Logger.getLogger(SecondPlayerChecker.class);
+public class GameChecker implements Runnable {
+
+    private static final Logger LOG = Logger.getLogger(SecondPlayerChecker.class);
 
     private GameService gameService;
     AsyncContext asyncContext;
@@ -28,13 +31,13 @@ public class GameChecker implements Runnable{
 
         try {
             gameId = gameService.getGameId(gameName);
-            while(gameId == null) {
+            while (gameId == null) {
                 gameId = gameService.getGameId(gameName);
                 Thread.sleep(1000);
             }
 
         } catch (InterruptedException e) {
-            LOG.error( "Failed to check game asynchronously. " + e.getMessage());
+            LOG.error("Failed to check game asynchronously. " + e.getMessage());
         }
         asyncContext.dispatch("/game/" + gameId + "/");
     }

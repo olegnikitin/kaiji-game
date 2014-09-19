@@ -15,6 +15,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.6
+ * @since 15.08.14.
+ */
+
 @Component
 public class ConvertToRestDto {
 

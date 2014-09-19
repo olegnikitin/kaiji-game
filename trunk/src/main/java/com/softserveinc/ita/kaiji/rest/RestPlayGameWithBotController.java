@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.5
+ * @since 14.07.14.
+ */
+
 @RequestMapping("rest/botgame/play")
 @RestController
 public class RestPlayGameWithBotController {
@@ -30,7 +36,6 @@ public class RestPlayGameWithBotController {
     @Autowired
     private RestUtils restUtils;
 
-    //http://localhost:8080/rest/botgame/play/0/ROCK
     @RequestMapping(value = "/{gameId}/{chosenCard}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@PathVariable("gameId") Integer gameId,
                                                            @PathVariable("chosenCard") Card chosenCard) {

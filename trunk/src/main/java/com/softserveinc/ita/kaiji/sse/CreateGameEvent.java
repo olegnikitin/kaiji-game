@@ -16,6 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 26.08.14.
+ */
+
 @Controller
 @RequestMapping("/joingame")
 public class CreateGameEvent {

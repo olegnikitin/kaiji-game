@@ -20,6 +20,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 26.08.14.
+ */
+
 @Controller
 @RequestMapping("/multiplayer")
 public class InvitePlayerEvent {
