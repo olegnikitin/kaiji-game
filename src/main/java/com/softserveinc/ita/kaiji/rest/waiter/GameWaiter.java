@@ -1,9 +1,14 @@
 package com.softserveinc.ita.kaiji.rest.waiter;
 
-
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
 import org.apache.log4j.Logger;
+
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.1
+ * @since 17.08.14.
+ */
 
 public class GameWaiter implements Runnable {
 

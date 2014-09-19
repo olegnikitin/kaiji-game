@@ -2,7 +2,6 @@ package com.softserveinc.ita.kaiji.ajax;
 
 import com.softserveinc.ita.kaiji.model.game.GameInfo;
 import com.softserveinc.ita.kaiji.service.GameService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +11,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Represents AJAX live search for created games
+ *
+ * @author Konstantin Shevchuk
+ * @version 1.1
+ * @since 25.08.14.
+ */
 
 @Controller
 @RequestMapping(value = "/game/createdgames")

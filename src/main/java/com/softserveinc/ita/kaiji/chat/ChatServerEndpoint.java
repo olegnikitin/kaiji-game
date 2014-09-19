@@ -9,6 +9,12 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.io.StringReader;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 01.08.14.
+ */
+
 @ServerEndpoint(value = "/chat/{group}", encoders = ChatMessageEncoder.class, decoders = ChatMessageDecoder.class)
 public class ChatServerEndpoint {
 

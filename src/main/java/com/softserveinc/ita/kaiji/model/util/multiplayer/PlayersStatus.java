@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 10.09.14.
+ */
+
 public class PlayersStatus {
 
     private static final PlayersStatus chatUtils = createPlayersStatus();

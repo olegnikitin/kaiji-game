@@ -4,6 +4,12 @@ import com.softserveinc.ita.kaiji.model.UserRole;
 
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 15.08.14.
+ */
+
 public class UserRestDto {
 
     private Integer id;

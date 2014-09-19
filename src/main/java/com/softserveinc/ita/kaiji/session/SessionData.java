@@ -1,9 +1,14 @@
 package com.softserveinc.ita.kaiji.session;
 
-
 import javax.servlet.http.HttpSession;
 import java.util.Timer;
 import java.util.TimerTask;
+
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 10.08.14.
+ */
 
 public class SessionData {
 

@@ -33,6 +33,15 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Oleksandra Sydorenko
+ * @author Konstantin Shevchuk
+ * @author Alexander Vorobyov
+ * @author Kyrylo Bardachov
+ * @version 1.5
+ * @since 02.09.14.
+ */
+
 @Controller
 @RequestMapping("/game/multiplayer")
 @SessionAttributes(value = {"gameId", "enemyObject", "playerObject", "enemyNumCards"})
@@ -68,17 +77,15 @@ public class PlayMultiplayerGame {
                               Locale locale,
                               Principal principal) {
 
-        if ((Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE || 
-            (Boolean) request.getAttribute("finishedGame") == Boolean.TRUE) {
-            String errorMessage = (Boolean) request.getAttribute("manyPlayers") == Boolean.TRUE ? 
-                                  messageSource.getMessage("TooManyPlayers.error", null, locale) : 
-                                  messageSource.getMessage("FinishedGame.error", null, locale);
+        if (request.getAttribute("manyPlayers") == Boolean.TRUE ||
+                request.getAttribute("finishedGame") == Boolean.TRUE) {
+            String errorMessage = request.getAttribute("manyPlayers") == Boolean.TRUE ?
+                    messageSource.getMessage("TooManyPlayers.error", null, locale) :
+                    messageSource.getMessage("FinishedGame.error", null, locale);
             model.addAttribute("notification", errorMessage);
             model.addAttribute("openedGames", gameService.getRealPlayerInGame());
             return "join-game";
         } else {
-            GameInfo info = gameService.getGameInfo(gameId);
-
             model.addAttribute("gameId", gameId);
             model.addAttribute("playersList", gameService.getAllOtherPlayers(gameId, principal.getName()));
             return "join-multiplayer-game";
@@ -186,8 +193,8 @@ public class PlayMultiplayerGame {
 
     @RequestMapping(value = "/finishRound/{gameId}", method = RequestMethod.GET)
     public String finishRound(@PathVariable Integer gameId,
-                      Model model,
-                      RedirectAttributes redirectAttributes) throws IOException {
+                              Model model,
+                              RedirectAttributes redirectAttributes) throws IOException {
         GameHistory gameHistory = gameService.getGameHistory(gameId);
         Player player = (Player) model.asMap().get("playerObject");
 

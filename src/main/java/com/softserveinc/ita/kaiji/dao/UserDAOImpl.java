@@ -9,6 +9,12 @@ import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * @author Alexander Vorobyov
+ * @version 1.1
+ * @since 20.08.2014
+ */
+
 @Repository
 public class UserDAOImpl implements UserDAOCustom {
 

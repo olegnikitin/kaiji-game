@@ -18,6 +18,11 @@ public interface UserDAO extends JpaRepository<User, Integer>, UserDAOCustom {
 	 */
 	public User findByNickname(String nickname);
 
+    /**
+     * Returns user from repository by email
+     * @param email nickname of user
+     * @return user from repository by email
+     */
 	public User findByEmail(String email);
 
 }

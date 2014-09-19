@@ -7,6 +7,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Sydorenko Oleksandra
+ * @version 1.0
+ * @since 21.08.14
+ */
+
 @Component
 public class MailSender {
 

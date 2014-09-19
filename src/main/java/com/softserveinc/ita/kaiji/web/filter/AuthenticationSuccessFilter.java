@@ -7,7 +7,6 @@ import com.softserveinc.ita.kaiji.model.User;
 import com.softserveinc.ita.kaiji.session.SessionData;
 import com.softserveinc.ita.kaiji.session.SessionTimer;
 import com.softserveinc.ita.kaiji.session.SessionUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -24,6 +23,12 @@ import java.net.URI;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 14.07.14.
+ */
 
 @Component("authenticationSuccessFilter")
 public class AuthenticationSuccessFilter extends SimpleUrlAuthenticationSuccessHandler {

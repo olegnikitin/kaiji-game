@@ -14,8 +14,11 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
- * Created by Kyryll on 24.08.2014.
+ * @author Kyrylo Bardachov
+ * @version 1.0
+ * @since 24.08.14.
  */
+
 @Configuration
 @Import({ContextConfiguration.class, SecurityConfiguration.class})
 public class TestConfiguration {

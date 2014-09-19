@@ -5,6 +5,12 @@ import com.softserveinc.ita.kaiji.model.game.Game;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 15.08.14.
+ */
+
 public class GameInfoRestDto {
 
     private Integer id;

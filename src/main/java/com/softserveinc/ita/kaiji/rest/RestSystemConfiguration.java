@@ -8,6 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.0
+ * @since 18.08.14.
+ */
+
 @RequestMapping("/rest/system-configuration")
 @RestController
 public class RestSystemConfiguration {

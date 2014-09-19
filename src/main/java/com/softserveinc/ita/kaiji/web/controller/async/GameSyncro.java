@@ -7,6 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.2
+ * @since 03.09.14.
+ */
+
 @Component
 public class GameSyncro {
 

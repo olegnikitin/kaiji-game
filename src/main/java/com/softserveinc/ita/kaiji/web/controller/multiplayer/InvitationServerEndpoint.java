@@ -13,8 +13,12 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 /**
- * Created by kbardtc on 8/28/2014.
+ * @author Kyrylo Bardachov
+ * @author Konstantin Shevchuk
+ * @version 1.5
+ * @since 02.09.14.
  */
+
 @ServerEndpoint(value = "/invitation/{playerLogin}")
 public class InvitationServerEndpoint {
 

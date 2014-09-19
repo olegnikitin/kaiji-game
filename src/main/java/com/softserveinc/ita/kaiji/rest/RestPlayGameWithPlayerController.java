@@ -22,6 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.5
+ * @since 14.07.14.
+ */
+
 @RestController
 @RequestMapping("rest/playergame/play")
 public class RestPlayGameWithPlayerController {
@@ -43,7 +49,6 @@ public class RestPlayGameWithPlayerController {
     @Autowired
     private RestUtils restUtils;
 
-    //
     @RequestMapping(produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CurrentGameRestInfoDto> makeTurn(@RequestParam("playerId") Integer playerId,
                                                            @RequestParam("gameId") Integer gameId,
@@ -102,6 +107,6 @@ public class RestPlayGameWithPlayerController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
 
-        return new ResponseEntity<CurrentGameRestInfoDto>(currentGameRestInfoDto, headers, HttpStatus.OK);
+        return new ResponseEntity<>(currentGameRestInfoDto, headers, HttpStatus.OK);
     }
 }

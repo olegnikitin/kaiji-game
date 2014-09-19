@@ -8,6 +8,12 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.StringReader;
 
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 01.08.14.
+ */
+
 @ServerEndpoint(value = "/session")
 public class SessionServerEndpoint {
     private final Logger LOG = Logger.getLogger(SessionServerEndpoint.class);

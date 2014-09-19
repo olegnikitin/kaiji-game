@@ -1,5 +1,12 @@
 package com.softserveinc.ita.kaiji.rest.dto;
+
 import com.softserveinc.ita.kaiji.model.Card;
+
+/**
+ * @author Konstantin Shevchuk
+ * @version 1.3
+ * @since 15.08.14.
+ */
 
 public class RoundResultEntryDto {
 

@@ -8,8 +8,11 @@ import javax.websocket.Session;
 import java.io.IOException;
 
 /**
- * Created by kbardtc on 8/28/2014.
+ * @author Kyrylo Bardachov
+ * @version 1.0
+ * @since 02.09.14.
  */
+
 @ClientEndpoint
 public class ClientTimeoutRound {
     private static final Logger LOG = Logger.getLogger(ClientTimeoutRound.class);
